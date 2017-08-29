@@ -1,0 +1,3 @@
+tool for gui : gtk
+tool for display : sdl
+tool for building : make
