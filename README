@@ -1,3 +1,12 @@
 tool for gui : gtk
 tool for display : sdl
 tool for building : make
+
+classes ideas:
+CPU (step, cycle, instructions, interruptions, registres...)
+Memory
+Video Memory
+Cartidge (pour les types de cartouches)
+Timer
+MBC (Memory Bank Controller)
+Serial (read byte, write byte)
