@@ -43,3 +43,28 @@ struct LD_RegCst {
 	}
 	char value;
 };
+
+
+decl_LD_Instruct_Cst(LD_BX)
+decl_instr_opcode(LD_BX, 0x06)
+decl_instr_cycles(LD_BX, 8)
+
+decl_LD_Instruct_Cst(LD_CX)
+decl_instr_opcode(LD_CX, 0x0E)
+decl_instr_cycles(LD_CX, 8)
+
+decl_LD_Instruct_Cst(LD_DX)
+decl_instr_opcode(LD_DX, 0x16)
+decl_instr_cycles(LD_DX, 8)
+
+decl_LD_Instruct_Cst(LD_EX)
+decl_instr_opcode(LD_EX, 0x1E)
+decl_instr_cycles(LD_EX, 8)
+
+decl_LD_Instruct_Cst(LD_HX)
+decl_instr_opcode(LD_HX, 0x26)
+decl_instr_cycles(LD_HX, 8)
+
+decl_LD_Instruct_Cst(LD_LX)
+decl_instr_opcode(LD_LX, 0x2E)
+decl_instr_cycles(LD_LX, 8)

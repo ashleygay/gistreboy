@@ -9,6 +9,12 @@ class Processor {
 			return inst;
 		}
 		FlagRegister flagReg;
+		Register registerB;
+		Register registerC;
+		Register registerD;
+		Register registerE;
+		Register registerH;
+		Register registerL;
 
 	private:
 		DRegister programCounter;
