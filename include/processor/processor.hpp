@@ -11,7 +11,16 @@ class Processor {
 		FlagRegister flagReg;
 
 	private:
-		Processor() {}
+		DRegister programCounter;
+		DRegister stackPointer;
+
+
+	private:
+		Processor()
+		{
+			programCounter.value = 0x100;
+			stackPointer.value = 0xfffe;
+		}
 
 	public:
 		Processor(Processor const&) = delete;
