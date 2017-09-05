@@ -1,5 +1,13 @@
 #pragma once
 
+#define decl_instr_opcode(instr, opc)\
+	int instr::opcode() { return opc; };
+
+#define decl_instr_cycles(instr, nbr)\
+	int instr::nbCycles() { return nbr; };
+
+
+
 class Instruction {
 	public:
 		virtual void execute() = 0;
