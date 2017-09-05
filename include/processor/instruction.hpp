@@ -21,3 +21,25 @@ class Nop : Instruction {
 		static int opcode() { return 0; };
 		static int nbCycles() { return 4; };
 };
+
+
+
+/// LD Instructions
+
+#define decl_LD_Instruct_Cst(name)\
+	class name : Instruction, LD_RegCst {\
+		public:\
+			using LD_RegCst::LD_RegCst;\
+			virtual void execute();\
+			virtual const char *toStr() { return #name; };\
+			static int opcode(); \
+			static int nbCycles(); \
+	};
+
+struct LD_RegCst {
+	LD_RegCst(char val)
+	{
+		this->value = val;
+	}
+	char value;
+};
