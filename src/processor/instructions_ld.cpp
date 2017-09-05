@@ -7,3 +7,11 @@
 		Processor& proc = Processor::getInstance();\
 		proc.register##reg.value = this->value;\
 	}
+
+	
+
+decl_LD_RegCst_exec(B)
+decl_LD_RegCst_exec(D)
+decl_LD_RegCst_exec(E)
+decl_LD_RegCst_exec(H)
+decl_LD_RegCst_exec(L)
