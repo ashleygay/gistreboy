@@ -1,4 +1,4 @@
-tool for gui : gtk
+tool for gui : gtk3
 tool for display : sdl
 tool for building : make
 
