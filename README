@@ -4,7 +4,7 @@ tool for building : make
 
 classes ideas:
 CPU (step, cycle, instructions, interruptions, registres...)
-Memory
+Memory: there are modules that need to interprets the memory as a certain objects
 Video Memory
 Cartidge (pour les types de cartouches)
 Timer
