@@ -1,4 +1,4 @@
-#include "callback.hpp"
+#include <callback.hpp>
 
 void NYI(GtkWidget * b, gpointer user_data)
 {

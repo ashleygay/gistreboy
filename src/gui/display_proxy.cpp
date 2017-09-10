@@ -1,4 +1,4 @@
-#include "display_proxy.hpp"
+#include <display_proxy.hpp>
 
 
 void DisplayProxy::access_buffer(void)

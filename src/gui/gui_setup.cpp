@@ -1,4 +1,4 @@
-#include "gui_setup.hpp"
+#include <gui_setup.hpp>
 
 static void create_menu_item_with_callback(const char *name, GtkWidget *window,
 				 GtkWidget * parent, callback_ptr callback, Helper* helper)

@@ -1,10 +1,9 @@
 MAIN=src/main.cpp
 
-GUI=src/gui
-GUI_SRC=$(GUI)/*.cpp
+GUI=include/gui
+GUI_SRC=src/gui/*.cpp
 
-DEBUG=src/debug
-DEBUG_SRC=$(DEBUG)/*.cpp
+DEBUG=include/debug
 
 PROCESSOR=src/processor
 
