@@ -25,7 +25,7 @@ COMPILER=g++
 
 
 all:
-	 $(COMPILER) $(GCC_OPTIONS) $(INCLUDE_PATH) $(LIB) $(SRC) -o $(EXEC)
+	 $(COMPILER) $(GCC_OPTIONS) $(INCLUDE_PATH) $(SRC) $(LIB) -o $(EXEC)
 
 clean:
 	rm $(EXEC)
