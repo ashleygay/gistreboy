@@ -34,5 +34,6 @@ class Nop : Instruction {
 			virtual const char *toStr() { return #name; }\
 			virtual int opCode() { return opc; } \
 			virtual int nbCycles() { return nbr; } \
-	}; \
+	};
 
+decl_instruction(LD_BX, 0x06, 8)
