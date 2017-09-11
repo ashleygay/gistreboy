@@ -1,13 +1,14 @@
 #include <instruction.hpp>
 
-
-void LD_BX::exec(InstructionArgs& args)
+LD_BX::LD_BX(InstructionArgs args)
 {
-	//Register& r = boost::get<RegRef>(args.first_arg);
-	//uint8_t val = boost::get<uint8_t>(args.second_arg);
+	this->args = args;
+}
 
+void LD_BX::exec()
+{
 	Processor& proc = Processor::getInstance();
-	proc.regissterB = val;
+	proc.registerB.value = boost::get<uint8_t>(this->args[0]);
 
 	DEBUG_PRINT << "args.first_arg is " << r.value
 	<< "\nargs.second_arg is " << val << std::endl; 

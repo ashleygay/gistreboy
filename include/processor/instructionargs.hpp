@@ -10,10 +10,5 @@ class Processor;
 using DRegRef = std::reference_wrapper<DRegister>;
 using RegRef = std::reference_wrapper<Register>;
 
-struct InstructionArgs
-{
-	using Argument = boost::variant<uint8_t, uint16_t,
-					RegRef, DRegRef>;
-	Argument first_arg;
-	Argument second_arg;
-};
+using Argument = boost::variant<uint8_t, uint16_t, RegRef, DRegRef>;
+using InstructionArgs = std::vector<Argument>;

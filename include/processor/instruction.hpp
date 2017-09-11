@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 #include <debug.hpp>
 #include <instructionargs.hpp>
@@ -11,7 +12,7 @@
 
 class Instruction {
 	public:
-		virtual void exec(InstructionArgs& args) = 0;
+		virtual void exec() = 0;
 		virtual const char *toStr() = 0;
 		virtual int opCode() = 0;
 		virtual int nbCycles() = 0;
@@ -30,10 +31,12 @@ class Nop : Instruction {
 #define decl_instruction(name, opc, nbr)\
 	class name : Instruction{\
 		public:\
-			virtual void exec(InstructionArgs& args);\
+			name(InstructionArgs args);\
+			virtual void exec();\
 			virtual const char *toStr() { return #name; }\
 			virtual int opCode() { return opc; } \
 			virtual int nbCycles() { return nbr; } \
+			InstructionArgs args; \
 	};
 
 decl_instruction(LD_BX, 0x06, 8)
