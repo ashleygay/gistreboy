@@ -24,12 +24,12 @@ class Clock
 		void execStep();
 
 		// Connect a CPU to the clock.
-		void connectProc(Processor *p);
+		void connectProc();
 
 	private:
 		boost::asio::io_service io;
 		
-		Processor * processor;
+		Processor & processor = Processor::getInstance();
 
 		// Desired frequence for the emulator
 		// const unsigned int freq = 4194304; // In Hz

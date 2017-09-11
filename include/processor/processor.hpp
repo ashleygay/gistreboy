@@ -5,18 +5,16 @@
 #include <debug.hpp>
 #include <instructionargs.hpp>
 #include <registers.hpp>
+#include <opcode.hpp>
 
 class Processor {
 
-	using OpCode = uint16_t;
 	public:
 		static Processor& getInstance() {
 			static Processor inst;
 			return inst;
 		}
 		
-		void execCurrentInstruction();
-
 		FlagRegister flagReg;
 
 		Register registerA;
@@ -31,16 +29,16 @@ class Processor {
 		// OpCode opc;
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
-		//MemoryAccessor mem;
+		// MemoryAccessor mem;
 
 	private:
 		DRegister programCounter;
 		DRegister stackPointer;
 
-		//TODO: structure for arguments of current instruction
 		InstructionArgs args;
 		OpCode currentOpCode;
-
+		// Architecture class containing all instructions.
+		// Architecture arch;
 
 	private:
 		Processor()
@@ -53,7 +51,9 @@ class Processor {
  		// Get the number of cycles of the current instruction to execute
 		int getNbCycles() const;
 		void fetchNextInstruction();
+		void execCurrentInstruction();
 
+	public:
 		Processor(Processor const&) = delete;
 		void operator=(Processor const&)  = delete;
 };

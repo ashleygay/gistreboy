@@ -1,13 +1,11 @@
 #pragma once
 
-class Register {
-	public:
-		unsigned char value;
+struct Register {
+	unsigned char value;
 };
 
-class DRegister {
-	public:
-		unsigned short value;
+struct DRegister {
+	unsigned short value;
 };
 
 class FlagRegister : private Register {
