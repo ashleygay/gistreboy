@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <vector>
 
 #include <boost/variant.hpp>
 #include <registers.hpp>

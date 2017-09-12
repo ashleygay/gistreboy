@@ -5,6 +5,7 @@
 
 #include <debug.hpp>
 #include <instructionargs.hpp>
+#include <processor.hpp>
 
 // Args are of the forme "const InstructionArgs& args"
 #define decl_instr_execute(name, content)\
