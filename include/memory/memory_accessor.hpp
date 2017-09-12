@@ -1,10 +1,8 @@
 #pragma once
 
+#include <array>
 #include <vector>
 #include <string>
-
-using RomType = std::string;
-
 
 // This class abstracts any memory access done by the processor, it will find
 // out which type of memory and what it must be done depending on the addresses.
@@ -12,43 +10,28 @@ using RomType = std::string;
 class MemoryAccessor {
 
 public :
+  MemoryAccessor(char *cart);
 
-  void set_types();
-  void set_ram();
+  uint8_t read(uint16_t address);
+  void write(uint16_t address, uint8_t byte);
 
 private :
 
-  /* the actual assembly of the cartidge */
-  std::vector<uint8_t> rom;
+  /* ROM : 0000-3FFF / ROM banks : 4000-7FFF / SRAM : A000-BFFF (MBC1) */
+  Cartridge cartridge;
+  /* VRAM : 4000-9FFF / OAM : FE00-FE9F
+     Video I/O Ports */
+  Video	video;
+  /* WRAM C000-DFFF */
+  std::vector<uint8_t> wram;
+  /* echo of WRAM E000-FDFF */
+  std::vector<uint8_t> echo_ram;
+  /* HRAM */
+  std::vector<uint8_t>
 
-  /* a program inside the gameboy that boots the machine
-     and jumps to the location of the animated sequence
-     inside the rom */
-  std::vector<uint8_t> boot_rom;
+  /* FEA0-FEFF not used */
 
-  /* the type of the cartidge see manual */
-  int type;
-
-  /* the MBC of the cartidge, chip that will extend address space,
-     no MBC is a simple 32kb cartidge like Tetris*/
-  int mbc;
-
-  /* the internal ram of the cartidge */
-  std::vector<uint8_t> ram;
-
-  int rom_size;
-  int ram_size;
-
-  uint8_t rom_bank_number;
-  uint8_t ram_bank_number;
-
-  bool has_ram = false;
-  bool has_battery = false;
-  bool has_timer = false;
-  bool has_rumble = false;
-
-  bool ram_enable = false;
-
-	static const std::unordered_map<uint16_t, CartridgeType> _cartridge_types;
+  /*Various I/O ports FF00-FF7F , FFFF*/
+  
 
 };
