@@ -7,8 +7,6 @@
 #include <boost/variant/recursive_variant.hpp>
 
 using OpCodeToInstruction = std::unordered_map<OpCode, Instruction *>;
-using Variant = boost::variant<Instruction *, OpCodeToInstruction>;
-using OpCodeToVariant = std::unordered_map<OpCode, Variant>;
 
 class Architecture
 {
@@ -19,18 +17,12 @@ class Architecture
 		}
 
 
-/*
-	class NodeElement
-	{
-		Element elt;
-	};
-*/
+	// -1 invalid instruction
+	// otherwise, the number of arguments it takes
+	int checkInstruction(OpCode opCode);
 
-	// 0 unknown instruction
-	// 1 complete instruction
-	// -1 partially correct
-	int checkInstruction(OpCode opcode);
+	int addInstruction(Instruction* instr);
 
 	private:
-		OpCodeToVariant map;
+		OpCodeToInstruction map;
 };
