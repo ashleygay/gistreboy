@@ -1,3 +1,10 @@
+/*
+ * File : display_proxy.hpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #pragma once
 
 #include <debug.hpp>
@@ -9,8 +16,6 @@
 // display. The GUI part uses it to get info on the buffer to  display. It must
 // be updated by the emulator. The coding style changes to respect the coding
 // style of the component in which it is used.
-
-//TODO: maybe make it thread-safe at some point.
 
 using area_to_cairo = std::unordered_map<GtkWidget*, cairo_t *>;
 
@@ -37,7 +42,7 @@ class DisplayProxy
 
 		//TODO: temporary input type so far
 		void notifyObservers(const char * buffer);
-	
+
 	private:
 		DisplayProxy() {}
 

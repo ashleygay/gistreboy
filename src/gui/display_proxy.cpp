@@ -1,3 +1,10 @@
+/*
+ * File : display_proxy.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #include <display_proxy.hpp>
 
 

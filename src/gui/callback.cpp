@@ -1,3 +1,10 @@
+/*
+ * File : callback.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #include <callback.hpp>
 
 void NYI(GtkWidget * b, gpointer user_data)

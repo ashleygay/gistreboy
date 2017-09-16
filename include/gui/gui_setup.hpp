@@ -1,3 +1,10 @@
+/*
+ * File : gui_setup.hpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #pragma once
 
 #include <gtk/gtk.h>
@@ -8,6 +15,8 @@ void setup_gui(GtkApplication *app);
 
 using callback_ptr = void (*)(GtkWidget*, gpointer);
 
+// XMacro to define all the buttons from the interface.
+// menuBar or subMenu to choose where the button will be added
 #define MENU_SETUP \
 	X("Run", NYI, menuBar, NULL) \
 	X("Stop", NYI, menuBar, NULL)\

@@ -1,3 +1,10 @@
+/*
+ * File : gui_setup.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #include <gui_setup.hpp>
 
 static void create_menu_item_with_callback(const char *name, GtkWidget *window,

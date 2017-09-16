@@ -1,3 +1,10 @@
+/*
+ * File : open_button_helper.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #include <open_button_helper.hpp>
 
 char * OpenButtonHelper::load_content(GFile* gf)
