@@ -5,7 +5,7 @@ GUI_SRC=src/gui/*.cpp
 
 DEBUG=include/debug
 
-PROCESSOR=src/processor
+PROCESSOR=include/processor
 
 EXEC=emulator
 SRC= $(MAIN) $(GUI_SRC)
@@ -16,7 +16,7 @@ COMPILER=g++
 
 
 all:
-	 $(COMPILER) $(GCC_OPTIONS) $(INCLUDE_PATH) $(SRC) $(LIB) -o $(EXEC)
+	 $(COMPILER) $(GCC_OPTIONS) $(INCLUDE_PATH) $(LIB) $(SRC) -o $(EXEC)
 
 clean:
 	rm $(EXEC)

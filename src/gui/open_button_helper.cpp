@@ -7,7 +7,7 @@
 
 #include <open_button_helper.hpp>
 
-char * OpenButtonHelper::load_content(GFile* gf)
+uint8_t * OpenButtonHelper::load_content(GFile* gf, size_t * s)
 {
 	std::ifstream file(g_file_get_path(gf), std::ios::in | std::ios::binary);
 
@@ -22,13 +22,16 @@ char * OpenButtonHelper::load_content(GFile* gf)
 
 	DEBUG_PRINT << "Copying file into buffer size : " << size << std::endl;
 	DEBUG_PRINT << "Buffer is :" << std::endl;
-	char* mem = (char *)malloc(size);
+	uint8_t * mem = (uint8_t *)malloc(size);
 	if (mem) {
 		for (uint i = 0; i < size; ++i) {
 			mem[i] = file.get(); 
 			DEBUG_PRINT << (char)mem[i];
 		}
 	}
+
+	// We update the size given as parameter
+	*s = size;
 
 	return mem;
 }
@@ -63,14 +66,14 @@ int OpenButtonHelper::verify_min_size(GFile * f)
 	return size >= _min_size;
 }
 
-GFile* OpenButtonHelper::open_correct_file(void)
+GFile* OpenButtonHelper::open_file_with_dialog(void)
 {
 	GtkWidget *dialog;	
 	GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;	
-	GFile *gf;
+	GFile *g = NULL;
 	int file_ok = 0, res = 0;
 
-	GtkWidget * w = this->get_window();
+	GtkWidget * w = _window;
 	if (!w) {
 		DEBUG_PRINT << "Trying to call open_correct_file without a parent window."
 				<< " Call set_window before calling that function" << std::endl;
@@ -90,18 +93,17 @@ GFile* OpenButtonHelper::open_correct_file(void)
 	while (!file_ok) {
 		res = gtk_dialog_run(GTK_DIALOG (dialog));
 		if (res == GTK_RESPONSE_ACCEPT) {
-			char *filename;
 			GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
-			filename = gtk_file_chooser_get_filename (chooser);
+			char * filename = gtk_file_chooser_get_filename (chooser);
 			DEBUG_PRINT << "Opening : " << filename << std::endl;
-			gf = g_file_new_for_path(filename);
-			file_ok = verify_attributes(gf) && verify_min_size(gf);
+			g = g_file_new_for_path(filename);
+			file_ok = verify_attributes(g) && verify_min_size(g);
 			if (!file_ok) message_dialog_display("Could not open file %s", filename);
 			g_free(filename);
 		}
 		else
-			return NULL;
+			break;
 	}
 	gtk_widget_destroy (dialog);
-	return gf;
+	return g;
 }

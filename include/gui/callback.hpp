@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <open_button_helper.hpp>
 
+#include <chrono>
+#include <thread>
 
 using checksum_fun = int (*)(const char *, off_t);
 using str_to_str = std::unordered_map<std::string, std::string>;

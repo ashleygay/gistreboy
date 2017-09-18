@@ -7,12 +7,11 @@
 
 #include <gui_setup.hpp>
 
-static void create_menu_item_with_callback(const char *name, GtkWidget *window,
-				 GtkWidget * parent, callback_ptr callback, Helper* helper)
+static void create_menu_item_with_callback(const char *name,  GtkWidget * parent,
+					callback_ptr callback, Helper* helper)
 {
 	GtkWidget *b = gtk_menu_item_new_with_label(name);
-	if (helper)
-		helper->set_window(window);
+
 	g_signal_connect(b, "activate", G_CALLBACK(callback), helper);
 
     	gtk_menu_shell_append (GTK_MENU_SHELL (parent), b);
@@ -47,7 +46,7 @@ void setup_gui (GtkApplication *app)
 	gtk_menu_shell_append(GTK_MENU_SHELL (menuBar), menuItem);
 
 	#define X(name, callback, parent, object) \
-		create_menu_item_with_callback(name, window, parent, callback, object);
+		create_menu_item_with_callback(name, parent, callback, object);
 	MENU_SETUP
 	#undef X
 
