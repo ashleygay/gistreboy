@@ -1,3 +1,10 @@
+/*
+ * File : main.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created at : 08/09/2017
+ */
+
 #include <gtk/gtk.h>
 #include <gui_setup.hpp>
 
