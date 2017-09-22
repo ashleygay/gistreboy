@@ -1,0 +1,54 @@
+/*
+ * File : emu_interface.hpp
+ *
+ * This class is used by the GUI to communicate with the emulator itself
+ *
+ * File created by : Corentin Gay
+ * File was created the : 17/09/2017
+ */
+
+#include <emu_interface.hpp>
+
+EmuInterface::EmuInterface()
+{
+}
+
+const uint8_t * EmuInterface::getRenderedPixels()
+{
+	//TODO: if VRAM has been updated, we render again
+	// if(_p.vramToUpdate())
+		//_renderPixels();
+	DEBUG_PRINT << "Getting pixels" << std::endl;
+	return _pixels;
+}
+
+void EmuInterface::_renderPixels()
+{
+	//TODO: update _pixels here
+
+	DEBUG_PRINT << "Rendering..." << std::endl;
+
+	//_p.setNoUpdate();
+}
+
+void EmuInterface::startEmulator()
+{
+	_controller.startEmulator();
+}
+
+
+void EmuInterface::stopEmulator()
+{
+	_controller.stopEmulator();
+}
+
+void EmuInterface::changeCartridge(uint8_t * mem, size_t s)
+{
+	stopEmulator();
+	// If previously loaded data, we free the pointer
+	if (_mem)
+		free(_mem);
+
+	_mem = mem;
+	_s = s;
+}

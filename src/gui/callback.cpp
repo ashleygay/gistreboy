@@ -14,12 +14,12 @@ void NYI(GtkWidget * b, gpointer user_data)
 		    << "\" not yet implemented." << std::endl;
 }
 
-void quit_callback(GtkWidget * w, gpointer data)
+void stop_callback(GtkWidget * w, gpointer user_data)
 {
 	(void)w;
-	DEBUG_PRINT << "Quitting the application." << std::endl;
-	GtkWidget *window = (GtkWidget *)data;
-	gtk_widget_destroy(window);
+	(void)user_data;
+	DEBUG_PRINT << "Stopping the emulation." << std::endl;
+	EmuInterface::getInstance().stopEmulator();
 }
 
 
@@ -33,15 +33,27 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 	if (!data)
 		return;
 
-	//TODO: we give the pointer to the memory here.
-	DEBUG_PRINT << "TODO: we give the pointer to the memory here." << std::endl;
+	EmuInterface & i = EmuInterface::getInstance();
 
-	free(data);
+	// EmuInterface takes ownership of the data pointer
+	i.changeCartridge(data, s);
+
+	DEBUG_PRINT << "We give the pointer to the memory here." << std::endl;
+}
+
+void run_button_callback(GtkWidget * b, gpointer user_data)
+{
+	(void)b;
+	(void)user_data;
+
+	EmuInterface& i = EmuInterface::getInstance();
+
+	i.startEmulator();
 }
 
 gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 {
-	using namespace std::chrono_literals;
+//	using namespace std::chrono_literals;
 	(void)user_data;
 
 //	DEBUG_PRINT << "Draw area callback" << std::endl;
@@ -56,7 +68,7 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 	width = gtk_widget_get_allocated_width(w);
 	height = gtk_widget_get_allocated_height(w);
 
-	std::this_thread::sleep_for(2s);
+//	std::this_thread::sleep_for(2s);
 //	DEBUG_PRINT << "Dimensions : " << width  << " x " << height << std::endl;
 
 	gtk_render_background(context, cr, 0, 0, width, height);

@@ -6,12 +6,14 @@
  */
 
 #pragma once
-#include <gtk/gtk.h>
 #include <debug.hpp>
-#include <iostream>
-#include <unordered_map>
 #include <open_button_helper.hpp>
+#include <emu_interface.hpp>
 
+#include <gtk/gtk.h>
+#include <unordered_map>
+#include <iostream>
+#include <string>
 #include <chrono>
 #include <thread>
 
@@ -28,8 +30,11 @@ void NYI(GtkWidget * b, gpointer user_data);
 // as where to set the result buffer
 void open_button_callback(GtkWidget * b, gpointer user_data);
 
-// Callback for quitting the app
-void quit_callback(GtkWidget * w, gpointer data);
+void run_button_callback(GtkWidget * b, gpointer user_data);
+
+
+// Callback for stoping the currently running emulation
+void stop_callback(GtkWidget * w, gpointer data);
 
 // Callback that is called as many times as possible per seconds
 // TODO: get the buffer to display from memory here

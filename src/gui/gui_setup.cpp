@@ -35,7 +35,14 @@ void setup_gui (GtkApplication *app)
 	gtk_window_set_title(GTK_WINDOW (window), "Super Gistre Boy");
 	gtk_window_set_default_size(GTK_WINDOW (window), 600, 400);
 
+	//TODO: We set the window for the emulation interface here, sothat it
+	//is able to display error messages. We also add a signal to kill the
+	//emulator when the window is killed.
+
+	//EmuInterface.getInstance().setWindow(window);
+
 	menuItem = gtk_menu_item_new_with_label("Menu");
+	g_signal_connect(G_OBJECT (window), "destroy", G_CALLBACK (stop_callback), NULL);
 
 	area = gtk_drawing_area_new();
 	gtk_widget_set_size_request (area, 600, 400);
@@ -53,7 +60,7 @@ void setup_gui (GtkApplication *app)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM (menuItem), subMenu);
 
     	gtk_box_pack_start(GTK_BOX (box), menuBar, FALSE, FALSE, 5);
-    	gtk_box_pack_start(GTK_BOX (box), area, TRUE, TRUE, 5);
+    	gtk_box_pack_start(GTK_BOX (box), area, FALSE, TRUE, 5);
 
 	g_signal_connect (G_OBJECT (area), "draw", G_CALLBACK (draw_callback), NULL);
 	gtk_widget_add_tick_callback(area, trigger_draw, NULL, stub_destroy);

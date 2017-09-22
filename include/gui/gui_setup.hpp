@@ -8,6 +8,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
+
 #include <callback.hpp>
 #include <open_button_helper.hpp>
 
@@ -18,8 +19,8 @@ using callback_ptr = void (*)(GtkWidget*, gpointer);
 // XMacro to define all the buttons from the interface.
 // menuBar or subMenu to choose where the button will be added
 #define MENU_SETUP \
-	X("Run", NYI, menuBar, NULL) \
-	X("Stop", NYI, menuBar, NULL)\
+	X("Run", run_button_callback, menuBar, NULL) \
+	X("Stop", stop_callback, menuBar, new Helper(window))\
 	X("Open image file", open_button_callback, subMenu,\
 		new OpenButtonHelper(window, 42, {{"access::can-read", "TRUE"}}))\
 	X("Save state", NYI, subMenu, NULL) \
