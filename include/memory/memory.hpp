@@ -19,7 +19,7 @@ private :
 
   /* ROM : 0000-3FFF / ROM banks : 4000-7FFF / SRAM : A000-BFFF (MBC1) */
   Cartridge cartridge;
-  /* VRAM : 4000-9FFF / OAM : FE00-FE9F
+  /* VRAM : 8000-9FFF / OAM : FE00-FE9F
      Video I/O Ports */
   Video	video;
   /* WRAM C000-DFFF */
