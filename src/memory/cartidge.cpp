@@ -1,8 +1,8 @@
-#include <ifstream>
 #include <cartridge.hpp>
 
-Cartridge::Cartridge(char *cart)
+Cartridge::Cartridge(uint8_t *cart)
 {
+ /*
   std::ifstream infile;
   infile.open("roms/boot.gb");
   uint8_t byte = 0
@@ -13,7 +13,7 @@ Cartridge::Cartridge(char *cart)
       break;
     boot_rom.push_back(byte);
   }
-
+ */
   rom(cart);
   for (uint16_t i = 0x134; i < 0x144; i++)
     name.push_back((char)rom[i]);

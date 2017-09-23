@@ -7,10 +7,10 @@
 // This class abstracts any memory access done by the processor, it will find
 // out which type of memory and what it must be done depending on the addresses.
 
-class MemoryAccessor {
+class Memory {
 
 public :
-  MemoryAccessor(char *cart);
+  Memory(char *cart);
 
   uint8_t read(uint16_t address);
   void write(uint16_t address, uint8_t byte);
