@@ -1,52 +1,75 @@
+/*
+ * File : callback.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #include <callback.hpp>
 
 void NYI(GtkWidget * b, gpointer user_data)
 {
+	(void)user_data;
 	DEBUG_PRINT << "Button \"" << gtk_menu_item_get_label(GTK_MENU_ITEM(b))
 		    << "\" not yet implemented." << std::endl;
 }
 
-void quit_callback(GtkWidget * w, gpointer data)
+void stop_callback(GtkWidget * w, gpointer user_data)
 {
-	DEBUG_PRINT << "Quitting the application." << std::endl;
-	GtkWidget *window = (GtkWidget *)data;
-	gtk_widget_destroy(window);
+	(void)w;
+	(void)user_data;
+	DEBUG_PRINT << "Stopping the emulation." << std::endl;
+	EmuInterface::getInstance().stopEmulator();
 }
 
 
 void open_button_callback(GtkWidget * b, gpointer user_data)
 {
+	(void)b;
 	OpenButtonHelper *helper = (OpenButtonHelper *)user_data;
-	GFile* gf = helper->open_correct_file();
-	char * data = helper->load_content(gf);
+	GFile* g = helper->open_file_with_dialog();
+	size_t s = 0;
+	uint8_t * data = helper->load_content(g, &s);
 	if (!data)
 		return;
-	//TODO: we give the pointer to the memory here.
-	DEBUG_PRINT << "TODO: we give the pointer to the memory here." << std::endl;
 
-	free(data);
+	EmuInterface & i = EmuInterface::getInstance();
+
+	// EmuInterface takes ownership of the data pointer
+	i.changeCartridge(data, s);
+
+	DEBUG_PRINT << "We give the pointer to the memory here." << std::endl;
+}
+
+void run_button_callback(GtkWidget * b, gpointer user_data)
+{
+	(void)b;
+	(void)user_data;
+
+	EmuInterface& i = EmuInterface::getInstance();
+
+	i.startEmulator();
 }
 
 gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 {
+//	using namespace std::chrono_literals;
 	(void)user_data;
 
-	DEBUG_PRINT << "Draw area callback" << std::endl;
-	DEBUG_PRINT << "Cairo object pointer is : " << (void*)cr<< std::endl;
+//	DEBUG_PRINT << "Draw area callback" << std::endl;
+//	DEBUG_PRINT << "Cairo object pointer is : " << (void*)cr<< std::endl;
 
-	//TODO: update the function to actually take into account that the
-	//buffer has changed
+	//TODO: get an instance of emu_interface and get the buffer to render
 
 	int width = 0, height = 0;
-	GdkRGBA color;
 	GtkStyleContext *context;
-	cairo_surface_t *cs;
 
 	context = gtk_widget_get_style_context(w);
 	width = gtk_widget_get_allocated_width(w);
 	height = gtk_widget_get_allocated_height(w);
 
-	DEBUG_PRINT << "Dimensions : " << width  << " x " << height << std::endl;
+//	std::this_thread::sleep_for(2s);
+//	DEBUG_PRINT << "Dimensions : " << width  << " x " << height << std::endl;
 
 	gtk_render_background(context, cr, 0, 0, width, height);
 
@@ -65,7 +88,9 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 
 int trigger_draw(GtkWidget * area, GdkFrameClock * c, gpointer user_data)
 {
-	DEBUG_PRINT << "Triggering draw event on the area. clock " << (void*)c << std::endl;
+	(void)c;
+	(void)user_data;
+//	DEBUG_PRINT << "Triggering draw event on the area. clock " << (void*)c << std::endl;
 	gtk_widget_queue_draw_area(area, 0, 0,
 			gtk_widget_get_allocated_width(area),
 			gtk_widget_get_allocated_height(area));
