@@ -8,10 +8,10 @@
 
 using OpCodeToInstruction = std::unordered_map<OpCode, Instruction *>;
 
-class Architecture
+class InstructionSet
 {
 	public:
-		Architecture()
+		InstructionSet()
 		{
 			//TODO: we add all instructions to the map here
 		}
@@ -19,7 +19,7 @@ class Architecture
 
 	// -1 invalid instruction
 	// otherwise, the number of arguments it takes
-	int checkInstruction(OpCode opCode);
+	int isInstructionValid(OpCode opCode);
 
 	int addInstruction(Instruction* instr);
 
