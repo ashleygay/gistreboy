@@ -14,6 +14,14 @@ class InstructionSet
 		InstructionSet()
 		{
 			//TODO: we add all instructions to the map here
+			//Use xmacros to generate all the instructions here
+		/*	
+			map = {
+				#define X(instruction) \
+					instruction::opCode, new instruction()
+				#undef X
+			}
+		*/
 		}
 
 

@@ -1,5 +1,20 @@
 #include <instructionset.hpp>
 
+InstructionSet::InstructionSet()
+{
+	//TODO: we add all instructions to the map here
+	//Use xmacros to generate all the instructions here
+	/*	
+	map = {
+		#define X(instruction) \
+			auto instr_##instruction = new instruction();\
+			{instr_##instruction->getOpCode(), &instr_##instruction},
+		#undef X
+	};
+	*/
+
+}
+
 int InstructionSet::isInstructionValid(OpCode opCode)
 {
 	auto elt = map.find(opCode);
