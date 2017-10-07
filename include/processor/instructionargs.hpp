@@ -15,7 +15,6 @@ using Argument = boost::variant<uint8_t, uint16_t, RegRef, DRegRef>;
 using InstructionArgs = std::vector<Argument>;
 
 // Helper functions to add correponding elements to a vector
-void addUChar(InstructionArgs& args, int val);
 void addShort(InstructionArgs& args, int val);
 void addRegRef(InstructionArgs& args, RegRef reg);
 void addDRegRef(InstructionArgs& args, DRegRef ref);

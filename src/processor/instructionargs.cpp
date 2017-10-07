@@ -1,11 +1,6 @@
 #include <instructionargs.hpp>
 
 // Helper functions to add correponding elements to a vector
-void addUChar(InstructionArgs& args, int val)
-{
-	args.push_back((uint8_t)val);
-}
-
 void addShort(InstructionArgs& args, int val)
 {
 	args.push_back((uint16_t)val);

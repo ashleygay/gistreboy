@@ -1,31 +1,51 @@
 #include <processor.hpp>
+#include <instruction.hpp>
 
 void Processor::execCurrentInstruction()
 {
-	//TODO: We get the next instruction to execute.
-	// If any interrupts we deal with that first
-	// Or we use programCounter and advance it to the next instruction
-
-	//uint opcode = _memAccessor.getNextOpCode(programCounter.value, &args);
-	//instructions[opcode].execute(&args);
-	//return instructions[opcode].nbCycles();
+	_currentInstruction->exec();
 }
 
 
-void Processor::fetchNextInstruction()
+int Processor::_fetchNextInstruction()
 {
-	//TODO: do nothing
-	//TODO: We get the next instruction to execute.
-	// If any interrupts we deal with that first
-	// Or we use programCounter and advance it to the next instruction
+	//TODO: Interrupts, interrupts and interrupts (maybe)
 
-	//currentOpCode = _memAccessor.getNextOpCode(programCounter.value, &args);
-	//instructions[opcode].execute(&args);
-	//return instructions[opcode].nbCycles();
+	uint16_t opcode = 0; /*_mem.read(programCounter.value);*/
+	if (!iset.isValidOpCode(opcode)) {
+		// We try the to get the instruction over 16bits
+//		opcode = (opcode << 8) | _mem.read(++programCounter.value);
+		if (!iset.isValidOpCode(opcode)) {
+			return _BUG("Unknown opcode : ", opcode);
+		}
+	}
+	// Opcode is valid
+	_currentInstruction = iset.getInstruction(opcode);
+	InstructionArgs args;
+
+	// We get each argument for the instruction, according to its length.
+	for (int i = 0; i < _currentInstruction->nbArgs() ; ++i) {
+
+		uint16_t arg = 0;
+		for (int size = 0; size < _currentInstruction->argSize(i); ++size) {
+
+//			arg = (arg << 8) | _mem.read(++programCounter.value);
+		}
+		addShort(args, arg);
+	}
+	_currentInstruction->setArgs(args);
+	return _currentInstruction->nbCycles();
 }
 
-int Processor::getNbCycles() const
+int Processor::fetchNextStep()
 {
-	//TODO: do stuff here
-	return 42;
+	//TODO: check for the interrupt first
+	return _fetchNextInstruction();
+}
+
+int Processor::_BUG(std::string str, int value)
+{
+	std::cout << str << "0x" << std::hex << value << std::dec << std::endl;
+	_isRunning = false;
+	return -1;
 }

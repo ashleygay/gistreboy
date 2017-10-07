@@ -1,4 +1,5 @@
 #include <instructionset.hpp>
+#include <instruction.hpp>
 
 InstructionSet::InstructionSet()
 {
@@ -15,7 +16,7 @@ InstructionSet::InstructionSet()
 
 }
 
-int InstructionSet::isInstructionValid(OpCode opCode)
+int InstructionSet::isValidOpCode(OpCode opCode)
 {
 	auto elt = map.find(opCode);
 	return (elt != map.end());
@@ -27,4 +28,10 @@ int InstructionSet::addInstruction(Instruction* instr)
 	if (elt == map.end())
 		map[instr->opCode()] = instr;
 	return (elt == map.end());
+}
+
+
+Instruction * InstructionSet::getInstruction(OpCode opCode)
+{
+	return map.find(opCode)->second;
 }

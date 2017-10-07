@@ -28,8 +28,7 @@ class Clock
 
 	private:
 		boost::asio::io_service io;
-		
-		Processor & processor = Processor::getInstance();
+		Processor & _p = Processor::getInstance();
 
 		// Desired frequence for the emulator
 		// const unsigned int freq = 4194304; // In Hz

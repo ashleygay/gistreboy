@@ -2,7 +2,8 @@
 
 #include <unordered_map>
 
-#include <instruction.hpp>
+class Instruction;
+
 #include <opcode.hpp>
 #include <boost/variant/recursive_variant.hpp>
 
@@ -11,25 +12,16 @@ using OpCodeToInstruction = std::unordered_map<OpCode, Instruction *>;
 class InstructionSet
 {
 	public:
-		InstructionSet()
-		{
-			//TODO: we add all instructions to the map here
-			//Use xmacros to generate all the instructions here
-		/*	
-			map = {
-				#define X(instruction) \
-					instruction::opCode, new instruction()
-				#undef X
-			}
-		*/
-		}
+		InstructionSet();
 
+		// -1 invalid instruction
+		// otherwise, the number of arguments it takes
+		int isValidOpCode(OpCode opCode);
 
-	// -1 invalid instruction
-	// otherwise, the number of arguments it takes
-	int isInstructionValid(OpCode opCode);
+		int addInstruction(Instruction* instr);
 
-	int addInstruction(Instruction* instr);
+		// Function not safe on its own, use isOpCodeValid() first
+		Instruction * getInstruction(OpCode opCode);
 
 	private:
 		OpCodeToInstruction map;
