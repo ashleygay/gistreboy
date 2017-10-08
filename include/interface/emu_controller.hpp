@@ -10,6 +10,7 @@
 #pragma once
 
 #include <debug.hpp>
+#include <gameboy.hpp>
 
 #include <gtk/gtk.h>
 #include <iostream>
@@ -22,37 +23,17 @@
 
 
 
-// This class will contain the processor and the clock, and then we only have on
-// singleton, EmuInterface
-
-class DummyProcessor
-{
-
-	public:
-		bool isRunning() {return _running;}
-		void stop() {_running = false;}
-		void start() {_running = true;}
-
-	private:
-		std::atomic<bool> _running{false};
-};
-
+// This class will contain the gameboy and will start/stop it.
 class EmuController
 {
-	using Processor = DummyProcessor;
 	public:
 		EmuController();
-		void startEmulator();
-		void stopEmulator();
+		void changeGame(uint8_t * mem, size_t s);
+		void startEmulation();
+		void stopEmulation();
 	private:
-		//static void mainLoop(Processor &p, Clock &c);
-		static void mainLoop(Processor& p);
+		static void mainLoop(GameBoy& gb);
 	private:
-		//TODO: future here
 		std::future<void> _future;
-		Processor _p;
-		//Clock c;
-
-		// Contains error messages.
-		std::array<std::string, 2> _errors;
+		GameBoy gb;
 };

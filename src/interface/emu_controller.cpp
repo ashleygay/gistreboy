@@ -11,33 +11,32 @@
 
 EmuController::EmuController()
 {
-	_errors = {"Bad error number", "We are number one"};
 }
 
-void EmuController::mainLoop(Processor& p)
+void EmuController::mainLoop(GameBoy& gb)
 {
-	//TODO: replace by the actual code
-	using namespace std::chrono_literals;
-	uint16_t i = 0;
-	while(p.isRunning()) {
-		std::cout << "Executing loop " << i << std::endl;
-		std::this_thread::sleep_for(0.1s);
-		++i;
+	while(gb.isRunning()) {
+		gb.step();
 	}
 }
 
-void EmuController::startEmulator()
+void EmuController::changeGame(uint8_t * mem, size_t s)
 {
-		stopEmulator();
-		_future = std::async(std::launch::async,
-			EmuController::mainLoop, std::ref(_p));
-		_p.start();
+	gb.changeGame(mem, s);
 }
 
-void EmuController::stopEmulator()
+void EmuController::startEmulation()
+{
+		stopEmulation();
+		_future = std::async(std::launch::async,
+			EmuController::mainLoop, std::ref(gb));
+		gb.start();
+}
+
+void EmuController::stopEmulation()
 {
 	try {
-		_p.stop();
+		gb.stop();
 		_future.wait();
 		_future.get(); // Future calls to wait() will be invalid.
 		DEBUG_PRINT << "Emulator stopped" << std::endl;

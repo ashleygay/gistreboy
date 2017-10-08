@@ -33,13 +33,19 @@ void EmuInterface::_renderPixels()
 
 void EmuInterface::startEmulator()
 {
-	_controller.startEmulator();
+	if (!_mem) {
+		_controller.changeGame(_mem, _s);
+		_controller.startEmulation();
+	}
+	else
+		std::cout << "Cannot start the emulation without a game"
+				<< std::endl;
 }
 
 
 void EmuInterface::stopEmulator()
 {
-	_controller.stopEmulator();
+	_controller.stopEmulation();
 }
 
 void EmuInterface::changeCartridge(uint8_t * mem, size_t s)

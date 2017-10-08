@@ -1,0 +1,49 @@
+#pragma once
+
+#include <debug.hpp>
+
+#include <gtk/gtk.h>
+#include <iostream>
+#include <array>
+#include <string>
+#include <chrono>
+#include <thread>
+#include <future>
+#include <atomic>
+
+class DummyProcessor
+{
+	
+};
+
+class GameBoy
+{
+	using Processor = DummyProcessor;
+	public:
+		GameBoy();
+
+		// A loop of execution of the emulator
+		void step();
+
+		void changeGame(uint8_t * mem, size_t s);
+
+		bool isRunning() {return _running;}
+		void stop() {_running = false;}
+		void start () {_running = true;}
+
+	private:
+		void _resetComponents();
+		void _wireComponents();
+	private:
+		//Processor p;
+		//Clock c;
+		//Memory m;
+		//LCD lcd;
+
+
+		// Used to handle periodic interrupts or interrupts provided by
+		// the software (joypad inputs)
+		//InterruptProvider ip;
+
+		std::atomic<bool> _running{false};
+};

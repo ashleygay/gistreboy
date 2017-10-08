@@ -50,7 +50,6 @@ class EmuInterface
 		void operator=(EmuInterface const &) = delete;
 
 	private:
-		//TODO
 		//GtkWidget * window; // Used to display errors
 		EmuController _controller;
 		uint8_t _pixels[600 * 400];
