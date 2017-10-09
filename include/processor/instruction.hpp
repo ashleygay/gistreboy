@@ -18,26 +18,12 @@ class Instruction {
 		virtual int argSize(int i) = 0;
 };
 
-class Nop : Instruction {
-	public:
-		void exec() {}
-		const char *toStr() { return "NOP"; }
-		virtual uint16_t opcode() { return 0; }
-		virtual int nbCycles() { return 4; }
-		virtual int nbArgs() { return 0; }
-		virtual void setArgs(InstructionArgs & args){}
-		virtual int argSize(int i) {return 0;}
-};
-
 /// LD Instructions
-
-//TODO: if the processor is no longer a singleton, how do we modify it in the
-//instructions, modidfying registers for example ?
 
 #define decl_instruction(name, opc, nb_cycles, nb_args, size_arg0, size_arg1)\
 	class name : Instruction{\
 		public:\
-			name();\
+			name(Processor& p): _p(p){}\
 			virtual void exec();\
 			virtual const char *toStr() { return #name; }\
 			virtual uint16_t opCode() { return opc; } \
@@ -48,6 +34,9 @@ class Nop : Instruction {
 				{return i ? size_arg1 : size_arg0;}\
 		private:\
 			InstructionArgs _args; \
+			Processor& _p;\
 	};
 
 decl_instruction(LD_BX, 0x06, 8, 1, 1, 0)
+
+decl_instruction(NOP, 0x00, 4, 0, 0, 0)
