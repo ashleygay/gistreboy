@@ -1,9 +1,19 @@
+/*
+ * File : gameboy.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created at : 08/10/2017
+ */
+
 #include <gameboy.hpp>
 
 
 
 void GameBoy::step()
 {
+	// Priority order:
+	// 	Interrupts
+	// 	Next Instruction
 }
 
 void GameBoy::_wireComponents()
@@ -13,6 +23,7 @@ void GameBoy::_wireComponents()
 	// c.setProc(&p);
 	// lcd.setMemory(&m);
 	// ip.setProc(&p);
+	// ip.setMemory(&m);
 }
 
 void GameBoy::_resetComponents()

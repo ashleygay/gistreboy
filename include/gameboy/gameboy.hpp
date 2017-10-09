@@ -1,3 +1,10 @@
+/*
+ * File : gameboy.hpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/10/2017
+ */
+
 #pragma once
 
 #include <debug.hpp>
@@ -22,7 +29,7 @@ class GameBoy
 	public:
 		GameBoy();
 
-		// A loop of execution of the emulator
+		// Execute a single step loop of the emulator
 		void step();
 
 		void changeGame(uint8_t * mem, size_t s);
