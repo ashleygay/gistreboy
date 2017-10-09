@@ -9,7 +9,7 @@
 
 class Instruction {
 	public:
-		virtual void exec() = 0;
+		virtual void exec(Processor *p) = 0;
 		virtual const char *toStr() = 0;
 		virtual uint16_t opCode() = 0;
 		virtual int nbCycles() = 0;
@@ -21,10 +21,9 @@ class Instruction {
 /// LD Instructions
 
 #define decl_instruction(name, opc, nb_cycles, nb_args, size_arg0, size_arg1)\
-	class name : Instruction{\
+	class name : public Instruction{\
 		public:\
-			name(Processor& p): _p(p){}\
-			virtual void exec();\
+			virtual void exec(Processor *p);\
 			virtual const char *toStr() { return #name; }\
 			virtual uint16_t opCode() { return opc; } \
 			virtual int nbCycles() { return nb_cycles; } \
@@ -34,7 +33,6 @@ class Instruction {
 				{return i ? size_arg1 : size_arg0;}\
 		private:\
 			InstructionArgs _args; \
-			Processor& _p;\
 	};
 
 decl_instruction(LD_BX, 0x06, 8, 1, 1, 0)

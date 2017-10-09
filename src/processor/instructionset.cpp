@@ -13,6 +13,8 @@ InstructionSet::InstructionSet()
 		#undef X
 	};
 	*/
+	NOP *instr_NOP = new NOP();
+	map[instr_NOP->opCode()] = instr_NOP;
 
 }
 

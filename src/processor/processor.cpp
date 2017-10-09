@@ -3,14 +3,12 @@
 
 void Processor::execCurrentInstruction()
 {
-	_currentInstruction->exec();
+	_currentInstruction->exec(this);
 }
 
 
 int Processor::_fetchNextInstruction()
 {
-	//TODO: Interrupts, interrupts and interrupts (maybe)
-
 	uint16_t opcode = 0; /*_mem.read(programCounter.value);*/
 	if (!iset.isValidOpCode(opcode)) {
 		// We try the to get the instruction over 16bits
@@ -39,7 +37,6 @@ int Processor::_fetchNextInstruction()
 
 int Processor::fetchNextStep()
 {
-	//TODO: check for the interrupt first
 	return _fetchNextInstruction();
 }
 

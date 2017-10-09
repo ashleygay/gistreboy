@@ -1,14 +1,14 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
-void LD_BX::exec()
+void LD_BX::exec(Processor *p)
 {
-	Processor& proc = _p;
 	uint8_t val = boost::get<uint8_t>(this->_args[0]);
 	DEBUG_PRINT << "Got value : " << val << std::endl;
-	proc.registerB.value = val;
+	p->registerB.value = val;
 }
 
-void NOP::exec()
+void NOP::exec(Processor *p)
 {
+	(void)p;
 }

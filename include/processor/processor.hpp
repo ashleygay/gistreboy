@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+class InstructionSet;
+
 #include <debug.hpp>
 #include <instructionset.hpp>
 #include <instructionargs.hpp>
@@ -12,11 +14,15 @@
 class Processor {
 
 	public:
-		static Processor& getInstance() {
-			static Processor inst;
-			return inst;
+		Processor()
+		{
+			programCounter.value = 0x100;
+			stackPointer.value = 0xfffe;
+			interruptMasterEnable.value = 1;
+			interruptEnable.value = 1;
 		}
-		
+
+	public:
 		FlagRegister flag;
 
 		Register registerA;
@@ -39,7 +45,6 @@ class Processor {
 		// Read/Write as wall as charging next instruction etc
 		// Memory mem;
 
-	private:
 		DRegister programCounter;
 		DRegister stackPointer;
 
@@ -47,25 +52,19 @@ class Processor {
 
 		Instruction * _currentInstruction;
 
-		// All interupts
-
-		// All interrupts routines here.
-		//std::array<>;
-
 		// InstructionSet containing all instructions.
 		InstructionSet iset;
-
+	public:
+		// Those functions are used by the instructions to read/write
+		// memory values
+/*
+		uint8_t _read(uint16_t address) {return mem.read(address);}
+		void _write(uint8_t value, uint16_t address)
+			{mem.write(value, address);}
+*/
 	private:
-		Processor()
-		{
-			programCounter.value = 0x100;
-			stackPointer.value = 0xfffe;
-			interruptMasterEnable.value = 1;
-			interruptEnable.value = 1;
-		}
 		int _BUG(std::string str, int value);
 		int _fetchNextInstruction();
-
 	public:
  		// Get the number of cycles of the current instruction to execute
 		int getNbCycles() const;

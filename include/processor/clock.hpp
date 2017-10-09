@@ -14,7 +14,7 @@
 class Clock
 {
 	public:
-		Clock()
+		Clock(Processor* p): _p(p)
 		{
 			boost::asio::io_service io;
 			boost::asio::deadline_timer t(io);
@@ -28,7 +28,7 @@ class Clock
 
 	private:
 		boost::asio::io_service io;
-		Processor & _p = Processor::getInstance();
+		Processor *_p;
 
 		// Desired frequence for the emulator
 		// const unsigned int freq = 4194304; // In Hz
