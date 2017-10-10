@@ -16,41 +16,56 @@ class Processor {
 	public:
 		Processor()
 		{
-			programCounter.value = 0x100;
-			stackPointer.value = 0xfffe;
-			interruptMasterEnable.value = 1;
-			interruptEnable.value = 1;
+			// Default values taken from TCAGBD docs
+			A.value = 0x01;
+			B.value = 0x00;
+			C.value = 0x13;
+			D.value = 0x00;
+			E.value = 0xD8;
+			H.value = 0x01;
+			L.value = 0x4D;
+			PC.value = 0x100;
+			SP.value = 0xfffe;
+
+			// Interrupts are enabled at the start
+			IME.value = 1;
+			IE.value = 1;
 		}
 
 	public:
 		FlagRegister flag;
 
-		Register registerA;
-		Register registerB;
-		Register registerC;
-		Register registerD;
-		Register registerE;
-		Register registerH;
-		Register registerL;
+		Register A;
+		Register B;
+		Register C;
+		Register D;
+		Register E;
+		Register H;
+		Register L;
 
 		// Enable interrupts to be used
-		Register interruptMasterEnable;
+		// If set, the CPU will jump to the interrup routine and reset IF
+		// If reset, the jump will not be performed and execution
+		// will continue as normal
+		Register IME;
 
 		// Interrupt enable
-		Register interruptEnable;
+		Register IE;
 
-		Register interruptFlag;
+		// This flag is set when an interrupt is pending
+		Register IF;
 
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
 		// Memory mem;
 
-		DRegister programCounter;
-		DRegister stackPointer;
+		DRegister PC;
+		DRegister SP;
 
-		std::atomic_bool _isRunning = {false};
+		// Boolean is set to false when we end the bootcode.
+		bool isBooting = true;
 
-		Instruction * _currentInstruction;
+		Instruction * currentInstruction;
 
 		// InstructionSet containing all instructions.
 		InstructionSet iset;

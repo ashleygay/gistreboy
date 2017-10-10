@@ -3,7 +3,7 @@
 
 void Processor::execCurrentInstruction()
 {
-	_currentInstruction->exec(this);
+	currentInstruction->exec(this);
 }
 
 
@@ -18,21 +18,21 @@ int Processor::_fetchNextInstruction()
 		}
 	}
 	// Opcode is valid
-	_currentInstruction = iset.getInstruction(opcode);
+	currentInstruction = iset.getInstruction(opcode);
 	InstructionArgs args;
 
 	// We get each argument for the instruction, according to its length.
-	for (int i = 0; i < _currentInstruction->nbArgs() ; ++i) {
+	for (int i = 0; i < currentInstruction->nbArgs() ; ++i) {
 
 		uint16_t arg = 0;
-		for (int size = 0; size < _currentInstruction->argSize(i); ++size) {
+		for (int size = 0; size < currentInstruction->argSize(i); ++size) {
 
 //			arg = (arg << 8) | _mem.read(++programCounter.value);
 		}
 		addShort(args, arg);
 	}
-	_currentInstruction->setArgs(args);
-	return _currentInstruction->nbCycles();
+	currentInstruction->setArgs(args);
+	return currentInstruction->nbCycles();
 }
 
 int Processor::fetchNextStep()
@@ -43,6 +43,5 @@ int Processor::fetchNextStep()
 int Processor::_BUG(std::string str, int value)
 {
 	std::cout << str << "0x" << std::hex << value << std::dec << std::endl;
-	_isRunning = false;
 	return -1;
 }
