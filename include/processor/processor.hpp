@@ -29,7 +29,13 @@ class Processor {
 
 			// Interrupts are enabled at the start
 			IME.value = 1;
-			IE.value = 1;
+
+			// We enable all kinds of interrupts
+			IE.setInterrupt(InterruptRegister::VBLANK);
+			IE.setInterrupt(InterruptRegister::LCD_STATUS);
+			IE.setInterrupt(InterruptRegister::TIMER);
+			IE.setInterrupt(InterruptRegister::SERIAL);
+			IE.setInterrupt(InterruptRegister::JOYPAD);
 		}
 
 	public:
@@ -43,17 +49,14 @@ class Processor {
 		Register H;
 		Register L;
 
-		// Enable interrupts to be used
-		// If set, the CPU will jump to the interrup routine and reset IF
-		// If reset, the jump will not be performed and execution
-		// will continue as normal
+		// Enable/disable all interrupts
 		Register IME;
 
-		// Interrupt enable
-		Register IE;
+		// Enable/disable specific interrupts
+		InterruptRegister IE;
 
 		// This flag is set when an interrupt is pending
-		Register IF;
+		InterruptRegister IF;
 
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
