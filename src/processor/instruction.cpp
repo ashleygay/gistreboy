@@ -18,10 +18,10 @@ void ADD_AA::exec(Processor *p)
 {
   	uint8_t val = boost::get<uint8_t>(this->_args[1]);
   	DEBUG_PRINT << "Got value : " << val << std::endl;
-  	p->A.value = p->A.value = val;
+  	p->A.value = val;
 	if (p->A.value == 0)
-	  p->flag.setFlag(ZERO);
-	p->flag.unsetFlag(SUBTRACT);
+	  p->flag.setFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 
 	/// il manque le set du flag C et H
-} 
+}

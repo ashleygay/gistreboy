@@ -6,6 +6,7 @@
 #include <debug.hpp>
 #include <processor.hpp>
 #include <instructionargs.hpp>
+#include <registers.hpp>
 
 class Instruction {
 	public:
@@ -18,7 +19,12 @@ class Instruction {
 		virtual int argSize(int i) = 0;
 };
 
-/// LD Instructions
+/*
+ * Argument of the instruction are stored in a std::vector<>.
+ * Arguments are stored starting at 0, so if an instruction takes
+ * only one argument, its argument will be at this->_args[0].
+ */
+
 
 #define decl_instruction(name, opc, nb_cycles, nb_args, size_arg0, size_arg1)\
 	class name : public Instruction{\
