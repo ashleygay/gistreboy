@@ -42,6 +42,11 @@ class Instruction {
 	};
 
 decl_instruction(LD_BX, 0x06, 8, 1, 1, 0)
+decl_instruction(LD_CX, 0x0E, 8, 1, 1, 0)
+decl_instruction(LD_DX, 0x16, 8, 1, 1, 0)
+decl_instruction(LD_EX, 0x1E, 8, 1, 1, 0)
+decl_instruction(LD_HX, 0x26, 8, 1, 1, 0)
+decl_instruction(LD_LX, 0x2E, 8, 1, 1, 0)
 
 decl_instruction(NOP, 0x00, 4, 0, 0, 0)
 

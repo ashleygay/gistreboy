@@ -20,6 +20,12 @@ InstructionSet::InstructionSet()
 		map[instr_##instruct->opCode()] = instr_##instruct;
 
 	add_instr(NOP)
+	add_instr(LD_BX)
+	add_instr(LD_CX)
+	add_instr(LD_DX)
+	add_instr(LD_EX)
+	add_instr(LD_HX)
+	add_instr(LD_LX)
 
 	#undef add_instr
 }

@@ -1,12 +1,6 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
-void LD_BX::exec(Processor *p)
-{
-	uint8_t val = boost::get<uint8_t>(this->_args[0]);
-	DEBUG_PRINT << "Got value : " << val << std::endl;
-	p->B.value = val;
-}
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -15,6 +9,12 @@ void LD_BX::exec(Processor *p)
 	p->reg.value = val;\
 	}
 
+LD_RegX_def(B)
+LD_RegX_def(C)
+LD_RegX_def(D)
+LD_RegX_def(E)
+LD_RegX_def(H)
+LD_RegX_def(L)
 
 #undef LD_RegX_def
 
