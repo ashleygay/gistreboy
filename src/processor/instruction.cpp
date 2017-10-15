@@ -1,12 +1,87 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
-void LD_BX::exec(Processor *p)
-{
-	uint8_t val = boost::get<uint8_t>(this->_args[0]);
-	DEBUG_PRINT << "Got value : " << val << std::endl;
-	p->B.value = val;
-}
+#define LD_RegX_def(reg)\
+	void LD_##reg##X::exec(Processor *p)\
+	{\
+	uint8_t val = boost::get<uint8_t>(this->_args[0]);\
+	DEBUG_PRINT << "Got value : " << val << std::endl;\
+	p->reg.value = val;\
+	}
+
+LD_RegX_def(B)
+LD_RegX_def(C)
+LD_RegX_def(D)
+LD_RegX_def(E)
+LD_RegX_def(H)
+LD_RegX_def(L)
+
+
+#undef LD_RegX_def
+
+#define LD_XY_def(reg1, reg2)\
+	void LD_##reg1##reg2::exec(Processor *p)\
+	{ p->reg1.value = p->reg2.value;}
+
+LD_XY_def(A,A)
+LD_XY_def(A,B)
+LD_XY_def(A,C)
+LD_XY_def(A,D)
+LD_XY_def(A,E)
+LD_XY_def(A,H)
+LD_XY_def(A,L)
+// TODO : A, HL
+LD_XY_def(B,B)
+LD_XY_def(B,C)
+LD_XY_def(B,D)
+LD_XY_def(B,E)
+LD_XY_def(B,H)
+LD_XY_def(B,L)
+// TODO : B, HL
+LD_XY_def(C,B)
+LD_XY_def(C,C)
+LD_XY_def(C,D)
+LD_XY_def(C,E)
+LD_XY_def(C,H)
+LD_XY_def(C,L)
+// TODO : C, HL
+LD_XY_def(D,B)
+LD_XY_def(D,C)
+LD_XY_def(D,D)
+LD_XY_def(D,E)
+LD_XY_def(D,H)
+LD_XY_def(D,L)
+// TODO : D, HL
+LD_XY_def(E,B)
+LD_XY_def(E,C)
+LD_XY_def(E,D)
+LD_XY_def(E,E)
+LD_XY_def(E,H)
+LD_XY_def(E,L)
+// TODO : E, HL
+LD_XY_def(H,B)
+LD_XY_def(H,C)
+LD_XY_def(H,D)
+LD_XY_def(H,E)
+LD_XY_def(H,H)
+LD_XY_def(H,L)
+// TODO : H, HL
+LD_XY_def(L,B)
+LD_XY_def(L,C)
+LD_XY_def(L,D)
+LD_XY_def(L,E)
+LD_XY_def(L,H)
+LD_XY_def(L,L)
+// TODO : L, HL
+// TODO : HL, B
+// TODO : HL, C
+// TODO : HL, D
+// TODO : HL, E
+// TODO : HL, H
+// TODO : HL, L
+// TODO : HL, n
+
+
 
 void NOP::exec(Processor *p)
 {
@@ -16,119 +91,33 @@ void NOP::exec(Processor *p)
 
 //ADD instructions
 
-void ADD_AA::exec(Processor *p)
-{
-  	auto val = p->A.value * 2;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);			         /// IF result = 0 so set Z 
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);               /// reset N
-	if (((p->A.value & 0xF) + (p->A.value & 0xF)) > 0xF)     /// Set if carry from bit 3
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)                                          /// Set if carry from bit 7
-	  p->flag.setFlag(FlagRegister::CARRY);
+#undef LD_XY_def
 
-	p->A.value = (val & 0xFF);
+#define ADD_XY_def(reg1, reg2)\
+  void ADD_##reg1##reg2::exec(Processor *p)\
+  {\
+  	uint val = p->reg1.value + p->reg2.value;\
+	uint8_t result = static_cast<uint8_t>(val);\
+	if ((result & 0xFF) == 0)\
+	  p->flag.setFlag(FlagRegister::ZERO);\
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+	if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF)) > 0xF)\
+	  p->flag.setFlag(FlagRegister::HALFCARRY);\
+	if (val > 0xFF)\
+	  p->flag.setFlag(FlagRegister::CARRY);	\
+	p->reg1.value = (result & 0xFF);\
 }
 
-void ADD_AB::exec(Processor *p)
-{
-  	auto val = p->A.value + p->B.value;
+ADD_XY_def(A, A)
+ADD_XY_def(A, B)
+ADD_XY_def(A, C)
+ADD_XY_def(A, D)
+ADD_XY_def(A, E)
+ADD_XY_def(A, H)
+ADD_XY_def(A, L)
+// TODO ADD_XY_def(A, HL); 
 
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);                   
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);               
-	if (((p->A.value & 0xF) + (p->B.value & 0xF)) > 0xF)     
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)                                          
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}  
-
-
-void ADD_AC::exec(Processor *p)
-{
-  	auto val = p->A.value + p->C.value;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);                   
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);               
-	if (((p->A.value & 0xF) + (p->C.value & 0xF)) > 0xF)     
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)                                          
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}
-
-void ADD_AD::exec(Processor *p)
-{
-  	auto val = p->A.value + p->D.value;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);                   
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);               
-	if (((p->A.value & 0xF) + (p->D.value & 0xF)) > 0xF)     
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)                                          
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}
-
-void ADD_AE::exec(Processor *p)
-{
-  	auto val = p->A.value + p->E.value;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);                   
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);               
-	if (((p->A.value & 0xF) + (p->E.value & 0xF)) > 0xF)     
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)                                          
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}
-
-void ADD_AH::exec(Processor *p)
-{
-  	auto val = p->A.value + p->H.value;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);                           
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);
-	if (((p->A.value & 0xF) + (p->H.value & 0xF)) > 0xF)    
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)                                         
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}
-
-void ADD_AL::exec(Processor *p)
-{
-  	auto val = p->A.value + p->L.value;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);
-	if (((p->A.value & 0xF) + (p->L.value & 0xF)) > 0xF)
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}
-
-void ADD_AHL::exec(Processor *p)
-{
-  	auto val = p->A.value + p->PC.value;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);
-	if (((p->A.value & 0xF) + (p->PC.value & 0xF)) > 0xF)
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)
-	  p->flag.setFlag(FlagRegister::CARRY);
-
-	p->A.value = (val & 0xFF);
-}
+#undef ADD_XY_def
 
 void ADD_AADDRESS::exec(Processor *p)
 {
@@ -142,9 +131,49 @@ void ADD_AADDRESS::exec(Processor *p)
 	  p->flag.setFlag(FlagRegister::HALFCARRY);
 	if (val > 0xFF)
 	  p->flag.setFlag(FlagRegister::CARRY);
-
 	  p->A.value = (val & 0xFF);*/
 }    
 
 //ADC instructions
 
+#define ADC_XY_def(reg1, reg2)			\
+  void ADC_##reg1##reg2::exec(Processor *p)\
+  {\
+    uint val = p->reg1.value + p->reg2.value + p->flag.getFlag(FlagRegister::CARRY);\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if ((result & 0xFF) == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (val > 0xFF)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg1.value = (result & 0xFF);	   \
+  }
+
+ADC_XY_def(A, A)
+ADC_XY_def(A, B)
+ADC_XY_def(A, C)
+ADC_XY_def(A, D)
+ADC_XY_def(A, E)
+ADC_XY_def(A, H)
+ADC_XY_def(A, L)
+// TODO ADC_XY_def(A, HL);
+
+#undef ADC_XY_def        
+
+void ADC_AADDRESS::exec(Processor *p)
+{
+  p = p;
+  /*auto mem = p._read(this->args[0]);
+  uint val = p->A.value + mem + p->flag.getFlag(FlagRegister::CARRY);\
+  uint8_t result = static_cast<uint8_t>(val);\
+  if ((result & 0xFF) == 0)\
+    p->flag.setFlag(FlagRegister::ZERO);\
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+  if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) \
+    p->flag.setFlag(FlagRegister::HALFCARRY);\
+  if (val > 0xFF)\
+    p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg1.value = (result & 0xFF);\  */
+} 
