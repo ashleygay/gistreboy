@@ -1,5 +1,6 @@
 #include <instructionset.hpp>
 #include <instruction.hpp>
+	
 
 InstructionSet::InstructionSet()
 {
@@ -13,9 +14,14 @@ InstructionSet::InstructionSet()
 		#undef X
 	};
 	*/
-	NOP *instr_NOP = new NOP();
-	map[instr_NOP->opCode()] = instr_NOP;
 
+	#define add_instr(instruct) \
+		auto instr_##instruct = new instruct();\
+		map[instr_##instruct->opCode()] = instr_##instruct;
+
+	add_instr(NOP)
+
+	#undef add_instr
 }
 
 int InstructionSet::isValidOpCode(OpCode opCode)
