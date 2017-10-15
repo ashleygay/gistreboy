@@ -104,7 +104,7 @@ void NOP::exec(Processor *p)
   {\
   	uint val = p->reg1.value + p->reg2.value;\
 	uint8_t result = static_cast<uint8_t>(val);\
-	if ((result & 0xFF) == 0)\
+	if (result == 0)\
 	  p->flag.setFlag(FlagRegister::ZERO);\
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
 	if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF)) > 0xF)\
@@ -138,7 +138,7 @@ void ADD_AADDRESS::exec(Processor *p)
   {\
     uint val = p->reg1.value + p->reg2.value + p->flag.getFlag(FlagRegister::CARRY);\
     uint8_t result = static_cast<uint8_t>(val);\
-    if ((result & 0xFF) == 0)\
+    if (result == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::SUBTRACT);\
     if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) \
@@ -172,7 +172,7 @@ void ADC_AADDRESS::exec(Processor *p)
   {\
     uint val = p->reg1.value - p->reg2.value;\
     uint8_t result = static_cast<uint8_t>(val);\
-    if ((result & 0xFF) == 0)\
+    if (result == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
     p->flag.setFlag(FlagRegister::SUBTRACT);\
     if (((p->reg1.value & 0xF) - (p->reg2.value & 0xF)) < 0) \
@@ -198,3 +198,31 @@ void SUB_AADDRESS::exec(Processor *p)
   p = p;
   /*auto mem = p._read(this->args[0]);*/
 }          
+
+//SUB instructions
+
+#define SBC_XY_def(reg1, reg2)                  \
+  void SBC_##reg1##reg2::exec(Processor *p)\
+  {\
+    uint val = p->reg1.value - p->reg2.value - p->flag.getFlag(FlagRegister::CARRY); \
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg1.value & 0xF) - (p->reg2.value & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (p->reg1.value < p->reg2.value)                 \
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg1.value = (result & 0xFF);       \
+  }
+
+SBC_XY_def(A, A)
+SBC_XY_def(A, B)
+SBC_XY_def(A, C)
+SBC_XY_def(A, D)
+SBC_XY_def(A, E)
+SBC_XY_def(A, H)
+SBC_XY_def(A, L)
+// TODO SBC_XY_def(A, HL);
+
+#undef SBC_XY_def

@@ -91,8 +91,17 @@ InstructionSet::InstructionSet()
 	add_instr(SUB_AH)
 	add_instr(SUB_AL)
 	  // TODO # and HL
-	  
-	#undef add_instr
+
+	add_instr(SBC_AA)
+	add_instr(SBC_AB)
+	add_instr(SBC_AC)
+        add_instr(SBC_AD)
+	add_instr(SBC_AE)
+	add_instr(SBC_AH)
+	add_instr(SBC_AL)
+	  // TODO # and HL   
+
+        #undef add_instr
 }
 
 int InstructionSet::isValidOpCode(OpCode opCode)

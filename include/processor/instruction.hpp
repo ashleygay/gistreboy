@@ -155,3 +155,15 @@ decl_instruction(SUB_AH, 0x94, 4, 0, 0, 0)
 decl_instruction(SUB_AL, 0x95, 4, 0, 0, 0)
 decl_instruction(SUB_AHL, 0x96, 8, 0, 0, 0)
 decl_instruction(SUB_AADDRESS, 0xD6, 8, 1, 1, 0)  
+
+// SBC Instructions
+
+decl_instruction(SBC_AA, 0x9F, 4, 0, 0, 0)
+decl_instruction(SBC_AB, 0x98, 4, 0, 0, 0)
+decl_instruction(SBC_AC, 0x99, 4, 0, 0, 0)
+decl_instruction(SBC_AD, 0x9A, 4, 0, 0, 0)
+decl_instruction(SBC_AE, 0x9B, 4, 0, 0, 0)
+decl_instruction(SBC_AH, 0x9C, 4, 0, 0, 0)
+decl_instruction(SBC_AL, 0x9D, 4, 0, 0, 0)
+decl_instruction(SBC_AHL, 0x9E, 8, 0, 0, 0)
+//decl_instruction(SBC_AADDRESS, 0xD, 8, 1, 1, 0) pas d'opcode in manual
