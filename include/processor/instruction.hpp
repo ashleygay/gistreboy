@@ -133,12 +133,25 @@ decl_instruction(ADD_AADDRESS, 0xC6, 8, 1, 1, 0)
 
 // ADC Instructions
 
-decl_instruction(ADC_AA, 0x87, 4, 0, 0, 0)
-decl_instruction(ADC_AB, 0x80, 4, 0, 0, 0)
-decl_instruction(ADC_AC, 0x81, 4, 0, 0, 0)
-decl_instruction(ADC_AD, 0x82, 4, 0, 0, 0)
-decl_instruction(ADC_AE, 0x83, 4, 0, 0, 0)
-decl_instruction(ADC_AH, 0x84, 4, 0, 0, 0)
-decl_instruction(ADC_AL, 0x85, 4, 0, 0, 0)
-decl_instruction(ADC_AHL, 0x86, 8, 0, 0, 0)
-decl_instruction(ADC_AADDRESS, 0xC6, 8, 1, 1, 0) 
+decl_instruction(ADC_AA, 0x8F, 4, 0, 0, 0)
+decl_instruction(ADC_AB, 0x88, 4, 0, 0, 0)
+decl_instruction(ADC_AC, 0x89, 4, 0, 0, 0)
+decl_instruction(ADC_AD, 0x8A, 4, 0, 0, 0)
+decl_instruction(ADC_AE, 0x8B, 4, 0, 0, 0)
+decl_instruction(ADC_AH, 0x8C, 4, 0, 0, 0)
+decl_instruction(ADC_AL, 0x8D, 4, 0, 0, 0)
+decl_instruction(ADC_AHL, 0x8E, 8, 0, 0, 0)
+decl_instruction(ADC_AADDRESS, 0xCE, 8, 1, 1, 0) 
+
+
+// SUB Instructions
+
+decl_instruction(SUB_AA, 0x97, 4, 0, 0, 0)
+decl_instruction(SUB_AB, 0x90, 4, 0, 0, 0)
+decl_instruction(SUB_AC, 0x91, 4, 0, 0, 0)
+decl_instruction(SUB_AD, 0x92, 4, 0, 0, 0)
+decl_instruction(SUB_AE, 0x93, 4, 0, 0, 0)
+decl_instruction(SUB_AH, 0x94, 4, 0, 0, 0)
+decl_instruction(SUB_AL, 0x95, 4, 0, 0, 0)
+decl_instruction(SUB_AHL, 0x96, 8, 0, 0, 0)
+decl_instruction(SUB_AADDRESS, 0xD6, 8, 1, 1, 0)  

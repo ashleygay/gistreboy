@@ -81,6 +81,16 @@ InstructionSet::InstructionSet()
 	add_instr(ADC_AH)
 	add_instr(ADC_AL)
 	  // TODO # and HL
+
+
+	add_instr(SUB_AA)
+	add_instr(SUB_AB)
+	add_instr(SUB_AC)
+	add_instr(SUB_AD)
+	add_instr(SUB_AE)
+	add_instr(SUB_AH)
+	add_instr(SUB_AL)
+	  // TODO # and HL
 	  
 	#undef add_instr
 }

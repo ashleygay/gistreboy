@@ -128,16 +128,7 @@ ADD_XY_def(A, L)
 void ADD_AADDRESS::exec(Processor *p)
 {
   p = p;
-  /*auto mem = p._read(this->args[0]);
-	auto val = p->A.value + mem;
-	if ((val & 0xFF) == 0)
-	  p->flag.setFlag(FlagRegister::ZERO);
-	p->flag.unsetFlag(FlagRegister::SUBTRACT);
-	if (((p->A.value & 0xF) + (p->PC.value & 0xF)) > 0xF)
-	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val > 0xFF)
-	  p->flag.setFlag(FlagRegister::CARRY);
-	  p->A.value = (val & 0xFF);*/
+  /*auto mem = p._read(this->args[0]);*/
 }    
 
 //ADC instructions
@@ -171,15 +162,39 @@ ADC_XY_def(A, L)
 void ADC_AADDRESS::exec(Processor *p)
 {
   p = p;
-  /*auto mem = p._read(this->args[0]);
-  uint val = p->A.value + mem + p->flag.getFlag(FlagRegister::CARRY);\
-  uint8_t result = static_cast<uint8_t>(val);\
-  if ((result & 0xFF) == 0)\
-    p->flag.setFlag(FlagRegister::ZERO);\
-  p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-  if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) \
-    p->flag.setFlag(FlagRegister::HALFCARRY);\
-  if (val > 0xFF)\
-    p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg1.value = (result & 0xFF);\  */
+  /*auto mem = p._read(this->args[0]);*/
 } 
+
+//SUB instructions
+
+#define SUB_XY_def(reg1, reg2)                  \
+  void SUB_##reg1##reg2::exec(Processor *p)\
+  {\
+    uint val = p->reg1.value - p->reg2.value;\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if ((result & 0xFF) == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg1.value & 0xF) - (p->reg2.value & 0xF)) < 0) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (p->reg1.value < p->reg2.value)		       \
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg1.value = (result & 0xFF);       \
+  }
+
+SUB_XY_def(A, A)
+SUB_XY_def(A, B)
+SUB_XY_def(A, C)
+SUB_XY_def(A, D)
+SUB_XY_def(A, E)
+SUB_XY_def(A, H)
+SUB_XY_def(A, L)
+// TODO SUB_XY_def(A, HL);
+
+#undef SUB_XY_def
+
+void SUB_AADDRESS::exec(Processor *p)
+{
+  p = p;
+  /*auto mem = p._read(this->args[0]);*/
+}          
