@@ -1,12 +1,11 @@
 #include <instructionset.hpp>
 #include <instruction.hpp>
-	
 
 InstructionSet::InstructionSet()
 {
 	//TODO: we add all instructions to the map here
 	//Use xmacros to generate all the instructions here
-	/*	
+	/*
 	map = {
 		#define X(instruction) \
 			auto instr_##instruction = new instruction();\
@@ -63,14 +62,6 @@ InstructionSet::InstructionSet()
 	add_instr(LD_ED)
 	add_instr(LD_EE)
 	add_instr(LD_EL)
-
-	add_instr(LD_AA)
-	add_instr(LD_AB)
-	add_instr(LD_AC)
-	add_instr(LD_AD)
-	add_instr(LD_AE)
-	add_instr(LD_AL)
-
 
 	add_instr(ADD_AA)
 	add_instr(ADD_AB)
