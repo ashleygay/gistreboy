@@ -176,6 +176,30 @@ decl_instruction(AND_AC, 0xA1, 4, 0, 0, 0)
 decl_instruction(AND_AD, 0xA2, 4, 0, 0, 0)
 decl_instruction(AND_AE, 0xA3, 4, 0, 0, 0)
 decl_instruction(AND_AH, 0xA4, 4, 0, 0, 0)
-decl_instruction(AND_AL, 0xA4, 4, 0, 0, 0)
+decl_instruction(AND_AL, 0xA5, 4, 0, 0, 0)
 decl_instruction(AND_AHL, 0xA6, 8, 0, 0, 0)
 decl_instruction(AND_AADDRESS, 0xE6, 8, 1, 1, 0)  
+
+// OR Instructions
+
+decl_instruction(OR_AA, 0xB7, 4, 0, 0, 0)
+decl_instruction(OR_AB, 0xB0, 4, 0, 0, 0)
+decl_instruction(OR_AC, 0xB1, 4, 0, 0, 0)
+decl_instruction(OR_AD, 0xB2, 4, 0, 0, 0)
+decl_instruction(OR_AE, 0xB3, 4, 0, 0, 0)
+decl_instruction(OR_AH, 0xB4, 4, 0, 0, 0)
+decl_instruction(OR_AL, 0xB5, 4, 0, 0, 0)
+decl_instruction(OR_AHL, 0xB6, 8, 0, 0, 0)
+decl_instruction(OR_AADDRESS, 0xF6, 8, 1, 1, 0)
+
+// XOR Instructions
+
+decl_instruction(XOR_AA, 0xAF, 4, 0, 0, 0)
+decl_instruction(XOR_AB, 0xA8, 4, 0, 0, 0)
+decl_instruction(XOR_AC, 0xA9, 4, 0, 0, 0)
+decl_instruction(XOR_AD, 0xAA, 4, 0, 0, 0)
+decl_instruction(XOR_AE, 0xAB, 4, 0, 0, 0)
+decl_instruction(XOR_AH, 0xAC, 4, 0, 0, 0)
+decl_instruction(XOR_AL, 0xAD, 4, 0, 0, 0)
+decl_instruction(XOR_AHL, 0xAE, 8, 0, 0, 0)
+decl_instruction(XOR_AADDRESS, 0xEE, 8, 1, 1, 0)  

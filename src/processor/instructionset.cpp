@@ -109,7 +109,25 @@ InstructionSet::InstructionSet()
 	add_instr(AND_AH)
 	add_instr(AND_AL)
 	  // TODO # and HL 
-	  
+
+	add_instr(OR_AA)
+	add_instr(OR_AB)
+	add_instr(OR_AC)
+	add_instr(OR_AD)
+	add_instr(OR_AE)
+	add_instr(OR_AH)
+	add_instr(OR_AL)
+	// TODO # and HL
+
+	add_instr(XOR_AA)
+	add_instr(XOR_AB)
+	add_instr(XOR_AC)
+	add_instr(XOR_AD)
+	add_instr(XOR_AE)
+	add_instr(XOR_AH)
+	add_instr(XOR_AL)
+	// TODO # and HL  
+
         #undef add_instr
 }
 

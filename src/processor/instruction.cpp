@@ -227,7 +227,7 @@ SBC_XY_def(A, L)
 
 #undef SBC_XY_def
 
-//SUB instructions
+//AND instructions
 
 #define AND_XY_def(reg1, reg2)                  \
   void AND_##reg1##reg2::exec(Processor *p)\
@@ -250,3 +250,52 @@ AND_XY_def(A, L)
 // TODO AND_XY_def(A, HL);
 
 #undef AND_XY_def  
+
+
+//OR instructions
+
+#define OR_XY_def(reg1, reg2)                  \
+  void OR_##reg1##reg2::exec(Processor *p)\
+  {\
+    p->reg1.value |= p->reg2.value; \
+    if (p->reg1.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+OR_XY_def(A, A)
+OR_XY_def(A, B)
+OR_XY_def(A, C)
+OR_XY_def(A, D)
+OR_XY_def(A, E)
+OR_XY_def(A, H)
+OR_XY_def(A, L)
+// TODO OR_XY_def(A, HL);
+
+#undef OR_XY_def
+
+//XOR instructions
+
+#define XOR_XY_def(reg1, reg2)                  \
+  void XOR_##reg1##reg2::exec(Processor *p)\
+  {\
+    p->reg1.value ^= p->reg2.value; \
+    if (p->reg1.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+XOR_XY_def(A, A)
+XOR_XY_def(A, B)
+XOR_XY_def(A, C)
+XOR_XY_def(A, D)
+XOR_XY_def(A, E)
+XOR_XY_def(A, H)
+XOR_XY_def(A, L)
+// TODO XOR_XY_def(A, HL);
+
+#undef XOR_XY_def  
