@@ -41,8 +41,30 @@ class Instruction {
 			InstructionArgs _args; \
 	};
 
+// LD INSTRUCTIONS
+
 decl_instruction(LD_BX, 0x06, 8, 1, 1, 0)
+
+// NOP INSTRUCTION
 
 decl_instruction(NOP, 0x00, 4, 0, 0, 0)
 
-decl_instruction(ADD_AA, 0x87, 4, 2, 1, 1)
+// ADD INSTRUCTIONS
+
+decl_instruction(ADD_AA, 0x87, 4, 0, 0, 0)
+
+decl_instruction(ADD_AB, 0x80, 4, 0, 0, 0)
+
+decl_instruction(ADD_AC, 0x81, 4, 0, 0, 0)
+
+decl_instruction(ADD_AD, 0x82, 4, 0, 0, 0)  
+
+decl_instruction(ADD_AE, 0x83, 4, 0, 0, 0)
+
+decl_instruction(ADD_AH, 0x84, 4, 0, 0, 0)  
+
+decl_instruction(ADD_AL, 0x85, 4, 0, 0, 0)
+
+decl_instruction(ADD_AHL, 0x86, 8, 0, 0, 0)  
+
+decl_instruction(ADD_AADDRESS, 0xC6, 8, 1, 1, 0)  
