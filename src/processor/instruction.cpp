@@ -226,3 +226,27 @@ SBC_XY_def(A, L)
 // TODO SBC_XY_def(A, HL);
 
 #undef SBC_XY_def
+
+//SUB instructions
+
+#define AND_XY_def(reg1, reg2)                  \
+  void AND_##reg1##reg2::exec(Processor *p)\
+  {\
+    p->reg1.value &= p->reg2.value; \
+    if (p->reg1.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.setFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+AND_XY_def(A, A)
+AND_XY_def(A, B)
+AND_XY_def(A, C)
+AND_XY_def(A, D)
+AND_XY_def(A, E)
+AND_XY_def(A, H)
+AND_XY_def(A, L)
+// TODO AND_XY_def(A, HL);
+
+#undef AND_XY_def  

@@ -101,6 +101,15 @@ InstructionSet::InstructionSet()
 	add_instr(SBC_AL)
 	  // TODO # and HL   
 
+	add_instr(AND_AA)
+	add_instr(AND_AB)
+	add_instr(AND_AC)
+	add_instr(AND_AD)
+	add_instr(AND_AE)
+	add_instr(AND_AH)
+	add_instr(AND_AL)
+	  // TODO # and HL 
+	  
         #undef add_instr
 }
 

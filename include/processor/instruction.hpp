@@ -167,3 +167,15 @@ decl_instruction(SBC_AH, 0x9C, 4, 0, 0, 0)
 decl_instruction(SBC_AL, 0x9D, 4, 0, 0, 0)
 decl_instruction(SBC_AHL, 0x9E, 8, 0, 0, 0)
 //decl_instruction(SBC_AADDRESS, 0xD, 8, 1, 1, 0) pas d'opcode in manual
+
+// AND Instructions
+
+decl_instruction(AND_AA, 0xA7, 4, 0, 0, 0)
+decl_instruction(AND_AB, 0xA0, 4, 0, 0, 0)
+decl_instruction(AND_AC, 0xA1, 4, 0, 0, 0)
+decl_instruction(AND_AD, 0xA2, 4, 0, 0, 0)
+decl_instruction(AND_AE, 0xA3, 4, 0, 0, 0)
+decl_instruction(AND_AH, 0xA4, 4, 0, 0, 0)
+decl_instruction(AND_AL, 0xA4, 4, 0, 0, 0)
+decl_instruction(AND_AHL, 0xA6, 8, 0, 0, 0)
+decl_instruction(AND_AADDRESS, 0xE6, 8, 1, 1, 0)  
