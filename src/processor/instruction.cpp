@@ -7,6 +7,17 @@ void LD_BX::exec(Processor *p)
 	DEBUG_PRINT << "Got value : " << val << std::endl;
 	p->B.value = val;
 }
+#define LD_RegX_def(reg)\
+	void LD_##reg##X::exec(Processor *p)\
+	{\
+	uint8_t val = boost::get<uint8_t>(this->_args[0]);\
+	DEBUG_PRINT << "Got value : " << val << std::endl;\
+	p->reg.value = val;\
+	}
+
+
+#undef LD_RegX_def
+
 
 void NOP::exec(Processor *p)
 {
