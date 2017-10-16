@@ -3,6 +3,10 @@
  *
  * File created by : Corentin Gay
  * File was created at : 08/10/2017
+ *
+ * This class handles all interrupts as well as enabling and disabling them.
+ * The code is used/called by GameBoy and Processor.
+ *
  */
 
 #pragma once
@@ -38,10 +42,10 @@ class InterruptHandler
 	private:
 		// Interrupt routines
 		// TODO: actually implement them
-		void _interruptLCD(){}
-		void _interruptVBLANK(){}
-		void _interruptSerial(){}
-		void _interruptJoypad(){}
+		void _interruptLCD();
+		void _interruptVBLANK();
+		void _interruptSerial();
+		void _interruptJoypad();
 	private:
 		// Interrupt Master Enable
 		bool IME = true;
