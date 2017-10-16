@@ -128,6 +128,16 @@ InstructionSet::InstructionSet()
 	add_instr(XOR_AL)
 	// TODO # and HL  
 
+
+	add_instr(CP_AA)
+	add_instr(CP_AB)
+	add_instr(CP_AC)
+	add_instr(CP_AD)
+	add_instr(CP_AE)
+	add_instr(CP_AH)
+	add_instr(CP_AL)
+	  // TODO # and HL
+	  
         #undef add_instr
 }
 

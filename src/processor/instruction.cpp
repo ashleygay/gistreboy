@@ -299,3 +299,31 @@ XOR_XY_def(A, L)
 // TODO XOR_XY_def(A, HL);
 
 #undef XOR_XY_def  
+
+
+//CP instructions
+
+#define CP_XY_def(reg1, reg2)                  \
+  void CP_##reg1##reg2::exec(Processor *p)\
+  {\
+    uint val = p->reg1.value - p->reg2.value;\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg1.value & 0xF) - (p->reg2.value & 0xF)) < 0) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (p->reg1.value < p->reg2.value)                 \
+      p->flag.setFlag(FlagRegister::CARRY);\  
+  }
+
+CP_XY_def(A, A)
+CP_XY_def(A, B)
+CP_XY_def(A, C)
+CP_XY_def(A, D)
+CP_XY_def(A, E)
+CP_XY_def(A, H)
+CP_XY_def(A, L)
+// TODO CP_XY_def(A, HL);
+
+#undef CP_XY_def  
