@@ -1,0 +1,94 @@
+
+LISTE DES INSTRUCTIONS
+
+LD(nn, n)	 -> done 
+LD(r1, r2)  	 -> done (HL not done)
+LD(A, n)	 -> ?
+LD(n, A		 -> ?
+LD(A, (C))  	 -> ?
+LD((C), A)  	 -> ?
+LD(A, (HLD))	 -> ?
+LD(A, (HL-))	 -> ?
+LDD(A, (HL))	 -> ?
+LD((HLD), A)     -> ?
+LD((HL-), A)     -> ?
+LDD((HL), A)     -> ?
+LD(A, (HLI))     -> ?
+LD(A, (HL+))     -> ?
+LDI(A, (HL))     -> ?
+LD((HLI), A)     -> ?
+LD((HLI), A)     -> ?
+LDI((HL), A)     -> ?
+LDH(n, A) 	 -> ?
+LDH(A, n)	 -> ?
+LD(n, nn)	 -> ?
+LD(SP, HL)	 -> ?
+LD(HL, SP+n)	 -> ?
+LDHL(SP, n)	 -> ?
+LD(nn, SP)	 -> ?
+
+PUSH(nn)	 -> not done
+POP(nn)		 -> not done
+
+ADD(A, n)	 -> done (HL and # not done)
+ADC(A, n)        -> done (HL and # not done)
+SUB(n)        	 -> done (HL and # not done)
+SBC(A, n)      	 -> done (HL and # not done)
+
+ADD(HL, n)	 -> not done
+ADD(SP, n)	 -> not done
+
+
+AND(n)        	 -> done (HL and # not done)
+OR(n)		 -> done (HL and # not done)
+XOR(n)           -> done (HL and # not done)
+CP(n)            -> done (HL and # not done)
+INC(n)           -> done (HL not done)
+DEC(n)           -> done (HL not done)
+
+INC(nn)		 -> not done
+DEC(nn)		 -> not done
+
+SWAP(n)		 -> done (HL not done)
+
+DAA		 -> not done
+CPL		 -> not done
+CCF		 -> not done
+SCF		 -> not done
+NOP 		 -> done
+HALT 		 -> not done
+STOP		 -> not done
+DI		 -> not done
+EI		 -> not done
+
+RLCA		 -> not done
+RLA		 -> not done
+RRCA		 -> not done
+RRA		 -> not done
+RLC(n)		 -> not done
+RL(n)		 -> not done
+RRC(n)		 -> not done
+RR(n)		 -> not done
+
+SLA(n)		 -> not done
+SRA(n)		 -> not done
+SRL(n)		 -> not done
+
+BIT(b, r)	 -> not done
+SET(b, r)	 -> not done
+RES(b, r)	 -> not done
+
+JP(nn) 		 -> not done
+JP(cc, nn)	 -> not done
+JP(HL) 		 -> not done
+JR(n)		 -> not done
+JR(cc, n)	 -> not done
+
+CALL(nn)	 -> not done
+CALL(cc, nn)	 -> not done
+
+RST(n)	 	 -> not done
+
+RET 		 -> not done
+RET(cc)		 -> not done
+RETI		 -> not done
