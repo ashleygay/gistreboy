@@ -49,6 +49,14 @@ class Processor {
 		Register H;
 		Register L;
 
+		DRegister PC;
+		DRegister SP;
+
+	private:
+		// Used to resolve all memory operations
+		// Read/Write as wall as charging next instruction etc
+		// Memory mem;
+
 		// Enable/disable all interrupts
 		Register IME;
 
@@ -58,12 +66,6 @@ class Processor {
 		// This flag is set when an interrupt is pending
 		InterruptRegister IF;
 
-		// Used to resolve all memory operations
-		// Read/Write as wall as charging next instruction etc
-		// Memory mem;
-
-		DRegister PC;
-		DRegister SP;
 
 		// Boolean is set to false when we end the bootcode.
 		bool isBooting = true;
@@ -72,18 +74,19 @@ class Processor {
 
 		// InstructionSet containing all instructions.
 		InstructionSet iset;
+
+		// Interrupt Handler, will handle all interrupts
+		// InterruptHandler *handler;
+
 	public:
-		// Those functions are used by the instructions to read/write
+		// FIXME Those functions are used by the instructions to read/write
 		// memory values
-/*
-		uint8_t _read(uint16_t address) {return mem.read(address);}
+		uint8_t _read(uint16_t address)
+			{(void)address;return 42;/*return mem.read(address);*/}
+
 		void _write(uint8_t value, uint16_t address)
-			{mem.write(value, address);}
-*/
-	private:
-		int _BUG(std::string str, int value);
-		int _fetchNextInstruction();
-	public:
+			{(void)value;(void)address;/*mem.write(value, address);*/}
+
  		// Get the number of cycles of the current instruction to execute
 		int getNbCycles() const;
 
@@ -91,6 +94,15 @@ class Processor {
 		int fetchNextStep();
 		void execCurrentInstruction();
 
+		// Enable/Disable IME
+		void enableIME() {/*handler->enableIME();*/}
+		// This version should be called from EI instruction only
+		void enableIMEDelay() {/*handler->enableIMEDelay();*/}
+		void disableIME() {/*handler->disableIME();*/}
+
+	private:
+		int _BUG(std::string str, int value);
+		int _fetchNextInstruction();
 	public:
 		Processor(Processor const&) = delete;
 		void operator=(Processor const&)  = delete;
