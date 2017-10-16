@@ -376,4 +376,29 @@ DEC_RegX_def(L)
 
 #undef DEC_RegX_def
 
-                        
+// SWAP instructions
+
+#define SWAP_RegX_def(reg)                  \
+  void SWAP_##reg##X::exec(Processor *p)\
+  {\
+    auto a = p->reg.value >> 4;			\
+    auto b = p->reg.value << 4;\
+    auto temp = a | b;\
+    p->reg.value = temp;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+SWAP_RegX_def(A)
+SWAP_RegX_def(B)
+SWAP_RegX_def(C)
+SWAP_RegX_def(D)
+SWAP_RegX_def(E)
+SWAP_RegX_def(H)
+SWAP_RegX_def(L)
+// TODO SWAP_RegX_def(HL);
+
+#undef SWAP_RegX_def

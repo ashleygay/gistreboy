@@ -20,7 +20,6 @@ InstructionSet::InstructionSet()
 
 	add_instr(NOP)
 
-
 	add_instr(LD_BX)
 	add_instr(LD_CX)
 	add_instr(LD_DX)
@@ -156,7 +155,16 @@ InstructionSet::InstructionSet()
 	add_instr(DEC_HX)
 	add_instr(DEC_LX)
 	  // TODO HL
-	  
+
+	add_instr(SWAP_AX)
+	add_instr(SWAP_BX)
+	add_instr(SWAP_CX)
+	add_instr(SWAP_DX)
+	add_instr(SWAP_EX)
+	add_instr(SWAP_HX)
+	add_instr(SWAP_LX)
+	  // TODO HL
+
         #undef add_instr
 }
 

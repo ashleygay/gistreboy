@@ -238,3 +238,14 @@ decl_instruction(DEC_EX, 0x1D, 4, 1, 1, 0)
 decl_instruction(DEC_HX, 0x25, 4, 1, 1, 0)
 decl_instruction(DEC_LX, 0x2D, 4, 1, 1, 0)
 decl_instruction(DEC_HLX, 0x35, 12, 1, 1, 0)  
+
+// SWAP Instructions
+
+decl_instruction(SWAP_AX, 0xCB37, 8, 1, 1, 0)
+decl_instruction(SWAP_BX, 0xCB30, 8, 1, 1, 0)
+decl_instruction(SWAP_CX, 0xCB31, 8, 1, 1, 0)
+decl_instruction(SWAP_DX, 0xCB32, 8, 1, 1, 0)
+decl_instruction(SWAP_EX, 0xCB33, 8, 1, 1, 0)
+decl_instruction(SWAP_HX, 0xCB34, 8, 1, 1, 0)
+decl_instruction(SWAP_LX, 0xCB35, 8, 1, 1, 0)
+decl_instruction(SWAP_HLX, 0xCB36, 16, 1, 1, 0) 
