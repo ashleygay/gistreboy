@@ -314,7 +314,7 @@ XOR_XY_def(A, L)
     if (((p->reg1.value & 0xF) - (p->reg2.value & 0xF)) < 0) \
       p->flag.setFlag(FlagRegister::HALFCARRY);\
     if (p->reg1.value < p->reg2.value)                 \
-      p->flag.setFlag(FlagRegister::CARRY);\  
+      p->flag.setFlag(FlagRegister::CARRY);\
   }
 
 CP_XY_def(A, A)
@@ -326,4 +326,54 @@ CP_XY_def(A, H)
 CP_XY_def(A, L)
 // TODO CP_XY_def(A, HL);
 
-#undef CP_XY_def  
+#undef CP_RegX_def  
+
+// INC instructions
+
+#define INC_RegX_def(reg)                  \
+  void INC_##reg##X::exec(Processor *p)\
+  {\
+    p->reg.value += 1;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    if ((p->reg.value & 0xF) == 0x00) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+  }
+
+INC_RegX_def(A)
+INC_RegX_def(B)
+INC_RegX_def(C)
+INC_RegX_def(D)
+INC_RegX_def(E)
+INC_RegX_def(H)
+INC_RegX_def(L)
+// TODO INC_RegX_def(HL);
+
+#undef DEC_RegX_def 
+
+// DEC instructions
+
+#define DEC_RegX_def(reg)                  \
+  void DEC_##reg##X::exec(Processor *p)\
+  {\
+    p->reg.value -= 1;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if ((p->reg.value & 0xF) == 0x0F) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+  }
+
+DEC_RegX_def(A)
+DEC_RegX_def(B)
+DEC_RegX_def(C)
+DEC_RegX_def(D)
+DEC_RegX_def(E)
+DEC_RegX_def(H)
+DEC_RegX_def(L)
+// TODO DEC_RegX_def(HL);
+
+#undef DEC_RegX_def
+
+                        

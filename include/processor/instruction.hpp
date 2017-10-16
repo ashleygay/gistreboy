@@ -215,3 +215,26 @@ decl_instruction(CP_AH, 0xBC, 4, 2, 1, 1)
 decl_instruction(CP_AL, 0xBD, 4, 2, 1, 1)
 decl_instruction(CP_AHL, 0xBE, 8, 2, 1, 1)
 decl_instruction(CP_AADDRESS, 0xFE, 8, 1, 1, 0) 
+
+
+// INC Instructions
+
+decl_instruction(INC_AX, 0x3C, 4, 1, 1, 0)
+decl_instruction(INC_BX, 0x04, 4, 1, 1, 0)
+decl_instruction(INC_CX, 0x0C, 4, 1, 1, 0)
+decl_instruction(INC_DX, 0x14, 4, 1, 1, 0)
+decl_instruction(INC_EX, 0x1C, 4, 1, 1, 0)
+decl_instruction(INC_HX, 0x24, 4, 1, 1, 0)
+decl_instruction(INC_LX, 0x2C, 4, 1, 1, 0)
+decl_instruction(INC_HLX, 0x34, 12, 1, 1, 0)
+
+// DEC Instructions
+
+decl_instruction(DEC_AX, 0x3D, 4, 1, 1, 0)
+decl_instruction(DEC_BX, 0x05, 4, 1, 1, 0)
+decl_instruction(DEC_CX, 0x0D, 4, 1, 1, 0)
+decl_instruction(DEC_DX, 0x15, 4, 1, 1, 0)
+decl_instruction(DEC_EX, 0x1D, 4, 1, 1, 0)
+decl_instruction(DEC_HX, 0x25, 4, 1, 1, 0)
+decl_instruction(DEC_LX, 0x2D, 4, 1, 1, 0)
+decl_instruction(DEC_HLX, 0x35, 12, 1, 1, 0)  

@@ -137,6 +137,25 @@ InstructionSet::InstructionSet()
 	add_instr(CP_AH)
 	add_instr(CP_AL)
 	  // TODO # and HL
+
+	add_instr(INC_AX)
+	add_instr(INC_BX)
+	add_instr(INC_CX)
+	add_instr(INC_DX)
+	add_instr(INC_EX)
+	add_instr(INC_HX)
+	add_instr(INC_LX)
+	  // TODO HL
+
+
+	add_instr(DEC_AX)
+	add_instr(DEC_BX)
+	add_instr(DEC_CX)
+	add_instr(DEC_DX)
+	add_instr(DEC_EX)
+	add_instr(DEC_HX)
+	add_instr(DEC_LX)
+	  // TODO HL
 	  
         #undef add_instr
 }
