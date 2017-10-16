@@ -17,6 +17,7 @@
 #include <thread>
 #include <future>
 #include <atomic>
+#include <interrupthandler.hpp>
 
 class DummyProcessor
 {
@@ -50,7 +51,7 @@ class GameBoy
 
 		// Used to handle periodic interrupts or interrupts provided by
 		// the software (joypad inputs)
-		//InterruptProvider ip;
+		InterruptHandler ip;
 
 		std::atomic<bool> _running{false};
 };
