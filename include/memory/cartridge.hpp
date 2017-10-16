@@ -1,30 +1,35 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include <string>
 #include <ifstream>
+#include <memoryobject.hpp>
 
-class Cartridge {
+class Cartridge : public MemoryObject {
 
 public :
-  Cartridge(uint8_t *cart);
+	Cartridge(uint8_t *cart);
   
-  uint8_t read(uint16_t address);
-  void write(uint16_t address, uint8_t byte);  
+	uint8_t read(uint16_t address);
+	void write(uint16_t address, uint8_t byte);  
 
-  bool ram_enable();
-  bool has_boot();
+	bool ram_enable();
+	bool has_boot();
 
-  bool rom_ram_mode();
-  bool has_ram();
-  bool has_battery();
-  bool has_timer();
-  bool has_rumble();
+	bool rom_ram_mode();
+	bool has_ram();
+	bool has_battery();
+	bool has_timer();
+	bool has_rumble();
 
 private :
 
-  /* the actual assembly of the cartridge */
-  std::vector<uint8_t> rom;
+	uint8_t get_current_rom_bank();
+	uint8_t get_current_ram_bank();
+
+	/*the actual assembly of the cartridge separated in banks of 32kB */
+	std::array<uint8_t, 2097152> rom;
 
   /* a program inside the gameboy that boots the machine
      and jumps to the location of the animated sequence
@@ -56,13 +61,13 @@ private :
   int mbc = 0;
 
   /* the internal ram of the cartridge */
-  std::vector<uint8_t> ram;
+  std::array<uint8_t, 32768> ram;
 
   size_t rom_size = 0;
   size_t ram_size = 0;
 
   uint8_t rom_bank_number = 0;
-  uint8_t ram_bank_number = 0; /* can be upper bit of rom_bank_number */
+  uint8_t ram_bank_number = 0; /* can be upper 2 bit of rom_bank_number */
 
   bool ram_enable = false;
   bool rom_ram_mode = false; /* false if rom mode, true if ram mode */
