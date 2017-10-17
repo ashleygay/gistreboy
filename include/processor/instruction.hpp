@@ -57,7 +57,7 @@ decl_instruction(LD_AD, 0x7A, 4, 0, 0, 0)
 decl_instruction(LD_AE, 0x7B, 4, 0, 0, 0)
 decl_instruction(LD_AH, 0x7C, 4, 0, 0, 0)
 decl_instruction(LD_AL, 0x7D, 4, 0, 0, 0)
-// TODO : A, HL
+decl_instruction(LD_AHL, 0x7E, 8, 0, 0, 0)
 decl_instruction(LD_BA, 0x47, 4, 0, 0, 0)
 decl_instruction(LD_BB, 0x40, 4, 0, 0, 0)
 decl_instruction(LD_BC, 0x41, 4, 0, 0, 0)
@@ -65,7 +65,7 @@ decl_instruction(LD_BD, 0x42, 4, 0, 0, 0)
 decl_instruction(LD_BE, 0x43, 4, 0, 0, 0)
 decl_instruction(LD_BH, 0x44, 4, 0, 0, 0)
 decl_instruction(LD_BL, 0x45, 4, 0, 0, 0)
-// TODO : B, HL
+decl_instruction(LD_BHL, 0x46, 8, 0, 0, 0)
 decl_instruction(LD_CA, 0x4F, 4, 0, 0, 0)
 decl_instruction(LD_CB, 0x48, 4, 0, 0, 0)
 decl_instruction(LD_CC, 0x49, 4, 0, 0, 0)
@@ -73,7 +73,7 @@ decl_instruction(LD_CD, 0x4A, 4, 0, 0, 0)
 decl_instruction(LD_CE, 0x4B, 4, 0, 0, 0)
 decl_instruction(LD_CH, 0x4C, 4, 0, 0, 0)
 decl_instruction(LD_CL, 0x4D, 4, 0, 0, 0)
-// TODO : C, HL
+decl_instruction(LD_CHL, 0x4E, 8, 0, 0, 0)
 decl_instruction(LD_DA, 0x57, 4, 0, 0, 0)
 decl_instruction(LD_DB, 0x50, 4, 0, 0, 0)
 decl_instruction(LD_DC, 0x51, 4, 0, 0, 0)
@@ -81,7 +81,7 @@ decl_instruction(LD_DD, 0x52, 4, 0, 0, 0)
 decl_instruction(LD_DE, 0x53, 4, 0, 0, 0)
 decl_instruction(LD_DH, 0x54, 4, 0, 0, 0)
 decl_instruction(LD_DL, 0x55, 4, 0, 0, 0)
-// TODO : D, HL
+decl_instruction(LD_DHL, 0x56, 8, 0, 0, 0)
 decl_instruction(LD_EA, 0x5F, 4, 0, 0, 0)
 decl_instruction(LD_EB, 0x58, 4, 0, 0, 0)
 decl_instruction(LD_EC, 0x59, 4, 0, 0, 0)
@@ -89,7 +89,7 @@ decl_instruction(LD_ED, 0x5A, 4, 0, 0, 0)
 decl_instruction(LD_EE, 0x5B, 4, 0, 0, 0)
 decl_instruction(LD_EH, 0x5C, 4, 0, 0, 0)
 decl_instruction(LD_EL, 0x5D, 4, 0, 0, 0)
-// TODO : E, HL
+decl_instruction(LD_EHL, 0x5E, 8, 0, 0, 0)
 decl_instruction(LD_HA, 0x67, 4, 0, 0, 0)
 decl_instruction(LD_HB, 0x60, 4, 0, 0, 0)
 decl_instruction(LD_HC, 0x61, 4, 0, 0, 0)
@@ -97,7 +97,7 @@ decl_instruction(LD_HD, 0x62, 4, 0, 0, 0)
 decl_instruction(LD_HE, 0x63, 4, 0, 0, 0)
 decl_instruction(LD_HH, 0x64, 4, 0, 0, 0)
 decl_instruction(LD_HL, 0x65, 4, 0, 0, 0)
-// TODO : H, HL
+decl_instruction(LD_HHL, 0x66, 8, 0, 0, 0)
 decl_instruction(LD_LA, 0x6F, 4, 0, 0, 0)
 decl_instruction(LD_LB, 0x68, 4, 0, 0, 0)
 decl_instruction(LD_LC, 0x69, 4, 0, 0, 0)
@@ -105,14 +105,14 @@ decl_instruction(LD_LD, 0x6A, 4, 0, 0, 0)
 decl_instruction(LD_LE, 0x6B, 4, 0, 0, 0)
 decl_instruction(LD_LH, 0x6C, 4, 0, 0, 0)
 decl_instruction(LD_LL, 0x6D, 4, 0, 0, 0)
-// TODO : L, HL
-// TODO : HL, B
-// TODO : HL, C
-// TODO : HL, D
-// TODO : HL, E
-// TODO : HL, H
-// TODO : HL, L
-// TODO : HL, n
+decl_instruction(LD_LHL, 0x6E, 8, 0, 0, 0)
+decl_instruction(LD_HLB, 0x70, 8, 0, 0, 0)
+decl_instruction(LD_HLC, 0x71, 8, 0, 0, 0)
+decl_instruction(LD_HLD, 0x72, 8, 0, 0, 0)
+decl_instruction(LD_HLE, 0x73, 8, 0, 0, 0)
+decl_instruction(LD_HLH, 0x74, 8, 0, 0, 0)
+decl_instruction(LD_HLL, 0x75, 8, 0, 0, 0)
+decl_instruction(LD_HLn, 0x36, 12, 1, 1, 0)
 
 
 // NOP INSTRUCTION

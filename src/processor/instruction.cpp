@@ -23,6 +23,22 @@ LD_RegX_def(L)
 	void LD_##reg1##reg2::exec(Processor *p)\
 	{ p->reg1.value = p->reg2.value;}
 
+#define LD_XHL_def(reg)\
+	void LD_##reg##HL::exec(Processor *p)\
+	{\
+		uint16_t address = p->L.value | (p->H.value >> 8);\
+		uint8_t value = p->_read(address);\
+		p->A.value = value;\
+	}
+
+#define LD_HLX_def(reg)\
+	void LD_HL##reg::exec(Processor *p)\
+	{\
+		uint16_t address = p->L.value | (p->H.value >> 8);\
+		uint8_t value = p->A.value;\
+		p->_write(value, address);\
+	}
+
 LD_XY_def(A,A)
 LD_XY_def(A,B)
 LD_XY_def(A,C)
@@ -30,7 +46,7 @@ LD_XY_def(A,D)
 LD_XY_def(A,E)
 LD_XY_def(A,H)
 LD_XY_def(A,L)
-// TODO : A, HL
+LD_XHL_def(A)
 LD_XY_def(B,A)
 LD_XY_def(B,B)
 LD_XY_def(B,C)
@@ -38,7 +54,7 @@ LD_XY_def(B,D)
 LD_XY_def(B,E)
 LD_XY_def(B,H)
 LD_XY_def(B,L)
-// TODO : B, HL
+LD_XHL_def(B)
 LD_XY_def(C,A)
 LD_XY_def(C,B)
 LD_XY_def(C,C)
@@ -46,7 +62,7 @@ LD_XY_def(C,D)
 LD_XY_def(C,E)
 LD_XY_def(C,H)
 LD_XY_def(C,L)
-// TODO : C, HL
+LD_XHL_def(C)
 LD_XY_def(D,A)
 LD_XY_def(D,B)
 LD_XY_def(D,C)
@@ -54,7 +70,7 @@ LD_XY_def(D,D)
 LD_XY_def(D,E)
 LD_XY_def(D,H)
 LD_XY_def(D,L)
-// TODO : D, HL
+LD_XHL_def(D)
 LD_XY_def(E,A)
 LD_XY_def(E,B)
 LD_XY_def(E,C)
@@ -62,7 +78,7 @@ LD_XY_def(E,D)
 LD_XY_def(E,E)
 LD_XY_def(E,H)
 LD_XY_def(E,L)
-// TODO : E, HL
+LD_XHL_def(E)
 LD_XY_def(H,A)
 LD_XY_def(H,B)
 LD_XY_def(H,C)
@@ -70,7 +86,7 @@ LD_XY_def(H,D)
 LD_XY_def(H,E)
 LD_XY_def(H,H)
 LD_XY_def(H,L)
-// TODO : H, HL
+LD_XHL_def(H)
 LD_XY_def(L,A)
 LD_XY_def(L,B)
 LD_XY_def(L,C)
@@ -78,14 +94,24 @@ LD_XY_def(L,D)
 LD_XY_def(L,E)
 LD_XY_def(L,H)
 LD_XY_def(L,L)
-// TODO : L, HL
-// TODO : HL, B
-// TODO : HL, C
-// TODO : HL, D
-// TODO : HL, E
-// TODO : HL, H
-// TODO : HL, L
-// TODO : HL, n
+LD_XHL_def(L)
+LD_HLX_def(B)
+LD_HLX_def(C)
+LD_HLX_def(D)
+LD_HLX_def(E)
+LD_HLX_def(H)
+LD_HLX_def(L)
+
+void LD_HLn::exec(Processor *p)
+{
+	uint16_t address = p->L.value | (p->H.value >> 8);
+	uint8_t value = boost::get<uint8_t>(this->_args[0]);
+	p->_write(value, address);
+}
+
+#undef LD_XY_def
+#undef LD_XHL_def
+#undef LD_HLX_def
 
 
 
@@ -95,9 +121,9 @@ void NOP::exec(Processor *p)
 }
 
 
+
 //ADD instructions
 
-#undef LD_XY_def
 
 #define ADD_XY_def(reg1, reg2)\
   void ADD_##reg1##reg2::exec(Processor *p)\
