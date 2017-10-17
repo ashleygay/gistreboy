@@ -21,7 +21,6 @@
 
 class DummyProcessor
 {
-	
 };
 
 class GameBoy
@@ -43,6 +42,9 @@ class GameBoy
 		void _resetComponents();
 		void _wireComponents();
 	private:
+		//TODO:	Each class is actually inside a Component class that
+		// handles each processor/clock/memory/lcd.
+
 		//Processor p;
 		//Clock c;
 		//Memory m;
