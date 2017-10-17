@@ -20,29 +20,40 @@ int InterruptHandler::doInterrupt()
 		if (!IME)
 			return 0;
 		else {
-			//TODO: get interrupt from memory, & them and get
-			// associated power of 2 to get the correct routine
-			return 42;
+			uint8_t IF = 0; /*_m->getInterruptFlags();*/
+			uint8_t IE = 0; /*_m->getInterruptEnable();*/
+			uint8_t res = IF & IE;
+
+			int index = 0;
+
+			for (; !(res & 1); ++index)
+				res = res >> 1;
+
+			return _interruptRoutines[res]();
 		}
 	}
 }
 
-void InterruptHandler::_interruptLCD() 
+int InterruptHandler::_interruptLCD()
 {
 	//TODO
+	return 1;
 }
 
-void InterruptHandler::_interruptVBLANK() 
+int InterruptHandler::_interruptVBLANK()
 {
 	//TODO
+	return 1;
 }
 
-void InterruptHandler::_interruptSerial()
+int InterruptHandler::_interruptSerial()
 {
 	//TODO
+	return 1;
 }
 
-void InterruptHandler::_interruptJoypad()
+int InterruptHandler::_interruptJoypad()
 {
 	//TODO
+	return 1;
 }

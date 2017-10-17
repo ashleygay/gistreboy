@@ -12,6 +12,7 @@
 #pragma once
 
 #include <functional>
+#include <cmath>
 
 // FIXME Temporary classes only for compilation purposes
 
@@ -42,10 +43,10 @@ class InterruptHandler
 	private:
 		// Interrupt routines
 		// TODO: actually implement them
-		void _interruptLCD();
-		void _interruptVBLANK();
-		void _interruptSerial();
-		void _interruptJoypad();
+		int _interruptLCD();
+		int _interruptVBLANK();
+		int _interruptSerial();
+		int _interruptJoypad();
 	private:
 		// Interrupt Master Enable
 		bool IME = true;
@@ -56,7 +57,7 @@ class InterruptHandler
 		// interrupts.
 		bool IME_delay = false;
 
-		std::array<std::function<void()>, 6> _interruptRoutines = {
+		std::array<std::function<int()>, 6> _interruptRoutines = {
 			std::bind(&InterruptHandler::_interruptLCD, this),
 			std::bind(&InterruptHandler::_interruptVBLANK, this),
 			std::bind(&InterruptHandler::_interruptSerial, this),
