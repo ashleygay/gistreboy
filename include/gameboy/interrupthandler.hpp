@@ -13,6 +13,8 @@
 
 #include <functional>
 #include <cmath>
+#include <debug.hpp>
+#include <bitset>
 
 // FIXME Temporary classes only for compilation purposes
 
@@ -43,10 +45,23 @@ class InterruptHandler
 	private:
 		// Interrupt routines
 		// TODO: actually implement them
-		int _interruptLCD();
-		int _interruptVBLANK();
-		int _interruptSerial();
-		int _interruptJoypad();
+		int _NONE();
+
+		//VBLANK:
+		// triggered once per frame (60fps)
+		// Duration : 4560 clock cycles
+		// During those cycles, video memory can be accessed freely
+		// It is not triggered by turning on or off the LCD screen
+		// It is only triggered when THE VBL starts (Mode 1 for LCD)
+		int _VBLANK();
+
+		int _LCD_STATUS();
+		int _SERIAL();
+
+		//JOYPAD: 
+		// Used by the programmer to read values from the JOYPAD
+		// Is usually used to get out of the STOP mode.
+		int _JOYPAD();
 	private:
 		// Interrupt Master Enable
 		bool IME = true;
@@ -58,10 +73,11 @@ class InterruptHandler
 		bool IME_delay = false;
 
 		std::array<std::function<int()>, 6> _interruptRoutines = {
-			std::bind(&InterruptHandler::_interruptLCD, this),
-			std::bind(&InterruptHandler::_interruptVBLANK, this),
-			std::bind(&InterruptHandler::_interruptSerial, this),
-			std::bind(&InterruptHandler::_interruptJoypad, this)
+			std::bind(&InterruptHandler::_NONE, this),
+			std::bind(&InterruptHandler::_LCD_STATUS, this),
+			std::bind(&InterruptHandler::_VBLANK, this),
+			std::bind(&InterruptHandler::_SERIAL, this),
+			std::bind(&InterruptHandler::_JOYPAD, this)
 			};
 		Processor *_p;
 		Memory *_m;

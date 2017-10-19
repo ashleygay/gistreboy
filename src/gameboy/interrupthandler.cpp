@@ -29,30 +29,45 @@ int InterruptHandler::doInterrupt()
 			for (; !(res & 1); ++index)
 				res = res >> 1;
 
-			return _interruptRoutines[res]();
+			return res ? _interruptRoutines[res](): 0;
 		}
 	}
 }
 
-int InterruptHandler::_interruptLCD()
+int InterruptHandler::_NONE()
+{
+	//In theory, this should never be called
+
+	uint8_t IF = 0; /*_m->getInterruptFlags();*/
+	uint8_t IE = 0; /*_m->getInterruptEnable();*/
+
+	DEBUG_PRINT << "Interrupt 0 called, something went wrong" << std::endl;
+	DEBUG_PRINT << "Interrupt Flags :" << std::bitset<8>(IF) << std::endl;
+	DEBUG_PRINT << "Interrupt Enable :" << std::bitset<8>(IE) << std::endl;
+
+	return 0;
+}
+
+int InterruptHandler::_LCD_STATUS()
+{
+	//Changes permissions to be able to write to VRAM/OAM
+	// _mem->VBLANK();
+	return 4560;
+}
+
+int InterruptHandler::_VBLANK()
 {
 	//TODO
 	return 1;
 }
 
-int InterruptHandler::_interruptVBLANK()
+int InterruptHandler::_SERIAL()
 {
 	//TODO
 	return 1;
 }
 
-int InterruptHandler::_interruptSerial()
-{
-	//TODO
-	return 1;
-}
-
-int InterruptHandler::_interruptJoypad()
+int InterruptHandler::_JOYPAD()
 {
 	//TODO
 	return 1;
