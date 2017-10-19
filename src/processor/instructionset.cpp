@@ -83,6 +83,10 @@ InstructionSet::InstructionSet()
 	add_instr(LD_HLL)
 	add_instr(LD_HLn)
 
+	add_instr(LD_ABC)
+	add_instr(LD_ADE)
+	add_instr(LD_Ann)
+
 	add_instr(ADD_AA)
 	add_instr(ADD_AB)
 	add_instr(ADD_AC)
