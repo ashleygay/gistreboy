@@ -43,6 +43,7 @@ class Instruction {
 
 // LD INSTRUCTIONS
 
+decl_instruction(LD_AX, 0x3E, 8, 1, 1, 0)
 decl_instruction(LD_BX, 0x06, 8, 1, 1, 0)
 decl_instruction(LD_CX, 0x0E, 8, 1, 1, 0)
 decl_instruction(LD_DX, 0x16, 8, 1, 1, 0)
@@ -114,6 +115,9 @@ decl_instruction(LD_HLH, 0x74, 8, 0, 0, 0)
 decl_instruction(LD_HLL, 0x75, 8, 0, 0, 0)
 decl_instruction(LD_HLn, 0x36, 12, 1, 1, 0)
 
+decl_instruction(LD_ABC, 0x0A, 8, 0, 0, 0)
+decl_instruction(LD_ADE, 0x1A, 8, 0, 0, 0)
+decl_instruction(LD_Ann, 0xFA, 16, 1, 2, 0)
 
 // NOP INSTRUCTION
 

@@ -35,6 +35,7 @@ static uint8_t HLReadDereference(Processor *p)
 	p->reg.value = val;\
 	}
 
+LD_RegX_def(A)
 LD_RegX_def(B)
 LD_RegX_def(C)
 LD_RegX_def(D)
@@ -135,6 +136,22 @@ void LD_HLn::exec(Processor *p)
 #undef LD_XHL_def
 #undef LD_HLX_def
 
+
+void LD_ABC::exec(Processor *p)
+{
+	p->A.value = BCReadDereference(p);
+}
+
+void LD_ADE::exec(Processor *p)
+{
+	p->A.value = DEReadDereference(p);
+}
+
+void LD_Ann::exec(Processor *p)
+{
+	uint16_t address = boost::get<uint16_t>(this->_args[0]);
+	p->A.value = p->_read(address);
+}
 
 
 void NOP::exec(Processor *p)
