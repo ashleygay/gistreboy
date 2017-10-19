@@ -1,6 +1,32 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
+/*
+static uint8_t AFReadDereference(Processor *p)
+{
+	uint16_t address = p->F.value | (p->A.value >> 8);
+	return p->_read(address);
+}
+*/
+
+static uint8_t BCReadDereference(Processor *p)
+{
+	uint16_t address = p->C.value | (p->B.value >> 8);
+	return p->_read(address);
+}
+
+static uint8_t DEReadDereference(Processor *p)
+{
+	uint16_t address = p->E.value | (p->D.value >> 8);
+	return p->_read(address);
+}
+
+static uint8_t HLReadDereference(Processor *p)
+{
+	uint16_t address = p->L.value | (p->H.value >> 8);
+	return p->_read(address);
+}
+
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -25,11 +51,7 @@ LD_RegX_def(L)
 
 #define LD_XHL_def(reg)\
 	void LD_##reg##HL::exec(Processor *p)\
-	{\
-		uint16_t address = p->L.value | (p->H.value >> 8);\
-		uint8_t value = p->_read(address);\
-		p->A.value = value;\
-	}
+	{ p->A.value = HLReadDereference(p); }
 
 #define LD_HLX_def(reg)\
 	void LD_HL##reg::exec(Processor *p)\
