@@ -17,7 +17,7 @@ EXEC=emulator
 SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC)
 LIB=`pkg-config --cflags --libs gtk+-3.0`
 INCLUDE_PATH= -I$(GUI) -I$(DEBUG) -I$(INTERFACE) -I$(GAMEBOY)
-GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_PRINT_ACTIVATED
+GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_STREAM_ACTIVATED
 COMPILER=g++
 
 

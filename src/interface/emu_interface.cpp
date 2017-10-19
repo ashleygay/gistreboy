@@ -18,7 +18,7 @@ const uint8_t * EmuInterface::getRenderedPixels()
 	//TODO: if VRAM has been updated, we render again
 	// if(_p.vramToUpdate())
 		//_renderPixels();
-	DEBUG_PRINT << "Getting pixels" << std::endl;
+	DEBUG_STREAM << "Getting pixels" << std::endl;
 	return _pixels;
 }
 
@@ -26,7 +26,7 @@ void EmuInterface::_renderPixels()
 {
 	//TODO: update _pixels here
 
-	DEBUG_PRINT << "Rendering..." << std::endl;
+	DEBUG_STREAM << "Rendering..." << std::endl;
 
 	//_p.setNoUpdate();
 }

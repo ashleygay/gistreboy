@@ -41,9 +41,9 @@ int InterruptHandler::_NONE()
 	uint8_t IF = 0; /*_m->getInterruptFlags();*/
 	uint8_t IE = 0; /*_m->getInterruptEnable();*/
 
-	DEBUG_PRINT << "Interrupt 0 called, something went wrong" << std::endl;
-	DEBUG_PRINT << "Interrupt Flags :" << std::bitset<8>(IF) << std::endl;
-	DEBUG_PRINT << "Interrupt Enable :" << std::bitset<8>(IE) << std::endl;
+	DEBUG_STREAM << "Interrupt 0 called, something went wrong" << std::endl;
+	DEBUG_STREAM << "Interrupt Flags :" << std::bitset<8>(IF) << std::endl;
+	DEBUG_STREAM << "Interrupt Enable :" << std::bitset<8>(IE) << std::endl;
 
 	return 0;
 }

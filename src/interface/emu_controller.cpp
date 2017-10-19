@@ -39,9 +39,9 @@ void EmuController::stopEmulation()
 		gb.stop();
 		_future.wait();
 		_future.get(); // Future calls to wait() will be invalid.
-		DEBUG_PRINT << "Emulator stopped" << std::endl;
+		DEBUG_STREAM << "Emulator stopped" << std::endl;
 	}
 	catch (const std::exception&) {
-		DEBUG_PRINT << "Emulator is not started" << std::endl;
+		DEBUG_STREAM << "Emulator is not started" << std::endl;
 	}
 }

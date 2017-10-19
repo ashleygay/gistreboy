@@ -1,3 +1,12 @@
 This project requires boost and GTK3 to compile.
 
 To compile : make
+
+To change branches:
+	git checkout <branch>
+
+branches:
+	dev_processor
+	dev_memory
+
+The list of instructions is in the file : instructionlist

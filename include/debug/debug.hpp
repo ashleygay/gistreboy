@@ -2,8 +2,8 @@
  * File : debug.hpp
  *
  * This file allows print out debug information that will not be compiled if
- * DEBUG_PRINT_ACTIVATED is not set
- * Allows to do something like this DEBUG_PRINT << "TEST" << std::endl;
+ * DEBUG_STREAM_ACTIVATED is not set
+ * Allows to do something like this DEBUG_STREAM << "TEST" << std::endl;
  *
  * File created by : Corentin Gay
  * File was created the : 08/09/2017
@@ -21,8 +21,8 @@ namespace std
 	};
 }
 
-#ifdef DEBUG_PRINT_ACTIVATED
-	#define DEBUG_PRINT std::cout
+#ifdef DEBUG_STREAM_ACTIVATED
+	#define DEBUG_STREAM std::cout
 #else
-	#define DEBUG_PRINT std::nullstream()
+	#define DEBUG_STREAM std::nullstream()
 #endif
