@@ -1,11 +1,17 @@
+/*
+ * File : gui_setup.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 08/09/2017
+ */
+
 #include <gui_setup.hpp>
 
-static void create_menu_item_with_callback(const char *name, GtkWidget *window,
-				 GtkWidget * parent, callback_ptr callback, Helper* helper)
+static void create_menu_item_with_callback(const char *name,  GtkWidget * parent,
+					callback_ptr callback, Helper* helper)
 {
 	GtkWidget *b = gtk_menu_item_new_with_label(name);
-	if (helper)
-		helper->set_window(window);
+
 	g_signal_connect(b, "activate", G_CALLBACK(callback), helper);
 
     	gtk_menu_shell_append (GTK_MENU_SHELL (parent), b);
@@ -29,7 +35,14 @@ void setup_gui (GtkApplication *app)
 	gtk_window_set_title(GTK_WINDOW (window), "Super Gistre Boy");
 	gtk_window_set_default_size(GTK_WINDOW (window), 600, 400);
 
+	//TODO: We set the window for the emulation interface here, sothat it
+	//is able to display error messages. We also add a signal to kill the
+	//emulator when the window is killed.
+
+	//EmuInterface.getInstance().setWindow(window);
+
 	menuItem = gtk_menu_item_new_with_label("Menu");
+	g_signal_connect(G_OBJECT (window), "destroy", G_CALLBACK (stop_callback), NULL);
 
 	area = gtk_drawing_area_new();
 	gtk_widget_set_size_request (area, 600, 400);
@@ -40,14 +53,14 @@ void setup_gui (GtkApplication *app)
 	gtk_menu_shell_append(GTK_MENU_SHELL (menuBar), menuItem);
 
 	#define X(name, callback, parent, object) \
-		create_menu_item_with_callback(name, window, parent, callback, object);
+		create_menu_item_with_callback(name, parent, callback, object);
 	MENU_SETUP
 	#undef X
 
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM (menuItem), subMenu);
 
     	gtk_box_pack_start(GTK_BOX (box), menuBar, FALSE, FALSE, 5);
-    	gtk_box_pack_start(GTK_BOX (box), area, TRUE, TRUE, 5);
+    	gtk_box_pack_start(GTK_BOX (box), area, FALSE, TRUE, 5);
 
 	g_signal_connect (G_OBJECT (area), "draw", G_CALLBACK (draw_callback), NULL);
 	gtk_widget_add_tick_callback(area, trigger_draw, NULL, stub_destroy);
