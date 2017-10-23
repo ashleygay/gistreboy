@@ -48,13 +48,13 @@ void EmuInterface::stopEmulator()
 	_controller.stopEmulation();
 }
 
-void EmuInterface::changeCartridge(uint8_t * mem, size_t s)
+void EmuInterface::changeCartridge(FileContent& f)
 {
 	stopEmulator();
 	// If previously loaded data, we free the pointer
 	if (_mem)
 		free(_mem);
 
-	_mem = mem;
-	_s = s;
+	_mem = f.memory;
+	_s = f.size;
 }

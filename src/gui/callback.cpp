@@ -28,15 +28,15 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 	(void)b;
 	OpenButtonHelper *helper = (OpenButtonHelper *)user_data;
 	GFile* g = helper->open_file_with_dialog();
-	size_t s = 0;
-	uint8_t * data = helper->load_content(g, &s);
-	if (!data)
+	FileContent data = helper->load_content(g);
+
+	if (!data.memory)
 		return;
 
 	EmuInterface & i = EmuInterface::getInstance();
 
 	// EmuInterface takes ownership of the data pointer
-	i.changeCartridge(data, s);
+	i.changeCartridge(data);
 
 	DEBUG_STREAM << "We give the pointer to the memory here." << std::endl;
 }
