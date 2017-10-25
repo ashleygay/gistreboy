@@ -7,9 +7,16 @@
 
 #include <interrupthandler.hpp>
 
+void InterruptHandler::_resetCleanupRoutine()
+{
+	_cleanup = std::bind(&InterruptHandler::_NONE, this);
+}
 
 int InterruptHandler::doInterrupt()
 {
+	_cleanup();
+	_resetCleanupRoutine();
+
 	if (IME_delay) {
 		enableIME();
 		this->IME_delay = false;
@@ -20,45 +27,55 @@ int InterruptHandler::doInterrupt()
 		if (!IME)
 			return 0;
 		else {
-			uint8_t IF = 0; /*_m->getInterruptFlags();*/
-			uint8_t IE = 0; /*_m->getInterruptEnable();*/
-			uint8_t res = IF & IE;
+			std::bitset<8> IF = 0; /*_m->getInterruptFlags();*/
+			std::bitset<8> IE = 0; /*_m->getInterruptEnable();*/
+			std::bitset<8> res = IF & IE;
 
+			// We compute the nth interrupt index
 			int index = 0;
+			for (; !res[index]; ++index){}
 
-			for (; !(res & 1); ++index)
-				res = res >> 1;
-
-			return res ? _interruptRoutines[res](): 0;
+			// We set the cleanup routine and the execution of
+			// the interrupt.
+			if (res.any()) {
+				unsigned long i = res.to_ulong();
+				_cleanup = _interruptRoutines[i].cleanup;
+				return _interruptRoutines[i].exec();
+			}
+			else
+				return 0;
 		}
 	}
 }
 
-int InterruptHandler::_NONE()
+void InterruptHandler::_NONE()
 {
-	//In theory, this should never be called
+	return;
+}
 
-	uint8_t IF = 0; /*_m->getInterruptFlags();*/
-	uint8_t IE = 0; /*_m->getInterruptEnable();*/
-
-	DEBUG_STREAM << "Interrupt 0 called, something went wrong" << std::endl;
-	DEBUG_STREAM << "Interrupt Flags :" << std::bitset<8>(IF) << std::endl;
-	DEBUG_STREAM << "Interrupt Enable :" << std::bitset<8>(IE) << std::endl;
-
+int InterruptHandler::_TIMER()
+{
 	return 0;
 }
 
 int InterruptHandler::_LCD_STATUS()
 {
-	//Changes permissions to be able to write to VRAM/OAM
-	// _mem->VBLANK();
-	return 4560;
+	return 0;
 }
 
 int InterruptHandler::_VBLANK()
 {
 	//TODO
-	return 1;
+	//Changes permissions to be able to write to VRAM/OAM
+	// _mem->VBLANK();
+	return 4560;
+}
+
+void InterruptHandler::_VBLANK_END()
+{
+	//TODO
+	//Changes permissions to disable write to VRAM/OAM
+	// _mem->VBLANK_END();
 }
 
 int InterruptHandler::_SERIAL()
