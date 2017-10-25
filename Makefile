@@ -15,9 +15,10 @@ HELPERS=include/helpers
 
 EXEC=emulator
 SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC)
-LIB=`pkg-config --cflags --libs gtk+-3.0`
+LIB=`pkg-config --cflags --libs gtk+-3.0` -lboost_system
 INCLUDE_PATH= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY) -I$(HELPERS)
-GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_STREAM_ACTIVATED
+GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_STREAM_ACTIVATED\
+	-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 COMPILER=g++
 
 
