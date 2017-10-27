@@ -50,7 +50,6 @@ class InterruptHandler
 		void enableIMEDelay(){IME_delay = true;}
 		void disableIME(){IME = false;}
 
-		void setProcessor(Processor *p){_p = p;}
 		void setMemory(Memory *m){_m = m;}
 	private:
 		// Interrupt routines
@@ -120,6 +119,5 @@ class InterruptHandler
 		std::function<void()> _cleanup =
 			std::bind(&InterruptHandler::_NONE, this);
 
-		Processor *_p;
 		Memory *_m;
 };

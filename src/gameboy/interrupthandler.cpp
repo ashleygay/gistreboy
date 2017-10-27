@@ -19,7 +19,7 @@ int InterruptHandler::doInterrupt()
 
 	if (IME_delay) {
 		enableIME();
-		this->IME_delay = false;
+		IME_delay = false;
 		return 0;
 	}
 	else {
