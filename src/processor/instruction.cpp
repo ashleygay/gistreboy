@@ -185,16 +185,27 @@ ADD_XY_def(A, C)
 ADD_XY_def(A, D)
 ADD_XY_def(A, E)
 ADD_XY_def(A, H)
-ADD_XY_def(A, L)
-// TODO ADD_XY_def(A, HL); 
+ADD_XY_def(A, L)  
 
-#undef ADD_XY_def
+#define ADD_XHL_def(reg)\
+  void ADD_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    uint val = p->reg.value + tmp;	\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg.value & 0xF) + (tmp & 0xF)) > 0xF)\
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (val > 0xFF)\
+      p->flag.setFlag(FlagRegister::CARRY); \
+    p->reg.value = (result & 0xFF);\
+  }
 
-void ADD_AADDRESS::exec(Processor *p)
-{
-  p = p;
-  /*auto mem = p._read(this->args[0]);*/
-}    
+
+ADD_XHL_def(A)
+
 
 //ADC instructions
 
@@ -220,15 +231,25 @@ ADC_XY_def(A, D)
 ADC_XY_def(A, E)
 ADC_XY_def(A, H)
 ADC_XY_def(A, L)
-// TODO ADC_XY_def(A, HL);
 
-#undef ADC_XY_def        
+#define ADC_XHL_def(reg)\
+  void ADC_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    uint val = p->reg.value + tmp + p->flag.getFlag(FlagRegister::CARRY);\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);	\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg.value & 0xF) + (tmp & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (val > 0xFF)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg.value = (result & 0xFF);       \
+  }
 
-void ADC_AADDRESS::exec(Processor *p)
-{
-  p = p;
-  /*auto mem = p._read(this->args[0]);*/
-} 
+
+ADC_XHL_def(A)
 
 //SUB instructions
 
@@ -254,17 +275,26 @@ SUB_XY_def(A, D)
 SUB_XY_def(A, E)
 SUB_XY_def(A, H)
 SUB_XY_def(A, L)
-// TODO SUB_XY_def(A, HL);
 
-#undef SUB_XY_def
+#define SUB_XHL_def(reg)\
+  void SUB_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    uint val = p->reg.value - tmp;\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg.value & 0xF) - (tmp & 0xF)) < 0) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (p->reg.value < tmp)                 \
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg.value = (result & 0xFF);       \
+  }
 
-void SUB_AADDRESS::exec(Processor *p)
-{
-  p = p;
-  /*auto mem = p._read(this->args[0]);*/
-}          
+SUB_XHL_def(A) 
 
-//SUB instructions
+//SBC instructions
 
 #define SBC_XY_def(reg1, reg2)                  \
   void SBC_##reg1##reg2::exec(Processor *p)\

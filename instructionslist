@@ -4,7 +4,7 @@ LISTE DES INSTRUCTIONS
 LD(nn, n)	 -> done 
 LD(r1, r2)  	 -> done (HL not done)
 LD(A, n)	 -> ?
-LD(n, A		 -> ?
+LD(n, A)	 -> ?
 LD(A, (C))  	 -> ?
 LD((C), A)  	 -> ?
 LD(A, (HLD))	 -> ?
@@ -30,9 +30,9 @@ LD(nn, SP)	 -> ?
 PUSH(nn)	 -> not done
 POP(nn)		 -> not done
 
-ADD(A, n)	 -> done (HL and # not done)
-ADC(A, n)        -> done (HL and # not done)
-SUB(n)        	 -> done (HL and # not done)
+ADD(A, n)	 -> done (# not done)
+ADC(A, n)        -> done (# not done)
+SUB(n)        	 -> done (# not done)
 SBC(A, n)      	 -> done (HL and # not done)
 
 ADD(HL, n)	 -> not done

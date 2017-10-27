@@ -94,7 +94,8 @@ InstructionSet::InstructionSet()
 	add_instr(ADD_AE)
 	add_instr(ADD_AH)
 	add_instr(ADD_AL)
-	  // TODO # and HL
+	add_instr(ADD_AHL)
+	  //add_instr(ADD_ADDRESS)
 
 
 	add_instr(ADC_AA)
@@ -104,7 +105,8 @@ InstructionSet::InstructionSet()
 	add_instr(ADC_AE)
 	add_instr(ADC_AH)
 	add_instr(ADC_AL)
-	  // TODO # and HL
+	add_instr(ADC_AHL)
+	  //add_instr(ADC_ADDRESS)
 
 
 	add_instr(SUB_AA)
@@ -114,7 +116,8 @@ InstructionSet::InstructionSet()
 	add_instr(SUB_AE)
 	add_instr(SUB_AH)
 	add_instr(SUB_AL)
-	  // TODO # and HL
+	add_instr(SUB_AHL)
+	  //add_instr(SUB_ADDRESS) 
 
 	add_instr(SBC_AA)
 	add_instr(SBC_AB)
@@ -123,7 +126,8 @@ InstructionSet::InstructionSet()
 	add_instr(SBC_AE)
 	add_instr(SBC_AH)
 	add_instr(SBC_AL)
-	  // TODO # and HL   
+	  //add_instr(SBC_AHL)
+	  //add_instr(SBC_ADDRESS) 
 
 	add_instr(AND_AA)
 	add_instr(AND_AB)
@@ -132,7 +136,8 @@ InstructionSet::InstructionSet()
 	add_instr(AND_AE)
 	add_instr(AND_AH)
 	add_instr(AND_AL)
-	  // TODO # and HL 
+	  //add_instr(ADD_AHL)
+	  //add_instr(ADD_ADDRESS) 
 
 	add_instr(OR_AA)
 	add_instr(OR_AB)
@@ -141,7 +146,8 @@ InstructionSet::InstructionSet()
 	add_instr(OR_AE)
 	add_instr(OR_AH)
 	add_instr(OR_AL)
-	// TODO # and HL
+	  //add_instr(OR_AHL)
+	  //add_instr(OR_ADDRESS)
 
 	add_instr(XOR_AA)
 	add_instr(XOR_AB)
@@ -150,7 +156,8 @@ InstructionSet::InstructionSet()
 	add_instr(XOR_AE)
 	add_instr(XOR_AH)
 	add_instr(XOR_AL)
-	// TODO # and HL  
+	  //add_instr(XOR_AHL)
+	  //add_instr(XOR_ADDRESS)
 
 
 	add_instr(CP_AA)
@@ -160,7 +167,8 @@ InstructionSet::InstructionSet()
 	add_instr(CP_AE)
 	add_instr(CP_AH)
 	add_instr(CP_AL)
-	  // TODO # and HL
+	  //add_instr(CP_AHL)
+	  //add_instr(CP_ADDRESS) 
 
 	add_instr(INC_AX)
 	add_instr(INC_BX)
@@ -169,7 +177,7 @@ InstructionSet::InstructionSet()
 	add_instr(INC_EX)
 	add_instr(INC_HX)
 	add_instr(INC_LX)
-	  // TODO HL
+	  //add_instr(INC_HLX)
 
 
 	add_instr(DEC_AX)
@@ -179,7 +187,7 @@ InstructionSet::InstructionSet()
 	add_instr(DEC_EX)
 	add_instr(DEC_HX)
 	add_instr(DEC_LX)
-	  // TODO HL
+	  //add_instr(DEC_HLX)
 
 	add_instr(SWAP_AX)
 	add_instr(SWAP_BX)
@@ -188,7 +196,7 @@ InstructionSet::InstructionSet()
 	add_instr(SWAP_EX)
 	add_instr(SWAP_HX)
 	add_instr(SWAP_LX)
-	  // TODO HL
+	  //add_instr(SWAP_HLX)
 
         #undef add_instr
 }
