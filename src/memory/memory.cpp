@@ -41,5 +41,3 @@ Cartridge& Memory::get_cartridge()
 {
 	return cartridge;
 }
-
-
