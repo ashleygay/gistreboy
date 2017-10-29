@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <file_content.hpp>
+
 #include <gtk/gtk.h>
 #include <debug.hpp>
 #include <iostream>
@@ -48,14 +50,15 @@ class OpenButtonHelper : public Helper
 	public:
 		GFile* open_file_with_dialog(void);
 
-		// get the content of a file in an allocated buffer form
-		uint8_t * load_content(GFile* f, size_t * s);
+		// Get the content of a file in an allocated buffer form
+		// TODO: return a struct FileContent {memory, size}
+		FileContent load_content(GFile* f);
 
 	private:
 		// Conditions that the file must meet in order to be considered
 		// correct and be successfully opened by the dialog box
-		int verify_min_size(GFile * f);
-		int verify_attributes(GFile * f);
+		bool verify_min_size(GFile * f);
+		bool verify_attributes(GFile * f);
 
 	private:
 		size_t _min_size;

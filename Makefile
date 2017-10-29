@@ -3,8 +3,6 @@ MAIN=src/main.cpp
 GUI=include/gui
 GUI_SRC=src/gui/*.cpp
 
-DEBUG=include/debug
-
 PROCESSOR=include/processor
 PROCESSOR_SRC=src/processor/*.cpp
 
