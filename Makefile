@@ -15,8 +15,10 @@ INTERFACE_SRC=src/interface/*.cpp
 MEMORY=include/memory
 MEMORY_SRC=src/memory/*.cpp
 
+DEBUG=include/helpers
+
 EXEC=emulator
-SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(MEMORY_SRC)
+SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC) $(MEMORY_SRC)
 LIB=-lm -lSDL -lSDL_image -lSDL_ttf `pkg-config --cflags --libs gtk+-3.0` -lboost_system
 INCLUDE_PATH= -I$(GUI) -I$(DEBUG) -I$(INTERFACE) -I$(PROCESSOR) -I$(MEMORY) -I$(GAMEBOY)
 GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_PRINT_ACTIVATED\
