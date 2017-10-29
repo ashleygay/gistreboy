@@ -17,22 +17,24 @@
 class MemoryObject
 {
 	public:
-		MemoryObject(std::vector<std::pair<uint16_t>> rang,
-                             Processor& proc): range(rang),
-					       processor(proc) { }
+		MemoryObject(Processor& proc,
+			     std::vector<std::pair<uint16_t, uint16_t>> 
+			     rang): processor(proc), range(rang) { }
 
 		bool isInRange(uint16_t address)
 		{
 			for (auto it = range.begin(); it != range.end();
 			     it++)
 			{
-				if (range(address, it->first, it->second))
+				if (addr_range(address, it->first,
+					       it->second))
 					return true;
 			}
 			return false;
 		}
 
-		bool range(uint16_t address, uint16_t min, uint16_t max)
+		bool addr_range(uint16_t address, uint16_t min,
+				uint16_t max)
 		{
 			return address >= min && address <= max;
 		}
@@ -44,7 +46,7 @@ class MemoryObject
 		virtual void check_permissions_read(uint16_t address) = 0;
 
 		virtual void check_permissions_write(uint16_t address,
-						     uint8_t byte) = 0:
+						     uint8_t byte) = 0;
 	protected:
 		std::vector<std::pair<uint16_t, uint16_t>> range;
 		Processor& processor;

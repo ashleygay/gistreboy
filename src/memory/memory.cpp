@@ -9,11 +9,14 @@ Memory::Memory(uint8_t* rom, Processor& proc)
 	std::vector<std::pair<uint16_t, uint16_t>> range_cart;
 	range_cart.push_back(std::make_pair(0x00, 0x7FFF));
 	range_cart.push_back(std::make_pair(0xA000, 0xBFFF));
-	cartridge(proc, rom);
+	cartridge(rom, proc, range_cart);
 
 	std::vector<std::pair<uint16_t, uint16_t>> range_video;
-	
-	video(proc);
+	range_video.push_back(std::make_pair(0xFF40, 0xFF4B));
+	range_video.push_back(std::make_pair(0x8000, 0x9FFF));
+	range_video.push_back(std::make_pair(0xFE00, 0xFE9F));
+	video(proc, range_video);
+
 	memory.fill(0);
 }
 
@@ -27,7 +30,7 @@ uint8_t Memory::read(uint16_t address)
 		return memory[address];
 }
 
-uint8_t Memory::write(uint16_t address, uint8_t byte)
+void Memory::write(uint16_t address, uint8_t byte)
 {
 	if (cartridge.isInRange(address))
 		cartridge.write(address, byte);
@@ -42,7 +45,7 @@ Video& Memory::get_video()
 	return video;
 }
 
-Cartridge& Memoery::get_cartridge()
+Cartridge& Memory::get_cartridge()
 {
 	return cartridge;
 }

@@ -3,13 +3,15 @@
 #include <vector>
 #include <array>
 #include <string>
-#include <ifstream>
+#include <fstream>
 #include <memoryobject.hpp>
 
 class Cartridge : public MemoryObject {
 
 public :
-	Cartridge(uint8_t *cart);
+	Cartridge(Processor& proc,
+		  std::vector<std::pair<uint16_t, uint16_t>> rang,
+		  uint8_t *cart);
   
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t byte);  
@@ -36,7 +38,7 @@ private :
      inside the rom */
 
 	//This array has been generated with the xd utility tool.
-	std::array<uint8_t, 256> boot_rom = {
+	std::array<uint8_t, 256> boot_rom = { {
 		49,254,255,175,33,255,159,50,203,124,32,251,33,38,255,14,17,62,128,50,
 		226,12,62,243,226,50,62,119,119,62,252,224,71,17,4,1,33,16,128,26,205,
 		149,0,205,150,0,19,123,254,52,32,243,17,216,0,6,8,26,19,34,35,5,32,249,
@@ -50,7 +52,7 @@ private :
 		187,185,51,62,60,66,185,165,185,165,66,60,33,4,1,17,168,0,26,19,190,32,
 		254,35,125,254,52,32,245,6,25,120,134,35,5,32,251,134,32,254,62,1,224,
 		80
-	};
+	} };
 
   /* the type of the cartidge see manual */
   uint8_t type = 0;
@@ -69,15 +71,15 @@ private :
   uint8_t rom_bank_number = 0;
   uint8_t ram_bank_number = 0; /* can be upper 2 bit of rom_bank_number */
 
-  bool ram_enable = false;
-  bool rom_ram_mode = false; /* false if rom mode, true if ram mode */
+  bool ram_enable_ = false;
+  bool rom_ram_mode_ = false; /* false if rom mode, true if ram mode */
 
-  bool has_ram = false;
-  bool has_battery = false;
-  bool has_timer = false;
-  bool has_rumble = false;
+  bool has_ram_ = false;
+  bool has_battery_ = false;
+  bool has_timer_ = false;
+  bool has_rumble_ = false;
 
-  bool has_boot = false; /* true when boot rom is finished */
+  bool has_boot_ = false; /* true when boot rom is finished */
 
   std::string name;
 

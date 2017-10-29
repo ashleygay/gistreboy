@@ -14,13 +14,16 @@ GAMEBOY_SRC=src/gameboy/*.cpp
 INTERFACE=include/interface
 INTERFACE_SRC=src/interface/*.cpp
 
+MEMORY=include/memory
+MEMORY_SRC=src/memory/*.cpp
 
 EXEC=emulator
-SRC= $(MAIN) $(GUI_SRC) $(PROCESSOR_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC)
-LIB= -lm -lSDL -lSDL_image -lSDL_ttf -lboost_system `pkg-config --cflags --libs gtk+-3.0`
-INCLUDE_PATH= -I$(GUI) -I$(DEBUG) -I$(PROCESSOR) -I$(INTERFACE) -I$(GAMEBOY)
+SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(MEMORY_SRC)
+LIB=-lm -lSDL -lSDL_image -lSDL_ttf -lboost_system `pkg-config --cflags --libs gtk+-3.0`
+INCLUDE_PATH= -I$(GUI) -I$(DEBUG) -I$(INTERFACE) -I$(PROCESSOR) -I$(MEMORY) -I$(GAMEBOY)
 GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_PRINT_ACTIVATED\
-					-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+					-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG	
+
 COMPILER=g++
 
 

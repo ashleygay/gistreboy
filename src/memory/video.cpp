@@ -16,7 +16,7 @@ void Video::write(uint16_t address, uint8_t byte)
 	{
 		uint16_t beg_src = (byte << 8) + (0x00 << 8);
 		uint16_t end_src = (byte << 8) + (0x9F << 8);
-		/*processor.dma_transfer(beg_src, end_src, 0xFE00, 0xFE9F);*/	
+		processor.dma_transfer(beg_src, end_src, 0xFE00, 0xFE9F);	
 	}
 
 	video_memory[address] = byte;
