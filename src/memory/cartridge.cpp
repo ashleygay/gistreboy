@@ -1,6 +1,6 @@
 #include <cartridge.hpp>
 
-Cartridge::Cartridge(Processor& proc,
+Cartridge::Cartridge(Processor* proc,
 		     std::vector<std::pair<uint16_t, uint16_t>> rang,
 		     uint8_t *cart)
 		     : MemoryObject(proc, rang)
@@ -236,6 +236,16 @@ void Cartridge::write(uint16_t address, uint8_t byte)
 			rom_ram_mode_ = true;
 	}
 
+}
+
+bool Cartridge::check_permissions_read(uint16_t address)
+{
+	return true;
+}
+
+bool Cartridge::check_permissions_write(uint16_t address, uint8_t byte)
+{
+	return true;
 }
 
 uint8_t Cartridge::get_current_rom_bank()

@@ -12,7 +12,7 @@
 class Memory {
 
 public :
-	Memory(uint8_t* rom, Processor& proc);
+	Memory(uint8_t* rom, Processor* proc);
 
   	uint8_t read(uint16_t address);
   	void write(uint16_t address, uint8_t byte);
@@ -26,6 +26,6 @@ private :
 
 	Cartridge cartridge;
 	Video video;
-	Processor& processor;
+	Processor* processor;
 
 };

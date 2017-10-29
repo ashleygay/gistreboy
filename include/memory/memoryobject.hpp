@@ -17,7 +17,10 @@
 class MemoryObject
 {
 	public:
-		MemoryObject(Processor& proc,
+
+		MemoryObject() {}
+
+		MemoryObject(Processor* proc,
 			     std::vector<std::pair<uint16_t, uint16_t>> 
 			     rang): processor(proc), range(rang) { }
 
@@ -41,13 +44,13 @@ class MemoryObject
 
 		virtual uint8_t read(uint16_t address) = 0;
 
-		virtual void write(uint8_t value, uint16_t address) = 0;
+		virtual void write(uint16_t address, uint8_t byte) = 0;
 
-		virtual void check_permissions_read(uint16_t address) = 0;
+		virtual bool check_permissions_read(uint16_t address) = 0;
 
-		virtual void check_permissions_write(uint16_t address,
+		virtual bool check_permissions_write(uint16_t address,
 						     uint8_t byte) = 0;
 	protected:
+		Processor* processor;
 		std::vector<std::pair<uint16_t, uint16_t>> range;
-		Processor& processor;
 };

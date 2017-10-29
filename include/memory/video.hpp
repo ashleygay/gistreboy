@@ -8,10 +8,17 @@
 class Video : public MemoryObject {
 
 public :
- 	Video();
+
+	Video() {}
+
+ 	Video(Processor* proc,
+	      std::vector<std::pair<uint16_t, uint16_t>> rang);
 
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t byte);
+
+	bool check_permissions_read(uint16_t address);
+	bool check_permissions_write(uint16_t address, uint8_t byte);
 
 	uint8_t get_lcd_control();
 	uint8_t get_lcd_status();

@@ -57,12 +57,12 @@ class InterruptHandler
 		// interrupts.
 		bool IME_delay = false;
 
-		std::array<std::function<int()>, 6> _interruptRoutines = {
+		std::array<std::function<int()>, 6> _interruptRoutines = { {
 			std::bind(&InterruptHandler::_interruptLCD, this),
 			std::bind(&InterruptHandler::_interruptVBLANK, this),
 			std::bind(&InterruptHandler::_interruptSerial, this),
 			std::bind(&InterruptHandler::_interruptJoypad, this)
-			};
+			} };
 		Processor *_p;
 		Memory *_m;
 };

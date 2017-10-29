@@ -9,12 +9,18 @@
 class Cartridge : public MemoryObject {
 
 public :
-	Cartridge(Processor& proc,
+
+	Cartridge() {}
+
+	Cartridge(Processor* proc,
 		  std::vector<std::pair<uint16_t, uint16_t>> rang,
 		  uint8_t *cart);
   
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t byte);  
+
+	bool check_permissions_read(uint16_t address);
+	bool check_permissions_write(uint16_t address, uint8_t byte);
 
 	bool ram_enable();
 	bool has_boot();

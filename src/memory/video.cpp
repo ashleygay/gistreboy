@@ -1,7 +1,10 @@
 #include <video.hpp>
 #include <bitset>
 
-Video::Video() {
+Video::Video(Processor* proc,
+	     std::vector<std::pair<uint16_t, uint16_t>> rang) :
+	     MemoryObject(proc, rang)
+{
 	video_memory.fill(0);
 }
 
@@ -14,12 +17,23 @@ void Video::write(uint16_t address, uint8_t byte)
 {
 	if (address == 0xFF40)
 	{
-		uint16_t beg_src = (byte << 8) + (0x00 << 8);
+		uint16_t beg_src = (byte << 8);
 		uint16_t end_src = (byte << 8) + (0x9F << 8);
-		processor.dma_transfer(beg_src, end_src, 0xFE00, 0xFE9F);	
+		/*DMA_TRANSFER beg_src, end_src, 0xFE00, 0xFE9F*/
+
 	}
 
 	video_memory[address] = byte;
+}
+
+bool Video::check_permissions_read(uint16_t address)
+{
+	return true;
+}
+
+bool Video::check_permissions_write(uint16_t address, uint8_t byte)
+{
+	return true;
 }
 
 uint8_t Video::get_lcd_control()
