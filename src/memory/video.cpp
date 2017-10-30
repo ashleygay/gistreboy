@@ -19,6 +19,7 @@ void Video::write(uint16_t address, uint8_t byte)
 	{
 		uint16_t beg_src = (byte << 8);
 		uint16_t end_src = (byte << 8) + (0x9F << 8);
+		//FIXME: implement DMA transfer
 		/*DMA_TRANSFER beg_src, end_src, 0xFE00, 0xFE9F*/
 
 	}
@@ -26,12 +27,12 @@ void Video::write(uint16_t address, uint8_t byte)
 	video_memory[address] = byte;
 }
 
-bool Video::check_permissions_read(uint16_t address)
+bool Video::can_read(uint16_t address)
 {
 	return true;
 }
 
-bool Video::check_permissions_write(uint16_t address, uint8_t byte)
+bool Video::can_write(uint16_t address, uint8_t byte)
 {
 	return true;
 }

@@ -18,7 +18,7 @@ const uint8_t * EmuInterface::getRenderedPixels()
 	//TODO: if VRAM has been updated, we render again
 	// if(_p.vramToUpdate())
 		//_renderPixels();
-	DEBUG_PRINT << "Getting pixels" << std::endl;
+	DEBUG_STREAM << "Getting pixels" << std::endl;
 	return _pixels;
 }
 
@@ -26,7 +26,7 @@ void EmuInterface::_renderPixels()
 {
 	//TODO: update _pixels here
 
-	DEBUG_PRINT << "Rendering..." << std::endl;
+	DEBUG_STREAM << "Rendering..." << std::endl;
 
 	//_p.setNoUpdate();
 }
@@ -48,13 +48,13 @@ void EmuInterface::stopEmulator()
 	_controller.stopEmulation();
 }
 
-void EmuInterface::changeCartridge(uint8_t * mem, size_t s)
+void EmuInterface::changeCartridge(FileContent& f)
 {
 	stopEmulator();
 	// If previously loaded data, we free the pointer
 	if (_mem)
 		free(_mem);
 
-	_mem = mem;
-	_s = s;
+	_mem = f.memory;
+	_s = f.size;
 }

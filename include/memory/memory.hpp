@@ -24,8 +24,7 @@ private :
 
 	std::array<uint8_t, 0x10000> memory;
 
+	Processor* processor;
 	Cartridge cartridge;
 	Video video;
-	Processor* processor;
-
 };

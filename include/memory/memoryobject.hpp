@@ -46,10 +46,10 @@ class MemoryObject
 
 		virtual void write(uint16_t address, uint8_t byte) = 0;
 
-		virtual bool check_permissions_read(uint16_t address) = 0;
+		// FIXME: actually implement permissions
+		virtual bool can_read(uint16_t address) = 0;
+		virtual bool can_write(uint16_t address, uint8_t byte) = 0;
 
-		virtual bool check_permissions_write(uint16_t address,
-						     uint8_t byte) = 0;
 	protected:
 		Processor* processor;
 		std::vector<std::pair<uint16_t, uint16_t>> range;

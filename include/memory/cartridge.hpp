@@ -19,8 +19,9 @@ public :
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t byte);  
 
-	bool check_permissions_read(uint16_t address);
-	bool check_permissions_write(uint16_t address, uint8_t byte);
+	// FIXME: actually implement permissions
+	bool can_read(uint16_t address);
+	bool can_write(uint16_t address, uint8_t byte);
 
 	bool ram_enable();
 	bool has_boot();

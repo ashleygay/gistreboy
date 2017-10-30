@@ -238,12 +238,12 @@ void Cartridge::write(uint16_t address, uint8_t byte)
 
 }
 
-bool Cartridge::check_permissions_read(uint16_t address)
+bool Cartridge::can_read(uint16_t address)
 {
 	return true;
 }
 
-bool Cartridge::check_permissions_write(uint16_t address, uint8_t byte)
+bool Cartridge::can_write(uint16_t address, uint8_t byte)
 {
 	return true;
 }
