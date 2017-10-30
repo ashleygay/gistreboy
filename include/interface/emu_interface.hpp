@@ -11,6 +11,7 @@
 
 #include <debug.hpp>
 #include <emu_controller.hpp>
+#include <file_content.hpp>
 
 #include <iostream>
 #include <array>
@@ -28,7 +29,7 @@ class EmuInterface
 		// Called when the user changes the game
 		// 	mem is the content of the file
 		// 	s is the size of the file
-		void changeCartridge(uint8_t * mem, size_t s);
+		void changeCartridge(FileContent& f);
 
 		// Returns a buffer ready to be displayed directly on screen
 		const uint8_t * getRenderedPixels();
@@ -55,5 +56,4 @@ class EmuInterface
 		uint8_t _pixels[600 * 400];
 		uint8_t * _mem = NULL;
 		size_t _s;
-		
 };
