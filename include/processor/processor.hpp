@@ -55,7 +55,7 @@ class Processor {
 	private:
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
-		// Memory mem;
+		// Memory *mem = nullptr;
 
 		// Enable/disable all interrupts
 		Register IME;
@@ -76,7 +76,7 @@ class Processor {
 		InstructionSet iset;
 
 		// Interrupt Handler, will handle all interrupts
-		// InterruptHandler *handler;
+		// InterruptHandler *handler = nullptr;
 
 	public:
 		// FIXME Those functions are used by the instructions to read/write

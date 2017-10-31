@@ -9,6 +9,8 @@
 
 #include <debug.hpp>
 #include <interrupthandler.hpp>
+#include <processor.hpp>
+#include <memory.hpp>
 
 #include <gtk/gtk.h>
 #include <iostream>
@@ -21,15 +23,10 @@
 #include <boost/asio.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-class DummyProcessor
-{
-};
-
 #define GB_CYCLE 238
 
 class GameBoy
 {
-	using Processor = DummyProcessor;
 	public:
 		GameBoy();
 
@@ -51,9 +48,8 @@ class GameBoy
 		//TODO:	Each class is actually inside a Component class that
 		// handles each processor/clock/memory/lcd.
 
-		//Processor p;
-		//Clock c;
-		//Memory m;
+		Processor p;
+		Memory m;
 		//LCD lcd;
 
 

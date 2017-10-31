@@ -35,11 +35,10 @@ void GameBoy::step()
 void GameBoy::_wireComponents()
 {
 	// TODO: Init all here
-	// p.setMemory(&m);
-	// c.setProc(&p);
+	p.setMemory(&m);
+	p.setHandler(&_handler);
 	// lcd.setMemory(&m);
-	// _handler.setProc(&p);
-	// _handler.setMemory(&m);
+	_handler.setMemory(&m);
 }
 
 void GameBoy::_clockCycle()
