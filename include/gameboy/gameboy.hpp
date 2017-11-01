@@ -8,6 +8,8 @@
 #pragma once
 
 #include <debug.hpp>
+#include <processor.hpp>
+#include <memory.hpp>
 #include <interrupthandler.hpp>
 #include <processor.hpp>
 #include <memory.hpp>
@@ -49,7 +51,7 @@ class GameBoy
 		// handles each processor/clock/memory/lcd.
 
 		Processor p;
-		Memory m;
+//		Memory m;
 		//LCD lcd;
 
 

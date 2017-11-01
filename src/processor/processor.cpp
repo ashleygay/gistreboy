@@ -7,6 +7,7 @@
 
 #include <processor.hpp>
 #include <instruction.hpp>
+#include <interrupthandler.hpp>
 
 void Processor::execCurrentInstruction()
 {

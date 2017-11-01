@@ -3,8 +3,8 @@
 #include <utility>
 
 Memory::Memory(uint8_t* rom, Processor* proc) : processor(proc),
-	       cartridge(proc, {std::make_pair(0x00, 0x7FFF),
-				std::make_pair(0xA000, 0xBFFF)}, rom),
+	       cartridge({std::make_pair(0x00, 0x7FFF),
+			  std::make_pair(0xA000, 0xBFFF)}, rom),
 	       video(proc, {std::make_pair(0xFF40, 0xFF4B),
 			    std::make_pair(0x8000, 0xFE9F),
 			    std::make_pair(0xFE00, 0xFE9F)})

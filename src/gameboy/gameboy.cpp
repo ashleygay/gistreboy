@@ -8,6 +8,12 @@
 #include <gameboy.hpp>
 
 
+GameBoy::GameBoy()
+{
+	//TODO: create memory from processor and rom
+	// m(rom, &p);
+	_wireComponents();
+}
 
 void GameBoy::step()
 {
@@ -35,10 +41,10 @@ void GameBoy::step()
 void GameBoy::_wireComponents()
 {
 	// TODO: Init all here
-	p.setMemory(&m);
-	p.setHandler(&_handler);
+	//p.setMemory(&m);
+	p.setInterruptHandler(&_handler);
 	// lcd.setMemory(&m);
-	_handler.setMemory(&m);
+	//_handler.setMemory(&m);
 }
 
 void GameBoy::_clockCycle()
@@ -53,11 +59,6 @@ void GameBoy::_clockCycle()
 void GameBoy::_resetComponents()
 {
 	// TODO Reset components here
-}
-
-GameBoy::GameBoy()
-{
-	_wireComponents();
 }
 
 void GameBoy::changeGame(uint8_t * mem, size_t s)

@@ -12,34 +12,21 @@
 #include <stdint.h>
 #include <vector>
 #include <utility>
-#include <processor.hpp>
 
 class MemoryObject
 {
 	public:
-
-		MemoryObject() {}
-
-		MemoryObject(Processor* proc,
-			     std::vector<std::pair<uint16_t, uint16_t>> 
-			     rang): processor(proc), range(rang) { }
+		MemoryObject(std::vector<std::pair<uint16_t, uint16_t>> 
+			     range): _range(range) { }
 
 		bool isInRange(uint16_t address)
 		{
-			for (auto it = range.begin(); it != range.end();
-			     it++)
+			for (auto it = _range.begin(); it != _range.end(); ++it)
 			{
-				if (addr_range(address, it->first,
-					       it->second))
+				if (addr_in_range(address, it->first, it->second))
 					return true;
 			}
 			return false;
-		}
-
-		bool addr_range(uint16_t address, uint16_t min,
-				uint16_t max)
-		{
-			return address >= min && address <= max;
 		}
 
 		virtual uint8_t read(uint16_t address) = 0;
@@ -51,6 +38,12 @@ class MemoryObject
 		virtual bool can_write(uint16_t address, uint8_t byte) = 0;
 
 	protected:
-		Processor* processor;
-		std::vector<std::pair<uint16_t, uint16_t>> range;
+	
+		bool addr_in_range(uint16_t address, uint16_t min, uint16_t max)
+		{
+			return address >= min && address <= max;
+		}
+
+	protected:
+		std::vector<std::pair<uint16_t, uint16_t>> _range;
 };

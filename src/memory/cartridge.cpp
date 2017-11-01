@@ -1,9 +1,8 @@
 #include <cartridge.hpp>
 
-Cartridge::Cartridge(Processor* proc,
-		     std::vector<std::pair<uint16_t, uint16_t>> rang,
-		     uint8_t *cart)
-		     : MemoryObject(proc, rang)
+Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
+			uint8_t *cart) :
+			MemoryObject(range)
 {
 	rom.fill(0);
   	ram.fill(0);
@@ -183,17 +182,17 @@ Cartridge::Cartridge(Processor* proc,
 
 uint8_t Cartridge::read(uint16_t address)
 {
-	if (addr_range(address, 0x00, 0x3FFF))
+	if (addr_in_range(address, 0x00, 0x3FFF))
 	{
 		if (address == 0x100)
 			has_boot_ = true;
-		if (addr_range(address, 0x00, 0xFF) && !has_boot_)
+		if (addr_in_range(address, 0x00, 0xFF) && !has_boot_)
 			return boot_rom[address];
 		else
 			return rom[address];
 	}
 
-	else if (addr_range(address, 0x4000, 0x7FFF))
+	else if (addr_in_range(address, 0x4000, 0x7FFF))
 	{
 		if (mbc == 0)
 			return rom[address];
@@ -201,7 +200,7 @@ uint8_t Cartridge::read(uint16_t address)
 			return rom[address + get_current_rom_bank()*16384];
 	}
 
-	else if (addr_range(address, 0xA000, 0xBFFF))
+	else if (addr_in_range(address, 0xA000, 0xBFFF))
 		return ram[address + get_current_ram_bank()*8192 - 0xA000];
 
 	return 0;
@@ -209,13 +208,13 @@ uint8_t Cartridge::read(uint16_t address)
 
 void Cartridge::write(uint16_t address, uint8_t byte)
 {
-	if (addr_range(address, 0xA000, 0xBFFF))
+	if (addr_in_range(address, 0xA000, 0xBFFF))
 		ram[address + get_current_ram_bank()*8192 - 0xA000] = byte;
 
-	else if (addr_range(address, 0x00, 0X1FFF))
+	else if (addr_in_range(address, 0x00, 0X1FFF))
 		ram_enable_ = ((byte & 0x0F) == 0x0A);
 
-	else if (addr_range(address, 0x2000, 0x3FFF))
+	else if (addr_in_range(address, 0x2000, 0x3FFF))
 	{
 		if (byte > 0x1F)
 			rom_bank_number = 0x01;
@@ -226,9 +225,9 @@ void Cartridge::write(uint16_t address, uint8_t byte)
 			rom_bank_number = byte;
 	}
 
-	else if (addr_range(address, 0x4000, 0x5FFF))
+	else if (addr_in_range(address, 0x4000, 0x5FFF))
 		ram_bank_number = byte;
-	else if (addr_range(address, 0x6000, 0x7FFF))
+	else if (addr_in_range(address, 0x6000, 0x7FFF))
 	{
 		if (byte == 0x00)
 			rom_ram_mode_ = false;
