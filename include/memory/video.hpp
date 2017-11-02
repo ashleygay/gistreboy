@@ -31,7 +31,6 @@ public :
 	uint8_t get_bgp();
 	uint8_t get_obp0();
 	uint8_t get_obp1();
-	
 
 private :
 

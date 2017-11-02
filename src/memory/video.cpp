@@ -3,8 +3,8 @@
 
 Video::Video(Processor* proc,
 	std::vector<std::pair<uint16_t, uint16_t>> range) :
-	_proc(proc),
-	MemoryObject(range)
+	MemoryObject(range),
+	_proc(proc)
 {
 	video_memory.fill(0);
 }

@@ -4,6 +4,7 @@
 
 class InstructionSet;
 class InterruptHandler;
+class Memory;
 
 #include <debug.hpp>
 #include <instructionset.hpp>
@@ -11,9 +12,6 @@ class InterruptHandler;
 #include <registers.hpp>
 #include <opcode.hpp>
 #include <atomic>
-
-//#include <interrupthandler.hpp>
-#include <memory.hpp>
 
 class Processor {
 
@@ -30,9 +28,6 @@ class Processor {
 			L.value = 0x4D;
 			PC.value = 0x100;
 			SP.value = 0xfffe;
-
-			// Interrupts are enabled at the start
-			IME.value = 1;
 		}
 
 	public:
@@ -51,7 +46,7 @@ class Processor {
 
 	private:
 		// Enable/disable all interrupts
-		Register IME;
+		bool IME = true;
 
 		// Boolean is set to false when we end the bootcode.
 		bool isBooting = true;
