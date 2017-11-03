@@ -1,18 +1,17 @@
 #pragma once
 
+#include <processor.hpp>
+#include <memoryobject.hpp>
+
 #include <array>
 #include <vector>
 #include <string>
-#include <memoryobject.hpp>
 
 class Video : public MemoryObject {
 
 public :
-
-	Video() {}
-
  	Video(Processor* proc,
-	      std::vector<std::pair<uint16_t, uint16_t>> rang);
+		std::vector<std::pair<uint16_t, uint16_t>> range);
 
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t byte);
@@ -32,9 +31,9 @@ public :
 	uint8_t get_bgp();
 	uint8_t get_obp0();
 	uint8_t get_obp1();
-	
 
 private :
 
+	Processor *_proc;
 	std::array<uint8_t, 0x10000> video_memory;
 };

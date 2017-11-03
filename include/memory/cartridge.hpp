@@ -6,14 +6,13 @@
 #include <fstream>
 #include <memoryobject.hpp>
 
+
+
 class Cartridge : public MemoryObject {
 
 public :
 
-	Cartridge() {}
-
-	Cartridge(Processor* proc,
-		  std::vector<std::pair<uint16_t, uint16_t>> rang,
+	Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
 		  uint8_t *cart);
   
 	uint8_t read(uint16_t address);
@@ -66,6 +65,7 @@ std::array<uint8_t,  256> boot_rom= { {
     0x34,0x20,0xF5,0x06,0x19,0x78,0x86,0x23,0x05,0x20,0xFB,0x86,0x20,0xFE,
     0x3E,0x01,0xE0,0x50
 } };
+
   /* the type of the cartidge see manual */
   uint8_t type = 0;
 

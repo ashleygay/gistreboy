@@ -2,8 +2,9 @@
 #include <bitset>
 
 Video::Video(Processor* proc,
-	     std::vector<std::pair<uint16_t, uint16_t>> rang) :
-	     MemoryObject(proc, rang)
+	std::vector<std::pair<uint16_t, uint16_t>> range) :
+	MemoryObject(range),
+	_proc(proc)
 {
 	video_memory.fill(0);
 }
