@@ -50,7 +50,6 @@ INCLUDES= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY)\
 SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC)\
 	$(MEMORY_SRC) $(PROCESSOR_SRC)
 
-#D_SRC=$(patsubst %,$(OBJ_DIR)/%,$(SRC))
 OBJS = $(SRC:.cpp=.o)
 
 # SETUP ALL NECESSARY FLAGS
@@ -63,19 +62,13 @@ CC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 \
 
 CXXFLAGS = $(CC_OPTIONS) $(INCLUDES) $(LIB)
 
-#test:
-#	echo $(MEMORY_SRC)
-
 emulator: $(OBJS)
 	g++ -o $@ $^ $(CXXFLAGS)
 
 $(OBJ_DIR)/%.o: %.c $(INCLUDES)
 	g++ -c -o $@ #< $(CXXFLAGS)
 
-#all:
-#	 $(COMPILER) $(CC_OPTIONS) $(INCLUDES) $(SRC) $(LIB) -o $(EXEC)
-
 .PHONY: clean
 
 clean:
-	rm $(EXEC)
+	rm $(EXEC) $(OBJS)
