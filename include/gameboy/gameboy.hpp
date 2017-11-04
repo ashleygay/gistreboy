@@ -40,7 +40,7 @@ class GameBoy
 
 		bool isRunning() {return _running;}
 		void stop() {_running = false;}
-		void start () {_running = true;}
+		void start() {_running = true;}
 
 	private:
 		void _resetComponents();

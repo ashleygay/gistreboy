@@ -15,14 +15,14 @@ INTERFACE_SRC=src/interface/*.cpp
 MEMORY=include/memory
 MEMORY_SRC=src/memory/*.cpp
 
-DEBUG=include/helpers
+HELPERS=include/helpers
 
 EXEC=emulator
-SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC) $(MEMORY_SRC)
-LIB=-lm -lSDL -lSDL_image -lSDL_ttf `pkg-config --cflags --libs gtk+-3.0` -lboost_system
-INCLUDE_PATH= -I$(GUI) -I$(DEBUG) -I$(INTERFACE) -I$(PROCESSOR) -I$(MEMORY) -I$(GAMEBOY)
-GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_PRINT_ACTIVATED\
-					-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG	
+SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC) $(MEMORY_SRC) $(PROCESSOR_SRC)
+LIB=`pkg-config --cflags --libs gtk+-3.0` -lboost_system
+INCLUDE_PATH= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY) -I$(HELPERS) -I$(MEMORY) -I$(PROCESSOR)
+GCC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 -D DEBUG_STREAM_ACTIVATED\
+	-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 
 COMPILER=g++
 

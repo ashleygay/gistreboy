@@ -31,7 +31,7 @@ static uint8_t HLReadDereference(Processor *p)
 	void LD_##reg##X::exec(Processor *p)\
 	{\
 	uint8_t val = boost::get<uint8_t>(this->_args[0]);\
-	DEBUG_PRINT << "Got value : " << val << std::endl;\
+	DEBUG_STREAM << "Got value : " << val << std::endl;\
 	p->reg.value = val;\
 	}
 
