@@ -253,7 +253,6 @@ uint8_t Cartridge::get_current_rom_bank()
 		return rom_bank_number;
 	else
 		return (ram_bank_number << 5)+rom_bank_number;
-		
 }
 
 uint8_t Cartridge::get_current_ram_bank()

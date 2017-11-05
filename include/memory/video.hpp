@@ -10,6 +10,10 @@
 class Video : public MemoryObject {
 
 public :
+	/*
+	 *  TODO: do dma_transfer and actually check permissions
+	 */
+
  	Video(Processor* proc,
 		std::vector<std::pair<uint16_t, uint16_t>> range);
 
