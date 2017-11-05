@@ -5,7 +5,7 @@ class VideoModule
 
 public:
 
-	VideoModule(Video *video) : video_mem(video) {}
+	VideoModule(Video &video) : video_mem(video) {}
 
 	/*render the tile pixels for the current line*/
 	void render_tiles(int current_line);
@@ -34,6 +34,6 @@ private:
 
 	int get_color(uint8_t id, uint8_t palette);
 
-	Video *video_mem;
+	Video &video_mem;
 
 };

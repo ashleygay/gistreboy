@@ -9,12 +9,12 @@ void VideoModule::render_tiles(int current_line)
 	uint16_t tile_map_address = 0;
 	bool is_signed = false;
 	bool window_display = false;
-	uint8_t scrollx = video_mem->get_scrollx();
-	uint8_t scrolly = video_mem->get_scrolly();
-	uint8_t wx = video_mem->get_wx() - 7;
-	uint8_t wy = video_mem->get_wy();
+	uint8_t scrollx = video_mem.get_scrollx();
+	uint8_t scrolly = video_mem.get_scrolly();
+	uint8_t wx = video_mem.get_wx() - 7;
+	uint8_t wy = video_mem.get_wy();
 
-	uint8_t lcd_control = video_mem->get_lcd_control();
+	uint8_t lcd_control = video_mem.get_lcd_control();
 
 	if ((lcd_control >> 5) & 1)
 		window_display = (current_line >= wy);
@@ -64,7 +64,7 @@ void VideoModule::render_tiles(int current_line)
 		uint8_t color_id = get_color_id(tile_address, x, y);
 
 		pixels[i][current_line] = get_color(color_id,
-						    video_mem->get_bgp());
+						    video_mem.get_bgp());
 	}
 
 }
@@ -79,9 +79,9 @@ int16_t VideoModule::get_tile_num(uint16_t tilemap_addr, uint8_t x,
 {
 	uint16_t addr = tilemap_addr + (y / 8) * 32 + (x / 8);
 	if (is_signed)
-		return (int8_t) video_mem->read(addr);
+		return (int8_t) video_mem.read(addr);
 	else
-		return video_mem->read(addr);
+		return video_mem.read(addr);
 }
 
 uint16_t VideoModule::get_tile_address(uint16_t tile_addr, int16_t tilenum,
@@ -95,8 +95,8 @@ uint16_t VideoModule::get_tile_address(uint16_t tile_addr, int16_t tilenum,
 
 uint8_t VideoModule::get_color_id(uint16_t tile_addr, uint8_t x, uint8_t y)
 {
-	uint8_t byte1 = video_mem->read(tile_addr + (y % 8) * 2);
-	uint8_t byte2 = video_mem->read(tile_addr + (y % 8) * 2 + 1);
+	uint8_t byte1 = video_mem.read(tile_addr + (y % 8) * 2);
+	uint8_t byte2 = video_mem.read(tile_addr + (y % 8) * 2 + 1);
 
 	uint8_t bit1 = (byte1 >> (7 - (x % 8))) & 1;
 	uint8_t bit2 = (byte2 >> (7 - (x % 8))) & 1;
