@@ -8,6 +8,7 @@
 #pragma once
 
 #include <debug.hpp>
+#include <interrupthandler.hpp>
 
 #include <gtk/gtk.h>
 #include <iostream>
@@ -17,11 +18,14 @@
 #include <thread>
 #include <future>
 #include <atomic>
-#include <interrupthandler.hpp>
+#include <boost/asio.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 class DummyProcessor
 {
 };
+
+#define GB_CYCLE 238
 
 class GameBoy
 {
@@ -36,11 +40,13 @@ class GameBoy
 
 		bool isRunning() {return _running;}
 		void stop() {_running = false;}
-		void start () {_running = true;}
+		void start() {_running = true;}
 
 	private:
 		void _resetComponents();
 		void _wireComponents();
+		void _clockCycle();
+
 	private:
 		//TODO:	Each class is actually inside a Component class that
 		// handles each processor/clock/memory/lcd.
@@ -53,7 +59,13 @@ class GameBoy
 
 		// Used to handle periodic interrupts or interrupts provided by
 		// the software (joypad inputs)
-		InterruptHandler ip;
+		InterruptHandler _handler;
+
+		int _handler_cycles = 0;
+		int _cpu_cycles = 0;
+		int _lcd_cycles = 0;
+
+		boost::asio::io_service io;
 
 		std::atomic<bool> _running{false};
 };

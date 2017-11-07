@@ -14,6 +14,22 @@ void GameBoy::step()
 	// Priority order:
 	// 	Interrupts
 	// 	Next Instruction
+
+	// Start chrono here for a cycle
+	boost::asio::deadline_timer t(io,
+			boost::posix_time::nanoseconds(GB_CYCLE));
+
+	if (!_handler_cycles)
+		_handler_cycles = _handler.doInterrupt();
+/*
+	if (!_checkInterrupts())
+		_checkCPU();
+
+	_checkLCD();
+*/
+	// wait for chrono here
+	t.wait();
+	_clockCycle();
 }
 
 void GameBoy::_wireComponents()
@@ -22,13 +38,22 @@ void GameBoy::_wireComponents()
 	// p.setMemory(&m);
 	// c.setProc(&p);
 	// lcd.setMemory(&m);
-	// ip.setProc(&p);
-	// ip.setMemory(&m);
+	// _handler.setProc(&p);
+	// _handler.setMemory(&m);
 }
+
+void GameBoy::_clockCycle()
+{
+	// Decrease all pending timers
+	if (_handler_cycles) --_handler_cycles;
+	if (_cpu_cycles) --_cpu_cycles;
+	if (_lcd_cycles) --_lcd_cycles;
+}
+
 
 void GameBoy::_resetComponents()
 {
-	//Recreate all components probably
+	// TODO Reset components here
 }
 
 GameBoy::GameBoy()
