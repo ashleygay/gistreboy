@@ -249,7 +249,35 @@ InstructionSet::InstructionSet()
 	add_instr(RR_HX)
 	add_instr(RR_LX)
 	//add_instr(RLC_HLX) 
-	 
+
+	add_instr(SLA_AX)
+	add_instr(SLA_BX)
+	add_instr(SLA_CX)
+	add_instr(SLA_DX)
+	add_instr(SLA_EX)
+	add_instr(SLA_HX)
+	add_instr(SLA_LX)
+	//add_instr(SLA_HLX)  
+
+	add_instr(SRA_AX)
+	add_instr(SRA_BX)
+	add_instr(SRA_CX)
+	add_instr(SRA_DX)
+	add_instr(SRA_EX)
+	add_instr(SRA_HX)
+	add_instr(SRA_LX)
+	//add_instr(SRA_HLX) 
+
+
+	add_instr(SRL_AX)
+	add_instr(SRL_BX)
+	add_instr(SRL_CX)
+	add_instr(SRL_DX)
+	add_instr(SRL_EX)
+	add_instr(SRL_HX)
+	add_instr(SRL_LX)
+	//add_instr(SRL_HLX) 
+
         #undef add_instr
 }
 

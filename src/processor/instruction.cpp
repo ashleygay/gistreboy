@@ -32,6 +32,23 @@ static uint8_t check_bit(uint8_t value, uint8_t bit)
   return (value & (1 << bit)) != 0;
 }
 
+static uint8_t clear_bit(uint8_t value, uint8_t bit)
+{
+  auto clear_value = value & ~(1 << bit);
+  return static_cast<uint8_t>(clear_value);
+}
+
+static uint8_t set_bit(uint8_t value, uint8_t bit)
+{
+  auto value_set = value | (1 << bit);
+  return static_cast<uint8_t>(value_set); 
+}
+
+static uint8_t set_bit_to(uint8_t value, uint8_t bit, bool on)
+{
+  return on ? set_bit(value, bit) : clear_bit(value, bit);
+}
+
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -761,3 +778,80 @@ RR_RegX_def(E)
 RR_RegX_def(H)
 RR_RegX_def(L)
 //RR_RegX_def(HL) 
+
+#define SLA_RegX_def(reg)                  \
+  void SLA_##reg##X::exec(Processor *p)\
+  {\
+    auto flag_carry = check_bit(p->reg.value, 7);\
+    if (flag_carry)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+    auto temp = static_cast<uint8_t>(p->reg.value << 1);	\
+    if (temp == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->reg.value = temp;\
+  }
+
+SLA_RegX_def(A)
+SLA_RegX_def(B)
+SLA_RegX_def(C)
+SLA_RegX_def(D)
+SLA_RegX_def(E)
+SLA_RegX_def(H)
+SLA_RegX_def(L)
+//SLA_RegX_def(HL)
+
+#define SRA_RegX_def(reg)                  \
+  void SRA_##reg##X::exec(Processor *p)\
+  {\
+    auto bit_carry = check_bit(p->reg.value, 0);\
+    auto top_bit = check_bit(p->reg.value, 7);\
+    auto temp = static_cast<uint8_t>(p->reg.value >> 1);        \
+    temp = set_bit_to(temp, 7, top_bit);				\
+    if (temp == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    if (bit_carry)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->reg.value = temp;\
+  }
+
+SRA_RegX_def(A)
+SRA_RegX_def(B)
+SRA_RegX_def(C)
+SRA_RegX_def(D)
+SRA_RegX_def(E)
+SRA_RegX_def(H)
+SRA_RegX_def(L)
+//SRA_RegX_def(HL)
+
+#define SRL_RegX_def(reg)                  \
+  void SRL_##reg##X::exec(Processor *p)\
+  {\
+    bool leastbitset = check_bit(p->reg.value, 0);\
+    auto temp = static_cast<uint8_t>(p->reg.value >> 1);        \
+    if (temp == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    if (leastbitset)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->reg.value = temp;\
+  }
+
+SRL_RegX_def(A)
+SRL_RegX_def(B)
+SRL_RegX_def(C)
+SRL_RegX_def(D)
+SRL_RegX_def(E)
+SRL_RegX_def(H)
+SRL_RegX_def(L)
+//SRL_RegX_def(HL) 

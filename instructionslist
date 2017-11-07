@@ -61,14 +61,14 @@ STOP		 -> not done
 DI		 -> not done
 EI		 -> not done
 
-RLC(n)		 -> done
-RL(n)		 -> done
-RRC(n)		 -> done
-RR(n)		 -> done
+RLC(n)		 -> done (hl not done) 
+RL(n)		 -> done (hl not done) 
+RRC(n)		 -> done (hl not done) 
+RR(n)		 -> done (hl not done) 
 
-SLA(n)		 -> not done
-SRA(n)		 -> not done
-SRL(n)		 -> not done
+SLA(n)		 -> done (hl not done) 
+SRA(n)		 -> done (hl not done)
+SRL(n)		 -> done (hl not done) 
 
 BIT(b, r)	 -> not done
 SET(b, r)	 -> not done

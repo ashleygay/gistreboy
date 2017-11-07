@@ -314,3 +314,37 @@ decl_instruction(RR_EX, 0xCB1B, 8, 1, 1, 0)
 decl_instruction(RR_HX, 0xCB1C, 8, 1, 1, 0)
 decl_instruction(RR_LX, 0xCB1D, 8, 1, 1, 0)
 //decl_instruction(RLC_HLX, 0xCB1E, 16, 1, 2, 0) 
+
+
+// SLA Instructions
+
+decl_instruction(SLA_AX, 0xCB27, 8, 1, 1, 0)
+decl_instruction(SLA_BX, 0xCB20, 8, 1, 1, 0)
+decl_instruction(SLA_CX, 0xCB21, 8, 1, 1, 0)
+decl_instruction(SLA_DX, 0xCB22, 8, 1, 1, 0)
+decl_instruction(SLA_EX, 0xCB23, 8, 1, 1, 0)
+decl_instruction(SLA_HX, 0xCB24, 8, 1, 1, 0)
+decl_instruction(SLA_LX, 0xCB25, 8, 1, 1, 0)
+//decl_instruction(SLA_HLX, 0xCB26, 16, 1, 2, 0)
+
+// SRA Instructions
+
+decl_instruction(SRA_AX, 0xCB2F, 8, 1, 1, 0)
+decl_instruction(SRA_BX, 0xCB28, 8, 1, 1, 0)
+decl_instruction(SRA_CX, 0xCB29, 8, 1, 1, 0)
+decl_instruction(SRA_DX, 0xCB2A, 8, 1, 1, 0)
+decl_instruction(SRA_EX, 0xCB2B, 8, 1, 1, 0)
+decl_instruction(SRA_HX, 0xCB2C, 8, 1, 1, 0)
+decl_instruction(SRA_LX, 0xCB2D, 8, 1, 1, 0)
+//decl_instruction(SRA_HLX, 0xCB2E, 16, 1, 2, 0)
+
+// SRL Instructions
+
+decl_instruction(SRL_AX, 0xCB3F, 8, 1, 1, 0)
+decl_instruction(SRL_BX, 0xCB38, 8, 1, 1, 0)
+decl_instruction(SRL_CX, 0xCB39, 8, 1, 1, 0)
+decl_instruction(SRL_DX, 0xCB3A, 8, 1, 1, 0)
+decl_instruction(SRL_EX, 0xCB3B, 8, 1, 1, 0)
+decl_instruction(SRL_HX, 0xCB3C, 8, 1, 1, 0)
+decl_instruction(SRL_LX, 0xCB3D, 8, 1, 1, 0)
+//decl_instruction(SRL_HLX, 0xCB3E, 16, 1, 2, 0) 
