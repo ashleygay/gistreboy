@@ -11,20 +11,13 @@
 
 #pragma once
 
+#include <processor.hpp>
+#include <memory.hpp>
+
 #include <functional>
 #include <cmath>
 #include <debug.hpp>
 #include <bitset>
-
-// FIXME Temporary classes only for compilation purposes
-
-class Processor
-{
-};
-
-class Memory
-{
-};
 
 struct Interrupt
 {

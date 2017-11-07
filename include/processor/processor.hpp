@@ -1,4 +1,3 @@
-
 /*
  * File : processor.hpp
  *
@@ -13,6 +12,8 @@
 #include <iostream>
 
 class InstructionSet;
+class InterruptHandler;
+class Memory;
 
 #include <debug.hpp>
 #include <instructionset.hpp>
@@ -36,16 +37,6 @@ class Processor {
 			L.value = 0x4D;
 			PC.value = 0x100;
 			SP.value = 0xfffe;
-
-			// Interrupts are enabled at the start
-			IME.value = 1;
-
-			// We enable all kinds of interrupts
-			IE.setInterrupt(InterruptRegister::VBLANK);
-			IE.setInterrupt(InterruptRegister::LCD_STATUS);
-			IE.setInterrupt(InterruptRegister::TIMER);
-			IE.setInterrupt(InterruptRegister::SERIAL);
-			IE.setInterrupt(InterruptRegister::JOYPAD);
 		}
 
 	public:
@@ -63,19 +54,8 @@ class Processor {
 		DRegister SP;
 
 	private:
-		// Used to resolve all memory operations
-		// Read/Write as wall as charging next instruction etc
-		// Memory mem;
-
 		// Enable/disable all interrupts
-		Register IME;
-
-		// Enable/disable specific interrupts
-		InterruptRegister IE;
-
-		// This flag is set when an interrupt is pending
-		InterruptRegister IF;
-
+		bool IME = true;
 
 		// Boolean is set to false when we end the bootcode.
 		bool isBooting = true;
@@ -86,8 +66,11 @@ class Processor {
 		InstructionSet iset;
 
 		// Interrupt Handler, will handle all interrupts
-		// InterruptHandler *handler;
+		InterruptHandler *_handler = nullptr;
 
+		// Used to resolve all memory operations
+		// Read/Write as wall as charging next instruction etc
+		Memory *_mem = nullptr;
 	public:
 		// FIXME Those functions are used by the instructions to read/write
 		// memory values
@@ -103,6 +86,12 @@ class Processor {
 		// Fetch the next instruction/interrupt to do.
 		int fetchNextStep();
 		void execCurrentInstruction();
+
+		void setInterruptHandler(InterruptHandler *handler)
+			{_handler = handler;}
+
+		void setMemory(Memory *mem)
+			{_mem = mem;}
 
 		// Enable/Disable IME
 		void enableIME() {/*handler->enableIME();*/}
