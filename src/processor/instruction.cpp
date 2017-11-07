@@ -31,7 +31,6 @@ static uint8_t HLReadDereference(Processor *p)
 	void LD_##reg##X::exec(Processor *p)\
 	{\
 	uint8_t val = boost::get<uint8_t>(this->_args[0]);\
-	DEBUG_PRINT << "Got value : " << val << std::endl;\
 	p->reg.value = val;\
 	}
 
@@ -203,9 +202,25 @@ ADD_XY_def(A, L)
     p->reg.value = (result & 0xFF);\
   }
 
-
 ADD_XHL_def(A)
 
+/*#define ADD_XADDRESS_def(reg, address)	\
+  void ADD_##reg##address::exec(Processor *p)\
+  {\
+    auto tmp = p->_read(address);		\
+    uint val = p->reg.value + tmp;      \
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg.value & 0xF) + (tmp & 0xF)) > 0xF)\
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (val > 0xFF)\
+      p->flag.setFlag(FlagRegister::CARRY); \
+    p->reg.value = (result & 0xFF);\
+  }
+
+  ADD_XADDRESS_def(A, #) */
 
 //ADC instructions
 
@@ -322,6 +337,24 @@ SBC_XY_def(A, L)
 
 #undef SBC_XY_def
 
+#define SBC_XHL_def(reg)\
+  void SBC_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    uint val = p->reg.value - tmp - p->flag.getFlag(FlagRegister::CARRY);	\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg.value & 0xF) - (tmp & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (p->reg.value < tmp)                 \
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->reg.value = (result & 0xFF);       \
+    }
+
+SBC_XHL_def(A) 
+
 //AND instructions
 
 #define AND_XY_def(reg1, reg2)                  \
@@ -342,10 +375,20 @@ AND_XY_def(A, D)
 AND_XY_def(A, E)
 AND_XY_def(A, H)
 AND_XY_def(A, L)
-// TODO AND_XY_def(A, HL);
 
-#undef AND_XY_def  
+#define AND_XHL_def(reg)\
+  void AND_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    p->reg.value &= tmp;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.setFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
 
+AND_XHL_def(A)
 
 //OR instructions
 
@@ -367,9 +410,20 @@ OR_XY_def(A, D)
 OR_XY_def(A, E)
 OR_XY_def(A, H)
 OR_XY_def(A, L)
-// TODO OR_XY_def(A, HL);
 
-#undef OR_XY_def
+#define OR_XHL_def(reg)\
+  void OR_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    p->reg.value |= tmp;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+OR_XHL_def(A) 
 
 //XOR instructions
 
@@ -391,10 +445,20 @@ XOR_XY_def(A, D)
 XOR_XY_def(A, E)
 XOR_XY_def(A, H)
 XOR_XY_def(A, L)
-// TODO XOR_XY_def(A, HL);
 
-#undef XOR_XY_def  
-
+#define XOR_XHL_def(reg)\
+  void XOR_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    p->reg.value ^= tmp; \
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+  
+XOR_XHL_def(A)  
 
 //CP instructions
 
@@ -419,9 +483,23 @@ CP_XY_def(A, D)
 CP_XY_def(A, E)
 CP_XY_def(A, H)
 CP_XY_def(A, L)
-// TODO CP_XY_def(A, HL);
 
-#undef CP_RegX_def  
+#define CP_XHL_def(reg)\
+  void CP_##reg##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    uint val = p->reg.value - tmp;\
+    uint8_t result = static_cast<uint8_t>(val);\
+    if (result == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    if (((p->reg.value & 0xF) - (tmp & 0xF)) < 0) \
+      p->flag.setFlag(FlagRegister::HALFCARRY);\
+    if (p->reg.value < tmp)                 \
+      p->flag.setFlag(FlagRegister::CARRY);\
+  }
+
+CP_XHL_def(A)    
 
 // INC instructions
 
@@ -443,9 +521,7 @@ INC_RegX_def(D)
 INC_RegX_def(E)
 INC_RegX_def(H)
 INC_RegX_def(L)
-// TODO INC_RegX_def(HL);
-
-#undef DEC_RegX_def 
+//INC_RegX_def(HL)
 
 // DEC instructions
 
@@ -467,7 +543,7 @@ DEC_RegX_def(D)
 DEC_RegX_def(E)
 DEC_RegX_def(H)
 DEC_RegX_def(L)
-// TODO DEC_RegX_def(HL);
+//DEC_RegX_def(HL);
 
 #undef DEC_RegX_def
 
@@ -485,7 +561,7 @@ DEC_RegX_def(L)
     p->flag.unsetFlag(FlagRegister::SUBTRACT);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     p->flag.unsetFlag(FlagRegister::CARRY);\
-  }
+    }
 
 SWAP_RegX_def(A)
 SWAP_RegX_def(B)
@@ -494,6 +570,6 @@ SWAP_RegX_def(D)
 SWAP_RegX_def(E)
 SWAP_RegX_def(H)
 SWAP_RegX_def(L)
-// TODO SWAP_RegX_def(HL);
+//SWAP_RegX_def(HL)
 
 #undef SWAP_RegX_def

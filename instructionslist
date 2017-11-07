@@ -33,18 +33,18 @@ POP(nn)		 -> not done
 ADD(A, n)	 -> done (# not done)
 ADC(A, n)        -> done (# not done)
 SUB(n)        	 -> done (# not done)
-SBC(A, n)      	 -> done (HL and # not done)
+SBC(A, n)      	 -> done (# not done)
 
 ADD(HL, n)	 -> not done
 ADD(SP, n)	 -> not done
 
 
-AND(n)        	 -> done (HL and # not done)
-OR(n)		 -> done (HL and # not done)
-XOR(n)           -> done (HL and # not done)
-CP(n)            -> done (HL and # not done)
+AND(n)        	 -> done (# not done)
+OR(n)		 -> done (# not done)
+XOR(n)           -> done (# not done)
+CP(n)            -> done (# not done)
 INC(n)           -> done (HL not done)
-DEC(n)           -> done (HL not done)
+DEC(n)           -> done (hl not done)
 
 INC(nn)		 -> not done
 DEC(nn)		 -> not done
