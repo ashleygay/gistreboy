@@ -573,3 +573,28 @@ SWAP_RegX_def(L)
 //SWAP_RegX_def(HL)
 
 #undef SWAP_RegX_def
+
+#define DAA_def()                  \
+  void DAA::exec(Processor *p)\
+  {\
+    auto a = p->A.value;\
+    auto tmp = p->flag.getFlag(FlagRegister::CARRY) ? 0x60 : 0x00;	\
+    if (p->flag.getFlag(FlagRegister::CARRY) ||\
+	(!p->flag.getFlag(FlagRegister::SUBTRACT) && ((a & 0x0F) > 9)))\
+      tmp |= 0x06;\
+    if (p->flag.getFlag(FlagRegister::CARRY) ||\
+	(!p->flag.getFlag(FlagRegister::SUBTRACT) && (a & 0x99)))	\
+      tmp |= 0x06;\
+    if (p->flag.getFlag(FlagRegister::SUBTRACT))\
+      a = static_cast<uint8_t>(a - tmp);\
+    else\
+      a = static_cast<uint8_t>(a + tmp);\
+    if (((tmp << 2) & 0x100) != 0)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    if (a == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->A.value = a;\
+  }
+
+DAA_def()

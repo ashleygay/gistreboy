@@ -198,6 +198,8 @@ InstructionSet::InstructionSet()
 	add_instr(SWAP_LX)
 	  //add_instr(SWAP_HLX)
 
+	add_instr(DAA)  
+
         #undef add_instr
 }
 
