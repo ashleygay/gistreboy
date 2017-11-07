@@ -51,8 +51,8 @@ DEC(nn)		 -> not done
 
 SWAP(n)		 -> done (HL not done)
 
-DAA		 -> not done
-CPL		 -> not done
+DAA		 -> done
+CPL		 -> done
 CCF		 -> not done
 SCF		 -> not done
 NOP 		 -> done

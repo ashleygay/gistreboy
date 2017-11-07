@@ -200,6 +200,8 @@ InstructionSet::InstructionSet()
 
 	add_instr(DAA)  
 
+	add_instr(CPL)  
+
         #undef add_instr
 }
 

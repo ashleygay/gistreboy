@@ -598,3 +598,16 @@ SWAP_RegX_def(L)
   }
 
 DAA_def()
+
+
+#define CPL_def()                  \
+  void CPL::exec(Processor *p)\
+  {\
+    auto temp = p->A.value;\
+    auto result = ~temp;\
+    p->A.value = result;\
+    p->flag.setFlag(FlagRegister::SUBTRACT);\
+    p->flag.setFlag(FlagRegister::HALFCARRY);\
+  }
+
+CPL_def() 

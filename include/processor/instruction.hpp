@@ -255,3 +255,4 @@ decl_instruction(SWAP_LX, 0xCB35, 8, 1, 1, 0)
 //decl_instruction(SWAP_HLX, 0xCB36, 16, 1, 1, 0) 
 
 decl_instruction(DAA, 0x27, 4, 0, 0, 0)
+decl_instruction(CPL, 0x2F, 4, 0, 0, 0)
