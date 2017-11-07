@@ -611,3 +611,16 @@ DAA_def()
   }
 
 CPL_def() 
+
+#define CCF_def()                  \
+  void CCF::exec(Processor *p)\
+  {\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    if (p->flag.getFlag(FlagRegister::CARRY))\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.setFlag(FlagRegister::CARRY);\
+  }
+
+CCF_def() 

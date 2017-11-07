@@ -199,8 +199,8 @@ InstructionSet::InstructionSet()
 	  //add_instr(SWAP_HLX)
 
 	add_instr(DAA)  
-
-	add_instr(CPL)  
+	add_instr(CPL)
+	add_instr(CCF)
 
         #undef add_instr
 }
