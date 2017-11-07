@@ -27,6 +27,11 @@ static uint8_t HLReadDereference(Processor *p)
 	return p->_read(address);
 }
 
+static uint8_t check_bit(uint8_t value, uint8_t bit)
+{
+  return (value & (1 << bit)) != 0;
+}
+
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -624,3 +629,54 @@ CPL_def()
   }
 
 CCF_def() 
+
+#define SCF_def()                  \
+  void SCF::exec(Processor *p)\
+  {\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->flag.setFlag(FlagRegister::CARRY);\
+  }
+
+SCF_def() 
+
+/*#define BIT_BITX_def(bit, reg)		\
+  void BIT_##bit##reg::exec(Processor *p)\
+  {\
+    p = p;\
+  }
+
+BIT_BITX_def(bit, A)
+BIT_BITX_def(bit, B)
+BIT_BITX_def(bit, C)
+BIT_BITX_def(bit, D)
+BIT_BITX_def(bit, E)
+BIT_BITX_def(bit, H)
+BIT_BITX_def(bit, L)  
+*/
+
+#define RRC_RegX_def(reg)                  \
+  void RRC_##reg##X::exec(Processor *p)\
+  {\
+    auto flag_carry = check_bit(p->reg.value, 0);\
+    auto truncated_bit = flag_carry;\ 
+    auto temp = static_cast<uint8_t>((p->reg.value >> 1) | (truncated_bit << 7));\
+    p->reg.value = temp;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    if (p->flag.getFlag(FlagRegister::CARRY))\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+RRC_RegX_def(A)
+RRC_RegX_def(B)
+RRC_RegX_def(C)
+RRC_RegX_def(D)
+RRC_RegX_def(E)
+RRC_RegX_def(H)
+RRC_RegX_def(L)
+//RRC_RegX_def(HL)

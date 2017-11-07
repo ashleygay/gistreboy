@@ -53,21 +53,17 @@ SWAP(n)		 -> done (HL not done)
 
 DAA		 -> done
 CPL		 -> done
-CCF		 -> not done
-SCF		 -> not done
+CCF		 -> done
+SCF		 -> done
 NOP 		 -> done
 HALT 		 -> not done
 STOP		 -> not done
 DI		 -> not done
 EI		 -> not done
 
-RLCA		 -> not done
-RLA		 -> not done
-RRCA		 -> not done
-RRA		 -> not done
 RLC(n)		 -> not done
 RL(n)		 -> not done
-RRC(n)		 -> not done
+RRC(n)		 -> done
 RR(n)		 -> not done
 
 SLA(n)		 -> not done

@@ -201,7 +201,27 @@ InstructionSet::InstructionSet()
 	add_instr(DAA)  
 	add_instr(CPL)
 	add_instr(CCF)
+	add_instr(SCF)
 
+
+	  /*add_instr(BIT_BA)
+	add_instr(BIT_BB)
+	add_instr(BIT_BC)
+	add_instr(BIT_BD)
+	add_instr(BIT_BE)
+	add_instr(BIT_BH)
+	add_instr(BIT_BL)
+	//add_instr(SWAP_HLX)*/
+
+
+	add_instr(RRC_AX)
+	add_instr(RRC_BX)
+	add_instr(RRC_CX)
+	add_instr(RRC_DX)
+	add_instr(RRC_EX)
+	add_instr(RRC_HX)
+	add_instr(RRC_LX)
+	//add_instr(RRC_HLX)
         #undef add_instr
 }
 

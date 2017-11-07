@@ -257,3 +257,27 @@ decl_instruction(SWAP_LX, 0xCB35, 8, 1, 1, 0)
 decl_instruction(DAA, 0x27, 4, 0, 0, 0)
 decl_instruction(CPL, 0x2F, 4, 0, 0, 0)
 decl_instruction(CCF, 0x3F, 4, 0, 0, 0)
+decl_instruction(SCF, 0x37, 4, 0, 0, 0)
+
+
+// BIT Instructions
+
+/*decl_instruction(BIT_BA, 0xCB47, 8, 2, 1, 1)
+decl_instruction(BIT_BB, 0xCB40, 8, 2, 1, 1)
+decl_instruction(BIT_BC, 0xCB41, 8, 2, 1, 1)
+decl_instruction(BIT_BD, 0xCB42, 8, 2, 1, 1)
+decl_instruction(BIT_BE, 0xCB43, 8, 2, 1, 1)
+decl_instruction(BIT_BH, 0xCB44, 8, 2, 1, 1)
+decl_instruction(BIT_BL, 0xCB45, 8, 2, 1, 1)
+//decl_instruction(SWAP_HLX, 0xCB36, 16, 1, 1, 0)*/
+
+// RRC Instructions
+
+decl_instruction(RRC_AX, 0xCB0F, 8, 1, 1, 0)                                                           
+decl_instruction(RRC_BX, 0xCB08, 8, 1, 1, 0)
+decl_instruction(RRC_CX, 0xCB09, 8, 1, 1, 0)
+decl_instruction(RRC_DX, 0xCB0A, 8, 1, 1, 0)
+decl_instruction(RRC_EX, 0xCB0B, 8, 1, 1, 0)
+decl_instruction(RRC_HX, 0xCB0C, 8, 1, 1, 0)
+decl_instruction(RRC_LX, 0xCB0D, 8, 1, 1, 0)
+decl_instruction(RRC_HLX, 0xCB0E, 16, 1, 2, 0) 
