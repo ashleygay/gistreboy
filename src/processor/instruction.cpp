@@ -659,14 +659,14 @@ BIT_BITX_def(bit, L)
   void RRC_##reg##X::exec(Processor *p)\
   {\
     auto flag_carry = check_bit(p->reg.value, 0);\
-    auto truncated_bit = flag_carry;\ 
+    auto truncated_bit = check_bit(p->reg.value, 0);\
     auto temp = static_cast<uint8_t>((p->reg.value >> 1) | (truncated_bit << 7));\
     p->reg.value = temp;\
     if (p->reg.value == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::SUBTRACT);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
-    if (p->flag.getFlag(FlagRegister::CARRY))\
+    if (flag_carry)\
       p->flag.setFlag(FlagRegister::CARRY);\
     else\
       p->flag.unsetFlag(FlagRegister::CARRY);\
@@ -680,3 +680,84 @@ RRC_RegX_def(E)
 RRC_RegX_def(H)
 RRC_RegX_def(L)
 //RRC_RegX_def(HL)
+
+#define RLC_RegX_def(reg)                  \
+  void RLC_##reg##X::exec(Processor *p)\
+  {\
+    auto flag_carry = check_bit(p->reg.value, 7);\
+    auto truncated_bit = check_bit(p->reg.value, 7);\
+    auto temp = static_cast<uint8_t>((p->reg.value << 1) | truncated_bit); \
+    p->reg.value = temp;\
+    if (p->reg.value == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    if (flag_carry)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+  }
+
+RLC_RegX_def(A)
+RLC_RegX_def(B)
+RLC_RegX_def(C)
+RLC_RegX_def(D)
+RLC_RegX_def(E)
+RLC_RegX_def(H)
+RLC_RegX_def(L)
+//RLC_RegX_def(HL) 
+
+
+#define RL_RegX_def(reg)                  \
+  void RL_##reg##X::exec(Processor *p)\
+  {\
+    auto carry = p->flag.getFlag(FlagRegister::CARRY);\
+    auto flag_carry = check_bit(p->reg.value, 7);\
+    if (flag_carry)\
+      p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
+    auto temp = static_cast<uint8_t>(p->reg.value << 1);	\
+    temp |= carry;\
+    if (temp == 0)\
+      p->flag.setFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+    p->reg.value = temp;\
+  }
+
+RL_RegX_def(A)
+RL_RegX_def(B)
+RL_RegX_def(C)
+RL_RegX_def(D)
+RL_RegX_def(E)
+RL_RegX_def(H)
+RL_RegX_def(L)
+//RL_RegX_def(HL)
+
+#define RR_RegX_def(reg)                  \
+  void RR_##reg##X::exec(Processor *p)\
+  {\
+   auto carry = p->flag.getFlag(FlagRegister::CARRY);\
+   auto flag_carry = check_bit(p->reg.value, 0);\
+   if (flag_carry)\
+     p->flag.setFlag(FlagRegister::CARRY);\
+   else\
+     p->flag.unsetFlag(FlagRegister::CARRY);\
+   auto temp = static_cast<uint8_t>(p->reg.value >> 1);	\
+   temp |= carry;\
+   if (temp == 0)\
+     p->flag.setFlag(FlagRegister::ZERO);\
+   p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+   p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+   p->reg.value = temp;\
+}
+
+RR_RegX_def(A)
+RR_RegX_def(B)
+RR_RegX_def(C)
+RR_RegX_def(D)
+RR_RegX_def(E)
+RR_RegX_def(H)
+RR_RegX_def(L)
+//RR_RegX_def(HL) 

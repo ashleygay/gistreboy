@@ -280,4 +280,37 @@ decl_instruction(RRC_DX, 0xCB0A, 8, 1, 1, 0)
 decl_instruction(RRC_EX, 0xCB0B, 8, 1, 1, 0)
 decl_instruction(RRC_HX, 0xCB0C, 8, 1, 1, 0)
 decl_instruction(RRC_LX, 0xCB0D, 8, 1, 1, 0)
-decl_instruction(RRC_HLX, 0xCB0E, 16, 1, 2, 0) 
+//decl_instruction(RRC_HLX, 0xCB0E, 16, 1, 2, 0) 
+
+// RLC Instructions
+
+decl_instruction(RLC_AX, 0xCB07, 8, 1, 1, 0)
+decl_instruction(RLC_BX, 0xCB00, 8, 1, 1, 0)
+decl_instruction(RLC_CX, 0xCB01, 8, 1, 1, 0)
+decl_instruction(RLC_DX, 0xCB02, 8, 1, 1, 0)
+decl_instruction(RLC_EX, 0xCB03, 8, 1, 1, 0)
+decl_instruction(RLC_HX, 0xCB04, 8, 1, 1, 0)
+decl_instruction(RLC_LX, 0xCB05, 8, 1, 1, 0)
+//decl_instruction(RLC_HLX, 0xCB06, 16, 1, 2, 0)   
+
+// RL Instructions
+
+decl_instruction(RL_AX, 0xCB17, 8, 1, 1, 0)
+decl_instruction(RL_BX, 0xCB10, 8, 1, 1, 0)
+decl_instruction(RL_CX, 0xCB11, 8, 1, 1, 0)
+decl_instruction(RL_DX, 0xCB12, 8, 1, 1, 0)
+decl_instruction(RL_EX, 0xCB13, 8, 1, 1, 0)
+decl_instruction(RL_HX, 0xCB14, 8, 1, 1, 0)
+decl_instruction(RL_LX, 0xCB15, 8, 1, 1, 0)
+//decl_instruction(RLC_HLX, 0xCB16, 16, 1, 2, 0)
+
+// RR Instructions
+
+decl_instruction(RR_AX, 0xCB1F, 8, 1, 1, 0)
+decl_instruction(RR_BX, 0xCB18, 8, 1, 1, 0)
+decl_instruction(RR_CX, 0xCB19, 8, 1, 1, 0)
+decl_instruction(RR_DX, 0xCB1A, 8, 1, 1, 0)
+decl_instruction(RR_EX, 0xCB1B, 8, 1, 1, 0)
+decl_instruction(RR_HX, 0xCB1C, 8, 1, 1, 0)
+decl_instruction(RR_LX, 0xCB1D, 8, 1, 1, 0)
+//decl_instruction(RLC_HLX, 0xCB1E, 16, 1, 2, 0) 

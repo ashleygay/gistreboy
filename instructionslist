@@ -61,10 +61,10 @@ STOP		 -> not done
 DI		 -> not done
 EI		 -> not done
 
-RLC(n)		 -> not done
-RL(n)		 -> not done
+RLC(n)		 -> done
+RL(n)		 -> done
 RRC(n)		 -> done
-RR(n)		 -> not done
+RR(n)		 -> done
 
 SLA(n)		 -> not done
 SRA(n)		 -> not done
