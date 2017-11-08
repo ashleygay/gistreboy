@@ -84,8 +84,23 @@ InstructionSet::InstructionSet()
 	add_instr(LD_HLn)
 
 	add_instr(LD_ABC)
+	add_instr(LD_BCA)
 	add_instr(LD_ADE)
+	add_instr(LD_DEA)
+	add_instr(LD_HLA)
 	add_instr(LD_Ann)
+	add_instr(LD_nnA)
+
+	add_instr(LD_AC2)
+	add_instr(LD_C2A)
+
+	add_instr(LDD_AHL)
+	add_instr(LDD_HLA)
+	add_instr(LDI_AHL)
+	add_instr(LDI_HLA)
+	add_instr(LDH_nA)
+	add_instr(LDH_An)
+
 
 	add_instr(ADD_AA)
 	add_instr(ADD_AB)

@@ -3,24 +3,16 @@ LISTE DES INSTRUCTIONS
 
 LD(nn, n)	 -> done 
 LD(r1, r2)  	 -> done (HL not done)
-LD(A, n)	 -> ?
-LD(n, A)	 -> ?
-LD(A, (C))  	 -> ?
-LD((C), A)  	 -> ?
-LD(A, (HLD))	 -> ?
-LD(A, (HL-))	 -> ?
-LDD(A, (HL))	 -> ?
-LD((HLD), A)     -> ?
-LD((HL-), A)     -> ?
-LDD((HL), A)     -> ?
-LD(A, (HLI))     -> ?
-LD(A, (HL+))     -> ?
-LDI(A, (HL))     -> ?
-LD((HLI), A)     -> ?
-LD((HLI), A)     -> ?
-LDI((HL), A)     -> ?
-LDH(n, A) 	 -> ?
-LDH(A, n)	 -> ?
+LD(A, n)	 -> done
+LD(n, A)	 -> done
+LD(A, (C))  	 -> done
+LD((C), A)  	 -> done
+LDD(A, (HL))	 -> done
+LDD((HL), A)     -> done
+LDI(A, (HL))     -> done
+LDI((HL), A)     -> done
+LDH(n, A) 	 -> done
+LDH(A, n)	 -> done
 LD(n, nn)	 -> ?
 LD(SP, HL)	 -> ?
 LD(HL, SP+n)	 -> ?
