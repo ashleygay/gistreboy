@@ -101,6 +101,21 @@ InstructionSet::InstructionSet()
 	add_instr(LDH_nA)
 	add_instr(LDH_An)
 
+	add_instr(LD_BCnn)
+	add_instr(LD_DEnn)
+	add_instr(LD_HLnn)
+	add_instr(LD_SPnn)
+	add_instr(LD_nnSP)
+	add_instr(LD_SPHL)
+	add_instr(LD_HLSPn)
+
+	add_instr(PUSH_BC)
+	add_instr(PUSH_DE)
+	add_instr(PUSH_HL)
+	add_instr(POP_BC)
+	add_instr(POP_DE)
+	add_instr(POP_HL)
+
 
 	add_instr(ADD_AA)
 	add_instr(ADD_AB)

@@ -133,6 +133,21 @@ decl_instruction(LDI_HLA, 0x22, 8, 0, 0, 0)
 decl_instruction(LDH_nA, 0xE0, 12, 1, 1, 0)
 decl_instruction(LDH_An, 0xF0, 12, 1, 1, 0)
 
+decl_instruction(LD_BCnn, 0x01, 12, 1, 2, 0)
+decl_instruction(LD_DEnn, 0x11, 12, 1, 2, 0)
+decl_instruction(LD_HLnn, 0x21, 12, 1, 2, 0)
+decl_instruction(LD_SPnn, 0x31, 12, 1, 2, 0)
+decl_instruction(LD_nnSP, 0x08, 20, 1, 2, 0)
+decl_instruction(LD_SPHL, 0xF9, 8, 0, 0, 0)
+decl_instruction(LD_HLSPn, 0xF8, 12, 1, 1, 0)
+
+decl_instruction(PUSH_BC, 0xC5, 16, 0, 0, 0)
+decl_instruction(PUSH_DE, 0xD5, 16, 0, 0, 0)
+decl_instruction(PUSH_HL, 0xE5, 16, 0, 0, 0)
+decl_instruction(POP_BC, 0xC1, 12, 0, 0, 0)
+decl_instruction(POP_DE, 0xD1, 12, 0, 0, 0)
+decl_instruction(POP_HL, 0xE1, 12, 0, 0, 0)
+
 // NOP INSTRUCTION
 
 decl_instruction(NOP, 0x00, 4, 0, 0, 0)

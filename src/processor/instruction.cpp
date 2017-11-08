@@ -254,6 +254,101 @@ void LDH_An::exec(Processor *p)
 	p->A.value = p->_read(address);
 }
 
+void LD_BCnn::exec(Processor *p)
+{
+	uint16_t BC = boost::get<uint16_t>(this->_args[0]);
+	p->C.value = BC & 0xFF;
+	p->B.value = BC << 8;
+}
+
+void LD_DEnn::exec(Processor *p)
+{
+	uint16_t DE = boost::get<uint16_t>(this->_args[0]);
+	p->E.value = DE & 0xFF;
+	p->D.value = DE << 8;
+}
+
+void LD_HLnn::exec(Processor *p)
+{
+	uint16_t HL = boost::get<uint16_t>(this->_args[0]);
+	p->L.value = HL & 0xFF;
+	p->H.value = HL << 8;
+}
+
+void LD_SPnn::exec(Processor *p)
+{
+	p->SP.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void LD_nnSP::exec(Processor *p)
+{
+	uint16_t address = boost::get<uint16_t>(this->_args[0]);
+	uint8_t SP_low = p->SP.value & 0xFF;
+	uint8_t SP_high = p->SP.value << 8;
+
+	p->_write(SP_low, address);
+	p->_write(SP_high, address + 1);
+}
+
+
+void LD_SPHL::exec(Processor *p)
+{
+	p->SP.value = p->L.value | (p->H.value >> 8);
+}
+
+void LD_HLSPn::exec(Processor *p)
+{
+	uint8_t n = boost::get<uint8_t>(this->_args[0]);
+	uint16_t HL = p->SP.value + n;
+	p->L.value = HL & 0xFF;
+	p->H.value = HL << 8;
+
+	// Carry if (b1 + b1) != (b1 | b2)
+	if ((HL & 0xF) != ((p->SP.value | n) & 0xF))
+		p->flag.setFlag(FlagRegister::HALFCARRY);
+	if (HL != (p->SP.value | n))
+		p->flag.setFlag(FlagRegister::CARRY);
+	p->flag.unsetFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+}
+
+
+void PUSH_BC::exec(Processor *p)
+{
+	p->_write(p->C.value, p->SP.value--);
+	p->_write(p->B.value, p->SP.value--);
+}
+
+void PUSH_DE::exec(Processor *p)
+{
+	p->_write(p->E.value, p->SP.value--);
+	p->_write(p->D.value, p->SP.value--);
+}
+
+void PUSH_HL::exec(Processor *p)
+{
+	p->_write(p->L.value, p->SP.value--);
+	p->_write(p->H.value, p->SP.value--);
+}
+
+void POP_BC::exec(Processor *p)
+{
+	p->B.value = p->_read(p->SP.value++);
+	p->C.value = p->_read(p->SP.value++);
+}
+
+void POP_DE::exec(Processor *p)
+{
+	p->D.value = p->_read(p->SP.value++);
+	p->E.value = p->_read(p->SP.value++);
+}
+
+void POP_HL::exec(Processor *p)
+{
+	p->H.value = p->_read(p->SP.value++);
+	p->L.value = p->_read(p->SP.value++);
+}
+
 void NOP::exec(Processor *p)
 {
 	(void)p;

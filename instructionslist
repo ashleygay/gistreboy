@@ -13,14 +13,14 @@ LDI(A, (HL))     -> done
 LDI((HL), A)     -> done
 LDH(n, A) 	 -> done
 LDH(A, n)	 -> done
-LD(n, nn)	 -> ?
-LD(SP, HL)	 -> ?
-LD(HL, SP+n)	 -> ?
-LDHL(SP, n)	 -> ?
-LD(nn, SP)	 -> ?
+LD(n, nn)	 -> done
+LD(SP, HL)	 -> done
+LD(HL, SP+n)	 -> done
+LDHL(SP, n)	 -> done
+LD(nn, SP)	 -> done
 
-PUSH(nn)	 -> not done
-POP(nn)		 -> not done
+PUSH(nn)	 -> done
+POP(nn)		 -> done
 
 ADD(A, n)	 -> done (# not done)
 ADC(A, n)        -> done (# not done)
