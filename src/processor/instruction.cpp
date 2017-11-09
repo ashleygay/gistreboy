@@ -733,22 +733,34 @@ CP_XY_def(A, E)
 CP_XY_def(A, H)
 CP_XY_def(A, L)
 
-#define CP_XHL_def(reg)\
-  void CP_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    uint val = p->reg.value - tmp;\
-    uint8_t result = static_cast<uint8_t>(val);\
-    if (result == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.setFlag(FlagRegister::SUBTRACT);\
-    if (((p->reg.value & 0xF) - (tmp & 0xF)) < 0) \
-      p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (p->reg.value < tmp)                 \
-      p->flag.setFlag(FlagRegister::CARRY);\
-  }
 
-CP_XHL_def(A)    
+void CP_AHL::exec(Processor *p)
+{
+    auto tmp = HLReadDereference(p);
+    uint val = p->A.value - tmp;
+    uint8_t result = static_cast<uint8_t>(val);
+    if (result == 0)
+      p->flag.setFlag(FlagRegister::ZERO);
+    p->flag.setFlag(FlagRegister::SUBTRACT);
+    if (((p->A.value & 0xF) - (tmp & 0xF)) < 0)
+      p->flag.setFlag(FlagRegister::HALFCARRY);
+    if (p->A.value < tmp)                 
+      p->flag.setFlag(FlagRegister::CARRY);
+}
+
+void CP_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
+  uint val = p->A.value - tmp;
+  uint8_t result = static_cast<uint8_t>(val);
+  if (result == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.setFlag(FlagRegister::SUBTRACT);
+  if (((p->A.value & 0xF) - (tmp & 0xF)) < 0)
+    p->flag.setFlag(FlagRegister::HALFCARRY);
+  if (p->A.value < tmp)
+    p->flag.setFlag(FlagRegister::CARRY);
+}  
 
 // INC instructions
 

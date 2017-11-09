@@ -246,8 +246,8 @@ decl_instruction(CP_AD, 0xBA, 4, 2, 1, 1)
 decl_instruction(CP_AE, 0xBB, 4, 2, 1, 1)
 decl_instruction(CP_AH, 0xBC, 4, 2, 1, 1)
 decl_instruction(CP_AL, 0xBD, 4, 2, 1, 1)
-decl_instruction(CP_AHL, 0xBE, 8, 1, 1, 0)
-//decl_instruction(CP_AADDRESS, 0xFE, 8, 1, 1, 0) 
+decl_instruction(CP_AHL, 0xBE, 8, 0, 0, 0)
+decl_instruction(CP_Aaddress, 0xFE, 8, 1, 2, 0) 
 
 
 // INC Instructions

@@ -198,7 +198,7 @@ InstructionSet::InstructionSet()
 	add_instr(CP_AH)
 	add_instr(CP_AL)
 	add_instr(CP_AHL)
-	  //add_instr(CP_ADDRESS) 
+	add_instr(CP_Aaddress) 
 
 	add_instr(INC_AX)
 	add_instr(INC_BX)
