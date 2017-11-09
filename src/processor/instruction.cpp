@@ -399,7 +399,7 @@ void ADD_AHL::exec(Processor *p)
 
 void ADD_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1]));
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
   uint val = p->A.value + tmp;
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -454,7 +454,7 @@ void ADC_AHL::exec(Processor *p)
 
 void ADC_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1])); 
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0])); 
   uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -510,7 +510,7 @@ void SUB_AHL::exec(Processor *p)
 
 void SUB_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1]));    
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));    
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -565,7 +565,7 @@ void SBC_AHL::exec(Processor *p)
 
 void SBC_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1]));
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
   uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -599,19 +599,27 @@ AND_XY_def(A, E)
 AND_XY_def(A, H)
 AND_XY_def(A, L)
 
-#define AND_XHL_def(reg)\
-  void AND_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    p->reg.value &= tmp;\
-    if (p->reg.value == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    p->flag.setFlag(FlagRegister::HALFCARRY);\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
-  }
+void AND_AHL::exec(Processor *p)
+{
+  auto tmp = HLReadDereference(p);
+  p->A.value &= tmp;
+  if (p->A.value == 0)
+    p->flag.setFlag(FlagRegister::ZERO);\
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  p->flag.setFlag(FlagRegister::HALFCARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
+}
 
-AND_XHL_def(A)
+void AND_Aaddress::exec(Processor *p)
+{
+  auto tmp =  p->_read(boost::get<uint16_t>(this->_args[0]));
+  p->A.value &= tmp;
+  if (p->A.value == 0)
+    p->flag.setFlag(FlagRegister::ZERO);\
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  p->flag.setFlag(FlagRegister::HALFCARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
+} 
 
 //OR instructions
 
@@ -634,20 +642,29 @@ OR_XY_def(A, E)
 OR_XY_def(A, H)
 OR_XY_def(A, L)
 
-#define OR_XHL_def(reg)\
-  void OR_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    p->reg.value |= tmp;\
-    if (p->reg.value == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
-  }
 
-OR_XHL_def(A) 
+void OR_AHL::exec(Processor *p)
+{
+  auto tmp = HLReadDereference(p);
+  p->A.value |= tmp;
+  if (p->A.value == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  p->flag.unsetFlag(FlagRegister::HALFCARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
+}
 
+void OR_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
+  p->A.value |= tmp;
+  if (p->A.value == 0)
+  p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  p->flag.unsetFlag(FlagRegister::HALFCARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
+}  
+    
 //XOR instructions
 
 #define XOR_XY_def(reg1, reg2)                  \
@@ -669,19 +686,28 @@ XOR_XY_def(A, E)
 XOR_XY_def(A, H)
 XOR_XY_def(A, L)
 
-#define XOR_XHL_def(reg)\
-  void XOR_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    p->reg.value ^= tmp; \
-    if (p->reg.value == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
-  }
-  
-XOR_XHL_def(A)  
+
+void XOR_AHL::exec(Processor *p)
+{
+  auto tmp = HLReadDereference(p);
+  p->A.value ^= tmp;
+  if (p->A.value == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  p->flag.unsetFlag(FlagRegister::HALFCARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
+}
+
+void XOR_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0])); 
+  p->A.value ^= tmp;
+  if (p->A.value == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  p->flag.unsetFlag(FlagRegister::HALFCARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
+} 
 
 //CP instructions
 

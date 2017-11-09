@@ -31,10 +31,10 @@ ADD(HL, n)	 -> not done
 ADD(SP, n)	 -> not done
 
 
-AND(n)        	 -> done (# not done)
-OR(n)		 -> done (# not done)
-XOR(n)           -> done (# not done)
-CP(n)            -> done (# not done)
+AND(n)        	 -> done 
+OR(n)		 -> done 
+XOR(n)           -> done 
+CP(n)            -> done 
 INC(n)           -> done (HL not done)
 DEC(n)           -> done (hl not done)
 
