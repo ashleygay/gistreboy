@@ -21,6 +21,7 @@ class Memory;
 #include <registers.hpp>
 #include <opcode.hpp>
 #include <atomic>
+#include <exception>
 
 class Processor {
 
@@ -72,20 +73,15 @@ class Processor {
 		// Read/Write as wall as charging next instruction etc
 		Memory *_mem = nullptr;
 	public:
-		// FIXME Those functions are used by the instructions to read/write
+		//Function used by the gameboy class
+		// returns the number of cycles that takes the instruction
+		int step();
+
+		// Those functions are used by the instructions to read/write
 		// memory values
-		uint8_t _read(uint16_t address)
-			{(void)address;return 42;/*return mem.read(address);*/}
+		uint8_t _read(uint16_t address);
 
-		void _write(uint8_t value, uint16_t address)
-			{(void)value;(void)address;/*mem.write(value, address);*/}
-
- 		// Get the number of cycles of the current instruction to execute
-		int getNbCycles() const;
-
-		// Fetch the next instruction/interrupt to do.
-		int fetchNextStep();
-		void execCurrentInstruction();
+		void _write(uint8_t value, uint16_t address);
 
 		void setInterruptHandler(InterruptHandler *handler)
 			{_handler = handler;}
@@ -94,14 +90,18 @@ class Processor {
 			{_mem = mem;}
 
 		// Enable/Disable IME
-		void enableIME() {/*handler->enableIME();*/}
-		// This version should be called from EI instruction only
-		void enableIMEDelay() {/*handler->enableIMEDelay();*/}
-		void disableIME() {/*handler->disableIME();*/}
+		void enableIME();
+		void disableIME();
+
+		// Delayed version should be called from EI instruction only
+		void enableIMEDelay();
 
 	private:
-		int _BUG(std::string str, int value);
-		int _fetchNextInstruction();
+		int _execCurrentInstruction();
+
+		void _BUG(std::string str, int value) const;
+
+		void _fetchNextInstruction();
 	public:
 		Processor(Processor const&) = delete;
 		void operator=(Processor const&)  = delete;
