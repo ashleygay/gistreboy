@@ -14,10 +14,16 @@
 class Memory {
 
 public :
-	Memory(uint8_t* rom, Processor* proc);
+	Memory(uint8_t* rom, Processor& proc);
 
   	uint8_t read(uint16_t address);
   	void write(uint16_t address, uint8_t byte);
+
+	// Rebuild a cartridge with a new rom
+	void set_rom(uint8_t *rom);
+
+	//Resets memory values to their default state
+	void resetMemory();
 
 	Video& get_video();
 	Cartridge& get_cartridge();
@@ -26,7 +32,7 @@ private :
 
 	std::array<uint8_t, 0x10000> memory;
 
-	Processor* processor;
+	Processor& processor;
 	Cartridge cartridge;
 	Video video;
 };

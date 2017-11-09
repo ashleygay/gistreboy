@@ -14,7 +14,7 @@ public :
 	 *  TODO: do dma_transfer and actually check permissions
 	 */
 
- 	Video(Processor* proc,
+ 	Video(Processor& proc,
 		std::vector<std::pair<uint16_t, uint16_t>> range);
 
 	uint8_t read(uint16_t address);
@@ -38,6 +38,6 @@ public :
 
 private :
 
-	Processor *_proc;
+	Processor &_proc;
 	std::array<uint8_t, 0x10000> video_memory;
 };
