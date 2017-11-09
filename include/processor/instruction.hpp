@@ -174,7 +174,7 @@ decl_instruction(ADC_AE, 0x8B, 4, 2, 1, 1)
 decl_instruction(ADC_AH, 0x8C, 4, 2, 1, 1)
 decl_instruction(ADC_AL, 0x8D, 4, 2, 1, 1)
 decl_instruction(ADC_AHL, 0x8E, 8, 2, 1, 1)
-//decl_instruction(ADC_AADDRESS, 0xCE, 8, 1, 1, 0) 
+decl_instruction(ADC_Aaddress, 0xCE, 8, 2, 1, 2) 
 
 
 // SUB Instructions
@@ -187,7 +187,7 @@ decl_instruction(SUB_AE, 0x93, 4, 0, 0, 0)
 decl_instruction(SUB_AH, 0x94, 4, 0, 0, 0)
 decl_instruction(SUB_AL, 0x95, 4, 0, 0, 0)
 decl_instruction(SUB_AHL, 0x96, 8, 0, 0, 0)
-//decl_instruction(SUB_AADDRESS, 0xD6, 8, 1, 1, 0)  
+decl_instruction(SUB_Aaddress, 0xD6, 8, 2, 1, 2)  
 
 // SBC Instructions
 
@@ -199,7 +199,7 @@ decl_instruction(SBC_AE, 0x9B, 4, 2, 1, 1)
 decl_instruction(SBC_AH, 0x9C, 4, 2, 1, 1)
 decl_instruction(SBC_AL, 0x9D, 4, 2, 1, 1)
 decl_instruction(SBC_AHL, 0x9E, 8, 2, 1, 0)
-//decl_instruction(SBC_AADDRESS, 0xD, 8, 1, 1, 0) pas d'opcode in manual
+decl_instruction(SBC_Aaddress, 0xDE, 8, 2, 1, 2) //pas d'opcode in manual
 
 // AND Instructions
 

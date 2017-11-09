@@ -382,41 +382,35 @@ ADD_XY_def(A, E)
 ADD_XY_def(A, H)
 ADD_XY_def(A, L)  
 
-#define ADD_XHL_def(reg)\
-  void ADD_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    uint val = p->reg.value + tmp;	\
-    uint8_t result = static_cast<uint8_t>(val);\
-    if (result == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    if (((p->reg.value & 0xF) + (tmp & 0xF)) > 0xF)\
-      p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (val > 0xFF)\
-      p->flag.setFlag(FlagRegister::CARRY); \
-    p->reg.value = (result & 0xFF);\
+void ADD_AHL::exec(Processor *p)
+  {
+    auto tmp = HLReadDereference(p);
+    uint val = p->A.value + tmp;	
+    uint8_t result = static_cast<uint8_t>(val);
+    if (result == 0)
+      p->flag.setFlag(FlagRegister::ZERO);
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);
+    if (((p->A.value & 0xF) + (tmp & 0xF)) > 0xF)
+      p->flag.setFlag(FlagRegister::HALFCARRY);
+    if (val > 0xFF)
+      p->flag.setFlag(FlagRegister::CARRY); 
+    p->A.value = (result & 0xFF);
   }
 
-ADD_XHL_def(A)
-
-/*#define ADD_XADDRESS_def(reg, address)	\
-  void ADD_##reg##address::exec(Processor *p)\
-  {\
-    auto tmp = p->_read(address);		\
-    uint val = p->reg.value + tmp;      \
-    uint8_t result = static_cast<uint8_t>(val);\
-    if (result == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    if (((p->reg.value & 0xF) + (tmp & 0xF)) > 0xF)\
-      p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (val > 0xFF)\
-      p->flag.setFlag(FlagRegister::CARRY); \
-    p->reg.value = (result & 0xFF);\
-  }
-
-  ADD_XADDRESS_def(A, #) */
+void ADD_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1]));
+  uint val = p->A.value + tmp;
+  uint8_t result = static_cast<uint8_t>(val);
+  if (result == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  if (((p->A.value & 0xF) + (tmp & 0xF)) > 0xF)
+    p->flag.setFlag(FlagRegister::HALFCARRY);
+  if (val > 0xFF)
+    p->flag.setFlag(FlagRegister::CARRY);
+  p->A.value = (result & 0xFF);
+} 
 
 //ADC instructions
 
@@ -443,24 +437,35 @@ ADC_XY_def(A, E)
 ADC_XY_def(A, H)
 ADC_XY_def(A, L)
 
-#define ADC_XHL_def(reg)\
-  void ADC_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    uint val = p->reg.value + tmp + p->flag.getFlag(FlagRegister::CARRY);\
-    uint8_t result = static_cast<uint8_t>(val);\
-    if (result == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);	\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    if (((p->reg.value & 0xF) + (tmp & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) \
-      p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (val > 0xFF)\
-      p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg.value = (result & 0xFF);       \
-  }
+void ADC_AHL::exec(Processor *p)
+{
+    auto tmp = HLReadDereference(p);
+    uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
+    uint8_t result = static_cast<uint8_t>(val);
+    if (result == 0)
+      p->flag.setFlag(FlagRegister::ZERO);	
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);
+    if (((p->A.value & 0xF) + (tmp & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF) 
+      p->flag.setFlag(FlagRegister::HALFCARRY);
+    if (val > 0xFF)
+      p->flag.setFlag(FlagRegister::CARRY);
+    p->A.value = (result & 0xFF);       
+}
 
-
-ADC_XHL_def(A)
+void ADC_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1])); 
+  uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
+  uint8_t result = static_cast<uint8_t>(val);
+  if (result == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::SUBTRACT);
+  if (((p->A.value & 0xF) + (tmp & 0xF) + p->flag.getFlag(FlagRegister::CARRY)) > 0xF)
+    p->flag.setFlag(FlagRegister::HALFCARRY);
+  if (val > 0xFF)
+    p->flag.setFlag(FlagRegister::CARRY);
+  p->A.value = (result & 0xFF);
+}  
 
 //SUB instructions
 
@@ -487,23 +492,36 @@ SUB_XY_def(A, E)
 SUB_XY_def(A, H)
 SUB_XY_def(A, L)
 
-#define SUB_XHL_def(reg)\
-  void SUB_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    uint val = p->reg.value - tmp;\
-    uint8_t result = static_cast<uint8_t>(val);\
-    if (result == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.setFlag(FlagRegister::SUBTRACT);\
-    if (((p->reg.value & 0xF) - (tmp & 0xF)) < 0) \
-      p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (p->reg.value < tmp)                 \
-      p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg.value = (result & 0xFF);       \
-  }
+void SUB_AHL::exec(Processor *p)
+{
+    auto tmp = HLReadDereference(p);
+    uint val = p->A.value - tmp;
+    uint8_t result = static_cast<uint8_t>(val);
+    if (result == 0)
+      p->flag.setFlag(FlagRegister::ZERO);
+    p->flag.setFlag(FlagRegister::SUBTRACT);
+    if (((p->A.value & 0xF) - (tmp & 0xF)) < 0)
+      p->flag.setFlag(FlagRegister::HALFCARRY);
+    if (p->A.value < tmp)                 
+      p->flag.setFlag(FlagRegister::CARRY);
+    p->A.value = (result & 0xFF);       
+}
 
-SUB_XHL_def(A) 
+
+void SUB_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1]));    
+  uint val = p->A.value - tmp;
+  uint8_t result = static_cast<uint8_t>(val);
+  if (result == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.setFlag(FlagRegister::SUBTRACT);
+  if (((p->A.value & 0xF) - (tmp & 0xF)) < 0)
+    p->flag.setFlag(FlagRegister::HALFCARRY);
+  if (p->A.value < tmp)
+    p->flag.setFlag(FlagRegister::CARRY);
+  p->A.value = (result & 0xFF);
+}
 
 //SBC instructions
 
@@ -529,27 +547,36 @@ SBC_XY_def(A, D)
 SBC_XY_def(A, E)
 SBC_XY_def(A, H)
 SBC_XY_def(A, L)
-// TODO SBC_XY_def(A, HL);
 
-#undef SBC_XY_def
+void SBC_AHL::exec(Processor *p)
+{
+  auto tmp = HLReadDereference(p);
+  uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
+  uint8_t result = static_cast<uint8_t>(val);
+  if (result == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.setFlag(FlagRegister::SUBTRACT);
+  if (((p->A.value & 0xF) - (tmp & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0) 
+    p->flag.setFlag(FlagRegister::HALFCARRY);
+  if (p->A.value < tmp)                 
+    p->flag.setFlag(FlagRegister::CARRY);
+  p->A.value = (result & 0xFF);       
+}
 
-#define SBC_XHL_def(reg)\
-  void SBC_##reg##HL::exec(Processor *p)\
-  {\
-    auto tmp = HLReadDereference(p);\
-    uint val = p->reg.value - tmp - p->flag.getFlag(FlagRegister::CARRY);	\
-    uint8_t result = static_cast<uint8_t>(val);\
-    if (result == 0)\
-      p->flag.setFlag(FlagRegister::ZERO);\
-    p->flag.setFlag(FlagRegister::SUBTRACT);\
-    if (((p->reg.value & 0xF) - (tmp & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0) \
-      p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (p->reg.value < tmp)                 \
-      p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg.value = (result & 0xFF);       \
-    }
-
-SBC_XHL_def(A) 
+void SBC_Aaddress::exec(Processor *p)
+{
+  auto tmp = p->_read(boost::get<uint16_t>(this->_args[1]));
+  uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
+  uint8_t result = static_cast<uint8_t>(val);
+  if (result == 0)
+    p->flag.setFlag(FlagRegister::ZERO);
+  p->flag.setFlag(FlagRegister::SUBTRACT);
+  if (((p->A.value & 0xF) - (tmp & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0)
+    p->flag.setFlag(FlagRegister::HALFCARRY);
+  if (p->A.value < tmp)
+    p->flag.setFlag(FlagRegister::CARRY);
+  p->A.value = (result & 0xFF);
+}
 
 //AND instructions
 

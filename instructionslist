@@ -22,10 +22,10 @@ LD(nn, SP)	 -> done
 PUSH(nn)	 -> done
 POP(nn)		 -> done
 
-ADD(A, n)	 -> done (# not done)
-ADC(A, n)        -> done (# not done)
-SUB(n)        	 -> done (# not done)
-SBC(A, n)      	 -> done (# not done)
+ADD(A, n)	 -> done 
+ADC(A, n)        -> done 
+SUB(n)        	 -> done 
+SBC(A, n)      	 -> done 
 
 ADD(HL, n)	 -> not done
 ADD(SP, n)	 -> not done
