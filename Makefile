@@ -65,10 +65,7 @@ CXXFLAGS = $(CC_OPTIONS) $(INCLUDES) $(LIB)
 emulator: $(OBJS)
 	g++ -o $@ $^ $(CXXFLAGS)
 
-$(OBJ_DIR)/%.o: %.c $(INCLUDES)
-	g++ -c -o $@ #< $(CXXFLAGS)
-
 .PHONY: clean
 
 clean:
-	rm $(EXEC) $(OBJS)
+	rm emulator $(OBJS)
