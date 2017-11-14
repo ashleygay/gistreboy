@@ -35,12 +35,6 @@ void setup_gui (GtkApplication *app)
 	gtk_window_set_title(GTK_WINDOW (window), "Super Gistre Boy");
 	gtk_window_set_default_size(GTK_WINDOW (window), 600, 400);
 
-	//TODO: We set the window for the emulation interface here, sothat it
-	//is able to display error messages. We also add a signal to kill the
-	//emulator when the window is killed.
-
-	//EmuInterface.getInstance().setWindow(window);
-
 	menuItem = gtk_menu_item_new_with_label("Menu");
 	g_signal_connect(G_OBJECT (window), "destroy", G_CALLBACK (stop_callback), NULL);
 

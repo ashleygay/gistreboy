@@ -25,8 +25,7 @@ GAMEBOY_SRC = $(patsubst %,$(subst include,src,$(GAMEBOY))/%,\
 		$(_GAMEBOY_SRC))
 
 INTERFACE=include/interface
-_INTERFACE_SRC += emu_controller.cpp
-_INTERFACE_SRC += emu_interface.cpp
+_INTERFACE_SRC += emulator.cpp
 INTERFACE_SRC = $(patsubst %,$(subst include,src,$(INTERFACE))/%,\
 		$(_INTERFACE_SRC))
 

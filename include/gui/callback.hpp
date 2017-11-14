@@ -8,7 +8,7 @@
 #pragma once
 #include <debug.hpp>
 #include <open_button_helper.hpp>
-#include <emu_interface.hpp>
+#include <emulator.hpp>
 
 #include <gtk/gtk.h>
 #include <unordered_map>
@@ -16,9 +16,6 @@
 #include <string>
 #include <chrono>
 #include <thread>
-
-using checksum_fun = int (*)(const char *, off_t);
-using str_to_str = std::unordered_map<std::string, std::string>;
 
 // Callbacks for NYI buttons, prints a debug message
 void NYI(GtkWidget * b, gpointer user_data);
@@ -31,7 +28,6 @@ void NYI(GtkWidget * b, gpointer user_data);
 void open_button_callback(GtkWidget * b, gpointer user_data);
 
 void run_button_callback(GtkWidget * b, gpointer user_data);
-
 
 // Callback for stoping the currently running emulation
 void stop_callback(GtkWidget * w, gpointer data);

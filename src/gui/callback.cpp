@@ -19,7 +19,7 @@ void stop_callback(GtkWidget * w, gpointer user_data)
 	(void)w;
 	(void)user_data;
 	DEBUG_STREAM << "Stopping the emulation." << std::endl;
-	EmuInterface::getInstance().stopEmulator();
+	Emulator::getInstance().stop();
 }
 
 
@@ -33,12 +33,11 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 	if (!data.memory)
 		return;
 
-	EmuInterface & i = EmuInterface::getInstance();
+	// Emulator takes ownership of the data pointer
+	Emulator::getInstance().changeCartridge(data);
 
-	// EmuInterface takes ownership of the data pointer
-	i.changeCartridge(data);
-
-	DEBUG_STREAM << "We give the pointer to the memory here." << std::endl;
+	DEBUG_STREAM << "We give the pointer to the memory here."
+		     << std::endl;
 }
 
 void run_button_callback(GtkWidget * b, gpointer user_data)
@@ -46,9 +45,7 @@ void run_button_callback(GtkWidget * b, gpointer user_data)
 	(void)b;
 	(void)user_data;
 
-	EmuInterface& i = EmuInterface::getInstance();
-
-	i.startEmulator();
+	Emulator::getInstance().start();
 }
 
 gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
