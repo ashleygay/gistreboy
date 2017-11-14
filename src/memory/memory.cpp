@@ -2,7 +2,7 @@
 #include <vector>
 #include <utility>
 
-Memory::Memory(uint8_t* rom, Processor* proc) : processor(proc),
+Memory::Memory(uint8_t* rom, Processor& proc) : processor(proc),
 	       cartridge({std::make_pair(0x00, 0x7FFF),
 			  std::make_pair(0xA000, 0xBFFF)}, rom),
 
@@ -12,6 +12,14 @@ Memory::Memory(uint8_t* rom, Processor* proc) : processor(proc),
 {
 	memory.fill(0);
 }
+
+
+void Memory::set_rom(uint8_t *rom)
+{
+	cartridge = Cartridge({std::make_pair(0x00, 0x7FFF),
+	  	   std::make_pair(0xA000, 0xBFFF)}, rom);
+}
+
 
 uint8_t Memory::read(uint16_t address)
 {

@@ -1,7 +1,7 @@
 #include <video.hpp>
 #include <bitset>
 
-Video::Video(Processor* proc,
+Video::Video(Processor& proc,
 	std::vector<std::pair<uint16_t, uint16_t>> range) :
 	MemoryObject(range),
 	_proc(proc)
