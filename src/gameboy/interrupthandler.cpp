@@ -33,7 +33,7 @@ int InterruptHandler::doInterrupt()
 
 			// We compute the nth interrupt index
 			int index = 0;
-			for (; !res[index]; ++index){}
+			for (; !res[index] && index < 8; ++index);
 
 			// We set the cleanup routine and the execution of
 			// the interrupt.

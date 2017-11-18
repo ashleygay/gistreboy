@@ -35,6 +35,8 @@ void Emulator::mainLoop(GameBoy& gb)
 {
 	while(gb.isRunning()) {
 		gb.step();
+		sleep(1);
+		std::cout << "STEP" << std::endl;
 	}
 }
 
@@ -53,8 +55,11 @@ void Emulator::start()
 void Emulator::stop()
 {
 	try {
+		DEBUG_STREAM << "Stopping gameboy" << std::endl;
 		gb.stop();
+		DEBUG_STREAM << "Emulator waiting" << std::endl;
 		_future.wait();
+		DEBUG_STREAM << "Emulator waited" << std::endl;
 		_future.get(); // Future calls to wait() will be invalid.
 		DEBUG_STREAM << "Emulator stopped" << std::endl;
 	}

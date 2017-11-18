@@ -20,6 +20,7 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <unistd.h>
 
 class Emulator
 {
