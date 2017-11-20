@@ -14,13 +14,13 @@
 class Memory {
 
 public :
-	Memory(uint8_t* rom, Processor& proc);
+	Memory(Processor& proc);
 
   	uint8_t read(uint16_t address);
   	void write(uint16_t address, uint8_t byte);
 
 	// Rebuild a cartridge with a new rom
-	void set_rom(uint8_t *rom);
+	void change_game(uint8_t *cart);
 
 	//Resets memory values to their default state
 	void resetMemory();

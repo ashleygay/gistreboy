@@ -8,10 +8,9 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy()
+GameBoy::GameBoy(): m(p)
 {
 	//TODO: create memory from processor and rom
-	// m(rom, &p);
 	_wireComponents();
 }
 
@@ -61,11 +60,12 @@ void GameBoy::_clockCycle()
 void GameBoy::_resetComponents()
 {
 	// TODO Reset components here
+	//p.reset();
 }
 
-void GameBoy::changeGame(uint8_t * mem, size_t s)
+void GameBoy::changeGame(uint8_t *mem)
 {
 	//TODO: memory copies the content of the pointer.
 	//_resetComponents();
-	//m.setCartridge(mem, s);
+	m.change_game(mem);
 }

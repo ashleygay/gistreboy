@@ -2,9 +2,9 @@
 #include <vector>
 #include <utility>
 
-Memory::Memory(uint8_t* rom, Processor& proc) : processor(proc),
+Memory::Memory(Processor& proc) : processor(proc),
 	       cartridge({std::make_pair(0x00, 0x7FFF),
-			  std::make_pair(0xA000, 0xBFFF)}, rom),
+			  std::make_pair(0xA000, 0xBFFF)}),
 
 	       video(proc, {std::make_pair(0xFF40, 0xFF4B),
 			    std::make_pair(0x8000, 0xFE9F),
@@ -14,10 +14,9 @@ Memory::Memory(uint8_t* rom, Processor& proc) : processor(proc),
 }
 
 
-void Memory::set_rom(uint8_t *rom)
+void Memory::change_game(uint8_t *cart)
 {
-	cartridge = Cartridge({std::make_pair(0x00, 0x7FFF),
-	  	   std::make_pair(0xA000, 0xBFFF)}, rom);
+	cartridge.change_game(cart);
 }
 
 

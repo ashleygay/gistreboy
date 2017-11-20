@@ -22,6 +22,6 @@ using callback_ptr = void (*)(GtkWidget*, gpointer);
 	X("Run", run_button_callback, menuBar, NULL) \
 	X("Stop", stop_callback, menuBar, new Helper(window))\
 	X("Open image file", open_button_callback, subMenu,\
-		new OpenButtonHelper(window, 42, {{"access::can-read", "TRUE"}}))\
+		new OpenButtonHelper(window, {{"access::can-read", "TRUE"}}))\
 	X("Save state", NYI, subMenu, NULL) \
 	X("Load state", NYI, subMenu, NULL)

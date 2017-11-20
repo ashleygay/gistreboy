@@ -28,9 +28,9 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 	(void)b;
 	OpenButtonHelper *helper = (OpenButtonHelper *)user_data;
 	GFile* g = helper->open_file_with_dialog();
-	FileContent data = helper->load_content(g);
+	uint8_t *data = helper->load_content(g);
 
-	if (!data.memory)
+	if (!data)
 		return;
 
 	// Emulator takes ownership of the data pointer
@@ -38,6 +38,7 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 
 	DEBUG_STREAM << "We give the pointer to the memory here."
 		     << std::endl;
+	//TODO: free the data pointer.
 }
 
 void run_button_callback(GtkWidget * b, gpointer user_data)

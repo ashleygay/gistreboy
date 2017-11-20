@@ -68,10 +68,8 @@ void Emulator::stop()
 	}
 }
 
-void Emulator::changeCartridge(FileContent& f)
+void Emulator::changeCartridge(uint8_t *data)
 {
 	stop();
-	//TODO
-	//gb.setCartridge(f.memory);
-	start();
+	gb.changeGame(data);
 }

@@ -12,9 +12,13 @@ class Cartridge : public MemoryObject {
 
 public :
 
-	Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
-		  uint8_t *cart);
+	Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range);
   
+	// We use this method to change the currently running game.
+	// The gameboy should not be running while calling it.
+	// It initializes the rom and the ram to zero.
+	void change_game(uint8_t *cart);
+
 	uint8_t read(uint16_t address);
 	void write(uint16_t address, uint8_t byte);  
 
@@ -94,5 +98,7 @@ std::array<uint8_t,  256> boot_rom= { {
   bool has_boot_ = false; /* true when boot rom is finished */
 
   std::string name;
+
+  bool initialized = false;
 
 };

@@ -32,7 +32,7 @@ class Emulator
 		// Called when the user changes the game
 		// 	mem is the content of the file
 		// 	s is the size of the file
-		void changeCartridge(FileContent& f);
+		void changeCartridge(uint8_t *data);
 
 		// Returns a buffer ready to be displayed directly on screen
 		const uint8_t * getRenderedPixels();

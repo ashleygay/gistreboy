@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <file_content.hpp>
-
 #include <gtk/gtk.h>
 #include <debug.hpp>
 #include <iostream>
@@ -43,21 +41,19 @@ class Helper
 class OpenButtonHelper : public Helper
 {
 	public:
-		OpenButtonHelper(GtkWidget * w, size_t min_size, str_to_str attributes):
-				Helper(w), _min_size(min_size),
+		OpenButtonHelper(GtkWidget * w, str_to_str attributes):
+				Helper(w),
 				_attributes(attributes){}
 
 	public:
 		GFile* open_file_with_dialog(void);
 
 		// Get the content of a file in an allocated buffer form
-		// TODO: return a struct FileContent {memory, size}
-		FileContent load_content(GFile* f);
+		uint8_t* load_content(GFile* f);
 
 	private:
 		// Conditions that the file must meet in order to be considered
 		// correct and be successfully opened by the dialog box
-		bool verify_min_size(GFile * f);
 		bool verify_attributes(GFile * f);
 
 	private:

@@ -7,23 +7,23 @@
 
 #include <open_button_helper.hpp>
 
-FileContent OpenButtonHelper::load_content(GFile* gf)
+uint8_t* OpenButtonHelper::load_content(GFile* gf)
 {
 	std::ifstream file(g_file_get_path(gf), std::ios::in | std::ios::binary);
 
 	if (!file.is_open())
-		return {NULL, 0};
+		return NULL;
 
 	size_t size = 0;
 
+	// We compute the size of the file.
 	file.seekg(0, std::ios::end);
     	size = file.tellg();
-	// We reset the position of the cursor to the beginning of the file
 	file.seekg(0, std::ios::beg);
 
 	DEBUG_STREAM << "Copying file into buffer size : " << size << std::endl;
 	DEBUG_STREAM << "Buffer is :" << std::endl;
-	// We get the content of the file
+	// We copy the content of the file
 	uint8_t * mem = (uint8_t *)malloc(size);
 	if (mem) {
 		for (uint i = 0; i < size; ++i) {
@@ -32,7 +32,7 @@ FileContent OpenButtonHelper::load_content(GFile* gf)
 		}
 	}
 
-	return {mem, size};
+	return mem;
 }
 
 bool OpenButtonHelper::verify_attributes(GFile * f)
@@ -69,21 +69,6 @@ bool OpenButtonHelper::verify_attributes(GFile * f)
 	return true;
 }
 
-bool OpenButtonHelper::verify_min_size(GFile * f)
-{
-	GFileInfo *info = g_file_query_info(f,
-					    "standard::size",
-					    G_FILE_QUERY_INFO_NONE,
-					    NULL,
-					    NULL);
-	if (!info)
-		return 0;
-
-	size_t size = g_file_info_get_size(info);
-	DEBUG_STREAM << "Min size is " << _min_size << " file size is " << size << std::endl;
-	return size >= _min_size;
-}
-
 GFile* OpenButtonHelper::open_file_with_dialog(void)
 {
 	GtkWidget *dialog;	
@@ -115,7 +100,7 @@ GFile* OpenButtonHelper::open_file_with_dialog(void)
 			char * filename = gtk_file_chooser_get_filename (chooser);
 			DEBUG_STREAM << "Opening : " << filename << std::endl;
 			g = g_file_new_for_path(filename);
-			file_ok = verify_attributes(g) && verify_min_size(g);
+			file_ok = verify_attributes(g);
 			if (!file_ok) message_dialog_display("Could not open file %s", filename);
 			g_free(filename);
 		}

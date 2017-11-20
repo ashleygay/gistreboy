@@ -35,7 +35,7 @@ class GameBoy
 		// Execute a single step loop of the emulator
 		void step();
 
-		void changeGame(uint8_t * mem, size_t s);
+		void changeGame(uint8_t *mem);
 
 		bool isRunning() {return _running;}
 		void stop() {_running = false;}
@@ -51,7 +51,7 @@ class GameBoy
 		// handles each processor/clock/memory/lcd.
 
 		Processor p;
-//		Memory m;
+		Memory m;
 		//LCD lcd;
 
 

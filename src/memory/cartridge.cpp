@@ -1,9 +1,14 @@
 #include <cartridge.hpp>
 
-Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
-			uint8_t *cart) :
+Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range) :
 			MemoryObject(range)
+{}
+
+
+void Cartridge::change_game(uint8_t *cart)
 {
+	initialized = true;
+
 	rom.fill(0);
   	ram.fill(0);
 
@@ -179,6 +184,7 @@ Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
     		}
   	}
 }
+
 
 uint8_t Cartridge::read(uint16_t address)
 {
