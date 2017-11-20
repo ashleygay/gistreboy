@@ -30,8 +30,56 @@ void Processor::enableIMEDelay()
 
 int Processor::step()
 {
+	if (halted || stopped) {
+		if (halted) {
+			// Check that the selected interrupt is triggered
+			std::bitset<8> IF = 0; /*_m->getInterruptFlags();*/
+			std::bitset<8> IE = 0; /*_m->getInterruptEnable();*/
+			std::bitset<8> res = IF & IE;
+			int inter = res.any();
+			if (inter) {
+
+				//The handler will not do the interrupt
+				// if IME is not set.
+
+				(void)_handler->doInterrupt();
+				halted = false;
+				return 4;
+			}
+			else
+				return 0;
+		}
+		else {
+			// Check if any selected button is pressed
+			uint8_t joypad_status = 0; /*_m->read(0xFF00);*/
+
+			// Get bits [0-3] check that a button is pressed
+			int pressed = ~joypad_status & 0x0F;
+
+			// Get bits [4-5], check that joypad is enabled
+			int selected = ~joypad_status & 0x30;
+
+			if (pressed && selected) {
+				// We end STOP mode.
+				stopped = false;
+				return 4;
+			}
+		}
+		return 0;
+	}
 	_fetchNextInstruction();
 	return _execCurrentInstruction();
+}
+
+
+void Processor::HALT()
+{
+	halted = false;
+}
+
+void Processor::STOP()
+{
+	stopped = true;
 }
 
 /* PRIVATE METHODS */

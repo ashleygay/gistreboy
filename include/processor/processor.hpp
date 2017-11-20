@@ -55,9 +55,6 @@ class Processor {
 		DRegister SP;
 
 	private:
-		// Enable/disable all interrupts
-		bool IME = true;
-
 		// Boolean is set to false when we end the bootcode.
 		bool isBooting = true;
 
@@ -72,6 +69,11 @@ class Processor {
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
 		Memory *_mem = nullptr;
+
+		// They cannot be both true at the same time
+		bool halted = false;
+		bool stopped = false;
+
 	public:
 		//Function used by the gameboy class
 		// returns the number of cycles that takes the instruction
@@ -96,6 +98,24 @@ class Processor {
 		// Delayed version should be called from EI instruction only
 		void enableIMEDelay();
 
+		// Enter halt mode,
+		// If (IF & IE) => an interrupt is enabled and active
+		// then we leave halt mode
+		// the behavior is then dependant on IME
+		//
+		// if IME is active we execute the interrupt and clean IF.
+		//
+		// if IME is not active then we continue execution of
+		// instructions and we do not clean IF.
+		void HALT();
+
+
+		// Enter stop mode
+		// Disable all interrupts except JOYPAD
+		// The programmer should clear IE before stopping
+		// The programmer must select bits prior to entering
+		// stop mode in order to be able to leave it correctly
+		void STOP();
 	private:
 		int _execCurrentInstruction();
 
