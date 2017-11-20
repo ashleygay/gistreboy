@@ -27,8 +27,9 @@ uint8_t* OpenButtonHelper::load_content(GFile* gf)
 	uint8_t * mem = (uint8_t *)malloc(size);
 	if (mem) {
 		for (uint i = 0; i < size; ++i) {
-			mem[i] = file.get(); 
-			DEBUG_STREAM << (char)mem[i];
+			mem[i] = file.get();
+			DEBUG_STREAM << "0x" << std::hex << (int)mem[i]
+				     << std::dec << ", ";
 		}
 	}
 
