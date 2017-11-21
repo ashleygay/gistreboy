@@ -13,7 +13,6 @@
 
 #include <gameboy.hpp>
 #include <debug.hpp>
-#include <file_content.hpp>
 
 #include <iostream>
 #include <array>

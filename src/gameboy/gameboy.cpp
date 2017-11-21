@@ -27,11 +27,12 @@ void GameBoy::step()
 			boost::posix_time::nanoseconds(GB_CYCLE));
 
 	if (!_handler_cycles)
-		_handler_cycles = _handler.doInterrupt();
-/*
-	if (!_checkInterrupts())
-		_checkCPU();
+	 	_handler_cycles = _handler.doInterrupt();
 
+	// If there was no interrupt to service we execute the next instruction
+//	if (!_handler_cycles)
+//		_cpu_cycles = p.step();
+/*
 	_checkLCD();
 */
 	// wait for chrono here
@@ -42,10 +43,10 @@ void GameBoy::step()
 void GameBoy::_wireComponents()
 {
 	// TODO: Init all here
-	//p.setMemory(&m);
+	p.setMemory(&m);
 	p.setInterruptHandler(&_handler);
 	// lcd.setMemory(&m);
-	//_handler.setMemory(&m);
+	_handler.setMemory(&m);
 }
 
 void GameBoy::_clockCycle()
