@@ -30,6 +30,8 @@ void Processor::enableIMEDelay()
 
 int Processor::step()
 {
+	if (!_handler || !_mem)
+		throw std::runtime_error("Memory or handler pointer not set.");
 	if (halted || stopped) {
 		if (halted) {
 			// Check that the selected interrupt is triggered
@@ -51,7 +53,7 @@ int Processor::step()
 		}
 		else {
 			// Check if any selected button is pressed
-			uint8_t joypad_status = 0; /*_m->read(0xFF00);*/
+			uint8_t joypad_status = 0; _mem->read(0xFF00);
 
 			// Get bits [0-3] check that a button is pressed
 			int pressed = ~joypad_status & 0x0F;
