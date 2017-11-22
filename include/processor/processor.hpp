@@ -21,6 +21,7 @@ class Memory;
 #include <registers.hpp>
 #include <opcode.hpp>
 #include <atomic>
+#include <exception>
 
 class Processor {
 
@@ -54,9 +55,6 @@ class Processor {
 		DRegister SP;
 
 	private:
-		// Enable/disable all interrupts
-		bool IME = true;
-
 		// Boolean is set to false when we end the bootcode.
 		bool isBooting = true;
 
@@ -71,21 +69,21 @@ class Processor {
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
 		Memory *_mem = nullptr;
+
+		// They cannot be both true at the same time
+		bool halted = false;
+		bool stopped = false;
+
 	public:
-		// FIXME Those functions are used by the instructions to read/write
+		//Function used by the gameboy class
+		// returns the number of cycles that takes the instruction
+		int step();
+
+		// Those functions are used by the instructions to read/write
 		// memory values
-		uint8_t _read(uint16_t address)
-			{(void)address;return 42;/*return mem.read(address);*/}
+		uint8_t _read(uint16_t address);
 
-		void _write(uint8_t value, uint16_t address)
-			{(void)value;(void)address;/*mem.write(value, address);*/}
-
- 		// Get the number of cycles of the current instruction to execute
-		int getNbCycles() const;
-
-		// Fetch the next instruction/interrupt to do.
-		int fetchNextStep();
-		void execCurrentInstruction();
+		void _write(uint8_t value, uint16_t address);
 
 		void setInterruptHandler(InterruptHandler *handler)
 			{_handler = handler;}
@@ -94,14 +92,36 @@ class Processor {
 			{_mem = mem;}
 
 		// Enable/Disable IME
-		void enableIME() {/*handler->enableIME();*/}
-		// This version should be called from EI instruction only
-		void enableIMEDelay() {/*handler->enableIMEDelay();*/}
-		void disableIME() {/*handler->disableIME();*/}
+		void enableIME();
+		void disableIME();
 
+		// Delayed version should be called from EI instruction only
+		void enableIMEDelay();
+
+		// Enter halt mode,
+		// If (IF & IE) => an interrupt is enabled and active
+		// then we leave halt mode
+		// the behavior is then dependant on IME
+		//
+		// if IME is active we execute the interrupt and clean IF.
+		//
+		// if IME is not active then we continue execution of
+		// instructions and we do not clean IF.
+		void HALT();
+
+
+		// Enter stop mode
+		// Disable all interrupts except JOYPAD
+		// The programmer should clear IE before stopping
+		// The programmer must select bits prior to entering
+		// stop mode in order to be able to leave it correctly
+		void STOP();
 	private:
-		int _BUG(std::string str, int value);
-		int _fetchNextInstruction();
+		int _execCurrentInstruction();
+
+		void _BUG(std::string str, int value) const;
+
+		void _fetchNextInstruction();
 	public:
 		Processor(Processor const&) = delete;
 		void operator=(Processor const&)  = delete;
