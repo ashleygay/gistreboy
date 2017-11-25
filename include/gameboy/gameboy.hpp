@@ -39,7 +39,10 @@ class GameBoy
 
 		bool isRunning() {return _running;}
 		void stop() {_running = false;}
-		void start() {_running = true;}
+
+		// Tries to start the gameboy, if memory not set
+		// returns false.
+		bool readyToLaunch();
 
 	private:
 		void _resetComponents();
@@ -51,7 +54,7 @@ class GameBoy
 		// handles each processor/clock/memory/lcd.
 
 		Processor p;
-		Memory m;
+		Memory _mem;
 		//LCD lcd;
 
 

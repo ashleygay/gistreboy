@@ -33,10 +33,14 @@ void Emulator::_renderPixels()
 
 void Emulator::mainLoop(GameBoy& gb)
 {
+	//TODO: Display an error message if not ready
+	if (!gb.readyToLaunch()) {
+		DEBUG_STREAM << "Load a game first." << std::endl;
+		return;
+	}
+
 	while(gb.isRunning()) {
 		gb.step();
-		sleep(1);
-		std::cout << "STEP" << std::endl;
 	}
 }
 
@@ -45,7 +49,6 @@ void Emulator::start()
 	if (!gb.isRunning()) {
 		_future = std::async(std::launch::async,
 			Emulator::mainLoop, std::ref(gb));
-		gb.start();
 	}
 	else
 		std::cout << "Emulator already running" << std::endl;
@@ -57,10 +60,7 @@ void Emulator::stop()
 	try {
 		DEBUG_STREAM << "Stopping gameboy" << std::endl;
 		gb.stop();
-		DEBUG_STREAM << "Emulator waiting" << std::endl;
-		_future.wait();
-		DEBUG_STREAM << "Emulator waited" << std::endl;
-		_future.get(); // Future calls to wait() will be invalid.
+		_future.get();
 		DEBUG_STREAM << "Emulator stopped" << std::endl;
 	}
 	catch (const std::exception&) {

@@ -38,7 +38,7 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 
 	DEBUG_STREAM << "We give the pointer to the memory here."
 		     << std::endl;
-	//TODO: free the data pointer.
+	free(data);
 }
 
 void run_button_callback(GtkWidget * b, gpointer user_data)

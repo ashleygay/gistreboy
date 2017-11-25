@@ -8,10 +8,19 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy(): m(p)
+GameBoy::GameBoy(): _mem(p)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();
+}
+
+bool GameBoy::readyToLaunch()
+{
+	if (_mem.is_ready()) {
+		_running = true;
+		return true;
+	}
+	return false;
 }
 
 void GameBoy::step()
@@ -30,8 +39,8 @@ void GameBoy::step()
 	 	_handler_cycles = _handler.doInterrupt();
 
 	// If there was no interrupt to service we execute the next instruction
-//	if (!_handler_cycles)
-//		_cpu_cycles = p.step();
+	if (!_handler_cycles)
+		_cpu_cycles = p.step();
 /*
 	_checkLCD();
 */
@@ -43,10 +52,10 @@ void GameBoy::step()
 void GameBoy::_wireComponents()
 {
 	// TODO: Init all here
-	p.setMemory(&m);
+	p.setMemory(&_mem);
 	p.setInterruptHandler(&_handler);
 	// lcd.setMemory(&m);
-	_handler.setMemory(&m);
+	_handler.setMemory(&_mem);
 }
 
 void GameBoy::_clockCycle()
@@ -61,12 +70,12 @@ void GameBoy::_clockCycle()
 void GameBoy::_resetComponents()
 {
 	// TODO Reset components here
-	//p.reset();
+	_mem.reset();
 }
 
 void GameBoy::changeGame(uint8_t *mem)
 {
 	//TODO: memory copies the content of the pointer.
-	//_resetComponents();
-	m.change_game(mem);
+	_resetComponents();
+	_mem.change_game(mem);
 }

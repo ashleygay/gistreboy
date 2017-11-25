@@ -17,8 +17,18 @@ Memory::Memory(Processor& proc) : processor(proc),
 void Memory::change_game(uint8_t *cart)
 {
 	cartridge.change_game(cart);
+	_ready = true;
 }
 
+bool Memory::is_ready()
+{
+	return _ready;
+}
+
+void Memory::reset()
+{
+	_ready = false;
+}
 
 uint8_t Memory::read(uint16_t address)
 {
