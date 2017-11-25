@@ -95,16 +95,21 @@ int Processor::_execCurrentInstruction()
 void Processor::_fetchNextInstruction()
 {
 	uint16_t opcode = _mem->read(PC.value);
+	++PC.value;
+
 	if (!iset.isValidOpCode(opcode)) {
 		// We try the to get the instruction over 16bits
-		opcode = (opcode << 8) | _mem->read(++PC.value);
+		opcode = (opcode << 8) | _mem->read(PC.value);
 		if (!iset.isValidOpCode(opcode)) {
 			// We dont really care if the program crashes,
 			// the rom is bad or there is a bug.
 			_BUG("Unknown opcode : ", opcode);
 			throw std::runtime_error("Unknown opcode, check the logs");
 		}
+		else //OpCode is on 16bits, we increment PC for args
+			++PC.value;
 	}
+	DEBUG_STREAM << "Fetching instruction 0x"<< std::hex << opcode << std::dec << std::endl;
 	// Opcode is valid
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArgs args;
@@ -115,9 +120,12 @@ void Processor::_fetchNextInstruction()
 		uint16_t arg = 0;
 
 		int size = 0;
-		for (; size < currentInstruction->argSize(i); ++size)
-			arg = (arg << 8) | _mem->read(++PC.value);
+		for (; size < currentInstruction->argSize(i); ++size) {
+			arg = (arg << 8) | _mem->read(PC.value);
+			++PC.value;
+		}
 
+		DEBUG_STREAM << "Fetching argument 0x"<< std::hex << arg << std::dec << std::endl;
 		addShort(args, arg);
 	}
 	currentInstruction->setArgs(args);
