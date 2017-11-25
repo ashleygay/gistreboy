@@ -18,11 +18,13 @@ public :
 		std::vector<std::pair<uint16_t, uint16_t>> range);
 
 	uint8_t read(uint16_t address);
-	void write(uint16_t address, uint8_t byte);
+	void write(uint8_t byte, uint16_t address);
+
+	void dma_transfer(uint16_t beg_src, uint16_t end_src);
 
 	// FIXME: actually implement permissions
 	bool can_read(uint16_t address);
-	bool can_write(uint16_t address, uint8_t byte);
+	bool can_write(uint8_t byte, uint16_t address);
 
 	uint8_t get_lcd_control();
 	uint8_t get_lcd_status();

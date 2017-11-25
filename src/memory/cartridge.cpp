@@ -212,7 +212,7 @@ uint8_t Cartridge::read(uint16_t address)
 	return 0;
 }
 
-void Cartridge::write(uint16_t address, uint8_t byte)
+void Cartridge::write(uint8_t byte, uint16_t address)
 {
 	if (addr_in_range(address, 0xA000, 0xBFFF))
 		ram[address + get_current_ram_bank()*8192 - 0xA000] = byte;
@@ -248,7 +248,7 @@ bool Cartridge::can_read(uint16_t address)
 	return true;
 }
 
-bool Cartridge::can_write(uint16_t address, uint8_t byte)
+bool Cartridge::can_write(uint8_t byte, uint16_t address)
 {
 	return true;
 }
@@ -258,7 +258,7 @@ uint8_t Cartridge::get_current_rom_bank()
 	if (rom_ram_mode_)
 		return rom_bank_number;
 	else
-		return (ram_bank_number << 5)+rom_bank_number;
+		return (ram_bank_number << 5) | rom_bank_number;
 }
 
 uint8_t Cartridge::get_current_ram_bank()

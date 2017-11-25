@@ -14,17 +14,35 @@ uint8_t Video::read(uint16_t address)
 	return video_memory[address];
 }
 
-void Video::write(uint16_t address, uint8_t byte)
+void Video::write(uint8_t byte, uint16_t address)
 {
 	if (address == 0xFF40)
 	{
 		uint16_t beg_src = (byte << 8);
-		uint16_t end_src = (byte << 8) + (0x9F << 8);
-		//FIXME: implement DMA transfer
-		/*DMA_TRANSFER beg_src, end_src, 0xFE00, 0xFE9F*/
+		uint16_t end_src = (byte << 8) | 0x9F;
+
+		dma_transfer(beg_src, end_src);
+		
 	}
 
 	video_memory[address] = byte;
+}
+
+void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
+{
+	uint16_t beg_dest = 0xFE00;
+
+	uint16_t inc_src = beg_src;
+	uint16_t inc_dest = beg_dest;
+	uint8_t byte = 0;
+
+	while (inc_src <= end_src)
+	{
+		byte = _proc._read(inc_src);
+		_proc._write(byte, inc_dest);
+		inc_src++;
+		inc_dest++;
+	}
 }
 
 bool Video::can_read(uint16_t address)
@@ -33,7 +51,7 @@ bool Video::can_read(uint16_t address)
 	return true;
 }
 
-bool Video::can_write(uint16_t address, uint8_t byte)
+bool Video::can_write(uint8_t byte, uint16_t address)
 {
 	//FIXME
 	return true;

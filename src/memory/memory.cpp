@@ -40,12 +40,12 @@ uint8_t Memory::read(uint16_t address)
 		return memory[address];
 }
 
-void Memory::write(uint16_t address, uint8_t byte)
+void Memory::write(uint8_t byte, uint16_t address)
 {
 	if (cartridge.isInRange(address))
-		cartridge.write(address, byte);
+		cartridge.write(byte, address);
 	else if (video.isInRange(address))
-		video.write(address, byte);
+		video.write(byte, address);
 	else
 		memory[address] = byte;
 }

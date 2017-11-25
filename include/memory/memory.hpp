@@ -17,7 +17,7 @@ public :
 	Memory(Processor& proc);
 
   	uint8_t read(uint16_t address);
-  	void write(uint16_t address, uint8_t byte);
+  	void write(uint8_t byte, uint16_t address);
 
 	// Rebuild a cartridge with a new rom
 	void change_game(uint8_t *cart);

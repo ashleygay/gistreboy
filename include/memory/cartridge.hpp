@@ -20,11 +20,11 @@ public :
 	void change_game(uint8_t *cart);
 
 	uint8_t read(uint16_t address);
-	void write(uint16_t address, uint8_t byte);  
+	void write(uint8_t byte, uint16_t address);  
 
 	// FIXME: actually implement permissions
 	bool can_read(uint16_t address);
-	bool can_write(uint16_t address, uint8_t byte);
+	bool can_write(uint8_t byte, uint16_t address);
 
 	bool ram_enable();
 	bool has_boot();
