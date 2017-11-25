@@ -36,7 +36,7 @@ class Processor {
 			E.value = 0xD8;
 			H.value = 0x01;
 			L.value = 0x4D;
-			PC.value = 0x100;
+			PC.value = 0x0000;
 			SP.value = 0xfffe;
 		}
 
