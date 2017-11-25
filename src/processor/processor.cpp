@@ -99,7 +99,7 @@ void Processor::_fetchNextInstruction()
 
 	if (!iset.isValidOpCode(opcode)) {
 		// We try the to get the instruction over 16bits
-		opcode = (opcode << 8) | _mem->read(PC.value);
+		opcode = (opcode >> 8) | (_mem->read(PC.value) << 8);
 		if (!iset.isValidOpCode(opcode)) {
 			// We dont really care if the program crashes,
 			// the rom is bad or there is a bug.
@@ -121,7 +121,7 @@ void Processor::_fetchNextInstruction()
 
 		int size = 0;
 		for (; size < currentInstruction->argSize(i); ++size) {
-			arg = (arg << 8) | _mem->read(PC.value);
+			arg = (arg >> 8) | (_mem->read(PC.value) << 8);
 			++PC.value;
 		}
 
