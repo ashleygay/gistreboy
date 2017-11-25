@@ -32,6 +32,11 @@ public :
 
 	void reset();
 
+	//Get specific values in memory
+
+	uint8_t get_interrupt_flag();
+	uint8_t get_interrupt_enable();
+
 private :
 
 	std::array<uint8_t, 0x10000> memory;

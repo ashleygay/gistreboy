@@ -11,6 +11,8 @@ Memory::Memory(Processor& proc) : processor(proc),
 			    std::make_pair(0xFE00, 0xFE9F)})
 {
 	memory.fill(0);
+	memory[0xFFFF] = 0xFF; /* interrupt enable */
+	memory[0xFF0F] = 0xFF; /* interrupt flag */
 }
 
 
@@ -48,6 +50,16 @@ void Memory::write(uint8_t byte, uint16_t address)
 		video.write(byte, address);
 	else
 		memory[address] = byte;
+}
+
+uint8_t Memory::get_interrupt_enable()
+{
+	return memory[0xFFFF];
+}
+
+uint8_t Memory::get_interrupt_flag()
+{
+	return memory[0xFF0F];
 }
 
 Video& Memory::get_video()
