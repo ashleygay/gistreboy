@@ -234,6 +234,7 @@ InstructionSet::InstructionSet()
 	add_instr(SCF)
 
 
+	add_instr(BIT_7H)
 	  /*add_instr(BIT_BA)
 	add_instr(BIT_BB)
 	add_instr(BIT_BC)

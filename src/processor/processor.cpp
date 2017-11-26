@@ -96,10 +96,10 @@ void Processor::_fetchNextInstruction()
 {
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
-
+	DEBUG_STREAM << "Fetching 8 first bits 0x"<< std::hex << opcode << std::dec << std::endl;
 	if (!iset.isValidOpCode(opcode)) {
 		// We try the to get the instruction over 16bits
-		opcode = (opcode >> 8) | (_mem->read(PC.value) << 8);
+		opcode = (opcode << 8) | (_mem->read(PC.value));
 		if (!iset.isValidOpCode(opcode)) {
 			// We dont really care if the program crashes,
 			// the rom is bad or there is a bug.

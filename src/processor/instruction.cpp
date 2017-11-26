@@ -896,19 +896,22 @@ CCF_def()
 
 SCF_def() 
 
-/*#define BIT_BITX_def(bit, reg)		\
+#define BIT_BITX_def(bit, reg)		\
   void BIT_##bit##reg::exec(Processor *p)\
   {\
-    p = p;\
+    if (p->reg.value & (1 << bit))\
+      p->flag.setFlag(FlagRegister::Flag::ZERO);\
   }
 
+BIT_BITX_def(7, H)
+/*
 BIT_BITX_def(bit, A)
 BIT_BITX_def(bit, B)
 BIT_BITX_def(bit, C)
 BIT_BITX_def(bit, D)
 BIT_BITX_def(bit, E)
 BIT_BITX_def(bit, H)
-BIT_BITX_def(bit, L)  
+BIT_BITX_def(bit, L)
 */
 
 #define RRC_RegX_def(reg)                  \

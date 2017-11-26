@@ -16,6 +16,9 @@ void setup_gui(GtkApplication *app);
 
 using callback_ptr = void (*)(GtkWidget*, gpointer);
 
+// TODO: make buttons work on Ubuntu
+// They work on archlinux fine
+
 // XMacro to define all the buttons from the interface.
 // menuBar or subMenu to choose where the button will be added
 #define MENU_SETUP \

@@ -227,7 +227,7 @@ decl_instruction(OR_Aaddress, 0xF6, 8, 1, 2, 0)
 
 // XOR Instructions
 
-decl_instruction(XOR_AA, 0xAF, 4, 2, 1, 1)
+decl_instruction(XOR_AA, 0xAF, 4, 0, 0, 0)
 decl_instruction(XOR_AB, 0xA8, 4, 2, 1, 1)
 decl_instruction(XOR_AC, 0xA9, 4, 2, 1, 1)
 decl_instruction(XOR_AD, 0xAA, 4, 2, 1, 1)
@@ -291,13 +291,15 @@ decl_instruction(SCF, 0x37, 4, 0, 0, 0)
 
 // BIT Instructions
 
-/*decl_instruction(BIT_BA, 0xCB47, 8, 2, 1, 1)
+decl_instruction(BIT_7H, 0xCB7C, 8, 0, 0, 0)
+
+/*decl_instruction(BIT_BA, 0xCB47, 8, 1, 1, 0)
 decl_instruction(BIT_BB, 0xCB40, 8, 2, 1, 1)
 decl_instruction(BIT_BC, 0xCB41, 8, 2, 1, 1)
 decl_instruction(BIT_BD, 0xCB42, 8, 2, 1, 1)
 decl_instruction(BIT_BE, 0xCB43, 8, 2, 1, 1)
 decl_instruction(BIT_BH, 0xCB44, 8, 2, 1, 1)
-decl_instruction(BIT_BL, 0xCB45, 8, 2, 1, 1)
+decl_instruction(BIT_BL, 0xCB45, 8, 1, 1, 0)
 //decl_instruction(SWAP_HLX, 0xCB36, 16, 1, 1, 0)*/
 
 // RRC Instructions
