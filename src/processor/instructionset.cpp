@@ -321,6 +321,12 @@ InstructionSet::InstructionSet()
 	add_instr(JRNC)
 	add_instr(JRC)
 
+	add_instr(CALL)
+	add_instr(CALLNZ)
+	add_instr(CALLZ)
+	add_instr(CALLNC)
+	add_instr(CALLC)
+
         #undef add_instr
 }
 

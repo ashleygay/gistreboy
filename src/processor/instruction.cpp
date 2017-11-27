@@ -49,6 +49,14 @@ static uint8_t set_bit_to(uint8_t value, uint8_t bit, bool on)
   return on ? set_bit(value, bit) : clear_bit(value, bit);
 }
 
+static void _callPush(Processor *p)
+{
+	uint8_t PC_low = p->PC.value & 0xFF;
+	uint8_t PC_high = p->PC.value << 8;
+	p->_write(PC_low, p->SP.value--);
+	p->_write(PC_high, p->SP.value--);
+}
+
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -1157,4 +1165,41 @@ void JRC::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::CARRY))
 		p->PC.value = (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void CALL::exec(Processor *p)
+{
+	_callPush(p);
+}
+
+void CALLNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+void CALLZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+void CALLNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+void CALLC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
 }
