@@ -64,7 +64,7 @@ SRL(n)		 -> done
 
 BIT(b, r)	 -> done
 SET(b, r)	 -> done
-RES(b, r)	 -> not done
+RES(b, r)	 -> done
 
 JP(nn) 		 -> not done
 JP(cc, nn)	 -> not done

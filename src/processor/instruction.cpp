@@ -1101,6 +1101,89 @@ SET_BITHL_def(5)
 SET_BITHL_def(6)
 SET_BITHL_def(7)  
 
+
+#define RES_BITX_def(bit, reg)          \
+  void RES_##bit##reg::exec(Processor *p)\
+  {\
+    auto tmp = clear_bit(p->reg.value, bit);\
+    p->reg.value = tmp;\
+  }  
+
+RES_BITX_def(0, A)
+RES_BITX_def(1, A)
+RES_BITX_def(2, A)
+RES_BITX_def(3, A)
+RES_BITX_def(4, A)
+RES_BITX_def(5, A)
+RES_BITX_def(6, A)
+RES_BITX_def(7, A)
+RES_BITX_def(0, B)
+RES_BITX_def(1, B)
+RES_BITX_def(2, B)
+RES_BITX_def(3, B)
+RES_BITX_def(4, B)
+RES_BITX_def(5, B)
+RES_BITX_def(6, B)
+RES_BITX_def(7, B)
+RES_BITX_def(0, C)
+RES_BITX_def(1, C)
+RES_BITX_def(2, C)
+RES_BITX_def(3, C)
+RES_BITX_def(4, C)
+RES_BITX_def(5, C)
+RES_BITX_def(6, C)
+RES_BITX_def(7, C)
+RES_BITX_def(0, D)
+RES_BITX_def(1, D)
+RES_BITX_def(2, D)
+RES_BITX_def(3, D)
+RES_BITX_def(4, D)
+RES_BITX_def(5, D)
+RES_BITX_def(6, D)
+RES_BITX_def(7, D)          
+RES_BITX_def(0, E)
+RES_BITX_def(1, E)
+RES_BITX_def(2, E)
+RES_BITX_def(3, E)
+RES_BITX_def(4, E)
+RES_BITX_def(5, E)
+RES_BITX_def(6, E)
+RES_BITX_def(7, E)
+RES_BITX_def(0, H)
+RES_BITX_def(1, H)
+RES_BITX_def(2, H)
+RES_BITX_def(3, H)
+RES_BITX_def(4, H)
+RES_BITX_def(5, H)
+RES_BITX_def(6, H)
+RES_BITX_def(7, H)
+RES_BITX_def(0, L)
+RES_BITX_def(1, L)
+RES_BITX_def(2, L)
+RES_BITX_def(3, L)
+RES_BITX_def(4, L)
+RES_BITX_def(5, L)
+RES_BITX_def(6, L)
+RES_BITX_def(7, L)             
+
+#define RES_BITHL_def(bit)          \
+  void RES_##bit##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    auto temp = clear_bit(tmp, bit);\
+    p->L.value = temp & 0xFF;\
+    p->H.value = temp << 8;\
+  }
+
+RES_BITHL_def(0)
+RES_BITHL_def(1)
+RES_BITHL_def(2)
+RES_BITHL_def(3)
+RES_BITHL_def(4)
+RES_BITHL_def(5)
+RES_BITHL_def(6)
+RES_BITHL_def(7)  
+
 #define RRC_RegX_def(reg)                  \
   void RRC_##reg##X::exec(Processor *p)\
   {\
