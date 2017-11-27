@@ -307,6 +307,19 @@ InstructionSet::InstructionSet()
 	add_instr(SRL_HX)
 	add_instr(SRL_LX)
 	//add_instr(SRL_HLX) 
+	
+
+	add_instr(JP)
+	add_instr(JPNZ)
+	add_instr(JPZ)
+	add_instr(JPNC)
+	add_instr(JPC)
+	add_instr(JPHL)
+	add_instr(JR)
+	add_instr(JRNZ)
+	add_instr(JRZ)
+	add_instr(JRNC)
+	add_instr(JRC)
 
         #undef add_instr
 }

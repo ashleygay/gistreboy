@@ -1094,3 +1094,67 @@ SRL_RegX_def(E)
 SRL_RegX_def(H)
 SRL_RegX_def(L)
 //SRL_RegX_def(HL) 
+
+
+void JP::exec(Processor *p)
+{
+	p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPHL::exec(Processor *p)
+{
+	p->PC.value = p->L.value | (p->H.value >> 8);
+}
+
+void JR::exec(Processor *p)
+{
+	p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value = (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
