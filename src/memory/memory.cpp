@@ -57,7 +57,7 @@ uint8_t Memory::get_interrupt_enable()
 	return memory[0xFFFF];
 }
 
-uint8_t Memory::get_interrupt_flag()
+uint8_t Memory::get_interrupt_flags()
 {
 	return memory[0xFF0F];
 }

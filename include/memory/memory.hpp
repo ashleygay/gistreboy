@@ -32,9 +32,9 @@ public :
 
 	void reset();
 
-	//Get specific values in memory
+	// Get specific values in memory
 
-	uint8_t get_interrupt_flag();
+	uint8_t get_interrupt_flags();
 	uint8_t get_interrupt_enable();
 
 private :
