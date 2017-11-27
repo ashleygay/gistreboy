@@ -35,13 +35,13 @@ AND(n)        	 -> done
 OR(n)		 -> done 
 XOR(n)           -> done 
 CP(n)            -> done 
-INC(n)           -> done (HL not done)
-DEC(n)           -> done (hl not done)
+INC(n)           -> done 
+DEC(n)           -> done 
 
 INC(nn)		 -> not done
 DEC(nn)		 -> not done
 
-SWAP(n)		 -> done (HL not done)
+SWAP(n)		 -> done
 
 DAA		 -> done
 CPL		 -> done
@@ -53,14 +53,14 @@ STOP		 -> not done
 DI		 -> not done
 EI		 -> not done
 
-RLC(n)		 -> done (hl not done) 
-RL(n)		 -> done (hl not done) 
-RRC(n)		 -> done (hl not done) 
-RR(n)		 -> done (hl not done) 
+RLC(n)		 -> done  
+RL(n)		 -> done  
+RRC(n)		 -> done 
+RR(n)		 -> done  
 
-SLA(n)		 -> done (hl not done) 
-SRA(n)		 -> done (hl not done)
-SRL(n)		 -> done (hl not done) 
+SLA(n)		 -> done  
+SRA(n)		 -> done 
+SRL(n)		 -> done 
 
 BIT(b, r)	 -> not done
 SET(b, r)	 -> not done
