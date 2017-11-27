@@ -62,8 +62,8 @@ SLA(n)		 -> done
 SRA(n)		 -> done 
 SRL(n)		 -> done 
 
-BIT(b, r)	 -> not done
-SET(b, r)	 -> not done
+BIT(b, r)	 -> done
+SET(b, r)	 -> done
 RES(b, r)	 -> not done
 
 JP(nn) 		 -> not done

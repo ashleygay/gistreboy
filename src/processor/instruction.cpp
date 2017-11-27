@@ -937,10 +937,169 @@ SCF_def()
   {\
     if (p->reg.value & (1 << bit))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
+    p->flag.unsetFlag(FlagRegister::Flag::SUBTRACT);\
+    p->flag.setFlag(FlagRegister::Flag::HALFCARRY);\
+  }
+  
+BIT_BITX_def(0, A)  
+BIT_BITX_def(1, A)
+BIT_BITX_def(2, A)
+BIT_BITX_def(3, A)
+BIT_BITX_def(4, A)
+BIT_BITX_def(5, A)
+BIT_BITX_def(6, A)
+BIT_BITX_def(7, A)
+BIT_BITX_def(0, B)
+BIT_BITX_def(1, B)
+BIT_BITX_def(2, B)
+BIT_BITX_def(3, B)
+BIT_BITX_def(4, B)
+BIT_BITX_def(5, B)
+BIT_BITX_def(6, B)
+BIT_BITX_def(7, B) 
+BIT_BITX_def(0, C)
+BIT_BITX_def(1, C)
+BIT_BITX_def(2, C)
+BIT_BITX_def(3, C)
+BIT_BITX_def(4, C)
+BIT_BITX_def(5, C)
+BIT_BITX_def(6, C)
+BIT_BITX_def(7, C)
+BIT_BITX_def(0, D)
+BIT_BITX_def(1, D)
+BIT_BITX_def(2, D)
+BIT_BITX_def(3, D)
+BIT_BITX_def(4, D)
+BIT_BITX_def(5, D)
+BIT_BITX_def(6, D)
+BIT_BITX_def(7, D)
+BIT_BITX_def(0, E)
+BIT_BITX_def(1, E)
+BIT_BITX_def(2, E)
+BIT_BITX_def(3, E)
+BIT_BITX_def(4, E)
+BIT_BITX_def(5, E)
+BIT_BITX_def(6, E)
+BIT_BITX_def(7, E)
+BIT_BITX_def(0, H)
+BIT_BITX_def(1, H)
+BIT_BITX_def(2, H)
+BIT_BITX_def(3, H)
+BIT_BITX_def(4, H)
+BIT_BITX_def(5, H)
+BIT_BITX_def(6, H)
+BIT_BITX_def(7, H)
+BIT_BITX_def(0, L)
+BIT_BITX_def(1, L)
+BIT_BITX_def(2, L)
+BIT_BITX_def(3, L)
+BIT_BITX_def(4, L)
+BIT_BITX_def(5, L)
+BIT_BITX_def(6, L)
+BIT_BITX_def(7, L) 
+
+#define BIT_BITHL_def(bit)          \
+  void BIT_##bit##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    if (tmp & (1 << bit))\
+      p->flag.setFlag(FlagRegister::Flag::ZERO);\
+    p->flag.unsetFlag(FlagRegister::Flag::SUBTRACT);\
+    p->flag.setFlag(FlagRegister::Flag::HALFCARRY);\
+ }
+
+BIT_BITHL_def(0)
+BIT_BITHL_def(1)
+BIT_BITHL_def(2)
+BIT_BITHL_def(3)
+BIT_BITHL_def(4)
+BIT_BITHL_def(5)
+BIT_BITHL_def(6)
+BIT_BITHL_def(7)  
+
+
+#define SET_BITX_def(bit, reg)          \
+  void SET_##bit##reg::exec(Processor *p)\
+  {\
+    auto tmp = set_bit(p->reg.value, bit);\
+    p->reg.value = tmp;\
+  }    
+
+SET_BITX_def(0, A)
+SET_BITX_def(1, A)
+SET_BITX_def(2, A)
+SET_BITX_def(3, A)
+SET_BITX_def(4, A)
+SET_BITX_def(5, A)
+SET_BITX_def(6, A)
+SET_BITX_def(7, A)
+SET_BITX_def(0, B)
+SET_BITX_def(1, B)
+SET_BITX_def(2, B)
+SET_BITX_def(3, B)
+SET_BITX_def(4, B)
+SET_BITX_def(5, B)
+SET_BITX_def(6, B)
+SET_BITX_def(7, B)
+SET_BITX_def(0, C)
+SET_BITX_def(1, C)
+SET_BITX_def(2, C)
+SET_BITX_def(3, C)
+SET_BITX_def(4, C)
+SET_BITX_def(5, C)
+SET_BITX_def(6, C)
+SET_BITX_def(7, C)
+SET_BITX_def(0, D)
+SET_BITX_def(1, D)
+SET_BITX_def(2, D)
+SET_BITX_def(3, D)
+SET_BITX_def(4, D)
+SET_BITX_def(5, D)
+SET_BITX_def(6, D)
+SET_BITX_def(7, D)
+SET_BITX_def(0, E)
+SET_BITX_def(1, E)
+SET_BITX_def(2, E)
+SET_BITX_def(3, E)
+SET_BITX_def(4, E)
+SET_BITX_def(5, E)
+SET_BITX_def(6, E)
+SET_BITX_def(7, E)
+SET_BITX_def(0, H)
+SET_BITX_def(1, H)
+SET_BITX_def(2, H)
+SET_BITX_def(3, H)
+SET_BITX_def(4, H)
+SET_BITX_def(5, H)
+SET_BITX_def(6, H)
+SET_BITX_def(7, H)
+SET_BITX_def(0, L)
+SET_BITX_def(1, L)
+SET_BITX_def(2, L)
+SET_BITX_def(3, L)
+SET_BITX_def(4, L)
+SET_BITX_def(5, L)
+SET_BITX_def(6, L)
+SET_BITX_def(7, L)  
+
+
+#define SET_BITHL_def(bit)          \
+  void SET_##bit##HL::exec(Processor *p)\
+  {\
+    auto tmp = HLReadDereference(p);\
+    auto temp = set_bit(tmp, bit);\
+    p->L.value = temp & 0xFF;\
+    p->H.value = temp << 8;\
   }
 
-BIT_BITX_def(7, H)
-
+SET_BITHL_def(0)
+SET_BITHL_def(1)
+SET_BITHL_def(2)
+SET_BITHL_def(3)
+SET_BITHL_def(4)
+SET_BITHL_def(5)
+SET_BITHL_def(6)
+SET_BITHL_def(7)  
 
 #define RRC_RegX_def(reg)                  \
   void RRC_##reg##X::exec(Processor *p)\
