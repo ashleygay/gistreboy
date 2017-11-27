@@ -14,6 +14,14 @@ void NYI(GtkWidget * b, gpointer user_data)
 		    << "\" not yet implemented." << std::endl;
 }
 
+gboolean key_pressed_callback(GtkWidget *widget, GdkEventKey *event)
+{
+	if (!event) return false;
+
+	DEBUG_STREAM << "Key pressed " << gdk_keyval_name(event->keyval) << std::endl;
+	return true;
+}
+
 void stop_callback(GtkWidget * w, gpointer user_data)
 {
 	(void)w;
@@ -67,6 +75,7 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 	height = gtk_widget_get_allocated_height(w);
 
 //	std::this_thread::sleep_for(2s);
+//	sleep(0.5);
 //	DEBUG_STREAM << "Dimensions : " << width  << " x " << height << std::endl;
 
 	gtk_render_background(context, cr, 0, 0, width, height);

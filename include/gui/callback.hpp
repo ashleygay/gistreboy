@@ -38,3 +38,5 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data);
 
 // Callback that will be called to trigger the draw event on the display surface
 int trigger_draw(GtkWidget * area, GdkFrameClock * c, gpointer user_data);
+
+gboolean key_pressed_callback(GtkWidget *widget, GdkEventKey *event);
