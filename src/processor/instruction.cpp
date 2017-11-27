@@ -57,6 +57,10 @@ static void _callPush(Processor *p)
 	p->_write(PC_high, p->SP.value--);
 }
 
+/////////////////////////////////////
+/////////////// LOADS ///////////////
+/////////////////////////////////////
+
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -320,6 +324,9 @@ void LD_HLSPn::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 }
 
+/////////////////////////////////////
+///////////// PUSH-POP //////////////
+/////////////////////////////////////
 
 void PUSH_BC::exec(Processor *p)
 {
@@ -1103,6 +1110,9 @@ SRL_RegX_def(H)
 SRL_RegX_def(L)
 //SRL_RegX_def(HL) 
 
+/////////////////////////////////////
+/////////////// JUMPS ///////////////
+/////////////////////////////////////
 
 void JP::exec(Processor *p)
 {
@@ -1166,6 +1176,10 @@ void JRC::exec(Processor *p)
 	if ( p->flag.getFlag(FlagRegister::CARRY))
 		p->PC.value = (int8_t) boost::get<uint8_t>(this->_args[0]);
 }
+
+/////////////////////////////////////
+/////////////// CALLS ///////////////
+/////////////////////////////////////
 
 void CALL::exec(Processor *p)
 {
