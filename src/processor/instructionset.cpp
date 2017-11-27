@@ -326,6 +326,15 @@ InstructionSet::InstructionSet()
 	add_instr(CALLZ)
 	add_instr(CALLNC)
 	add_instr(CALLC)
+	
+	add_instr(RST_0x00)
+	add_instr(RST_0x08)
+	add_instr(RST_0x10)
+	add_instr(RST_0x18)
+	add_instr(RST_0x20)
+	add_instr(RST_0x28)
+	add_instr(RST_0x30)
+	add_instr(RST_0x38)
 
         #undef add_instr
 }

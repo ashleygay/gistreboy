@@ -396,3 +396,13 @@ decl_instruction(CALLNZ, 0xC4, 12, 1, 2, 0)
 decl_instruction(CALLZ, 0xCC, 12, 1, 2, 0)
 decl_instruction(CALLNC, 0xD4, 12, 1, 2, 0)
 decl_instruction(CALLC, 0xDC, 12, 1, 2, 0)
+
+
+decl_instruction(RST_0x00, 0xC7, 32, 0, 0, 0)
+decl_instruction(RST_0x08, 0xCF, 32, 0, 0, 0)
+decl_instruction(RST_0x10, 0xD7, 32, 0, 0, 0)
+decl_instruction(RST_0x18, 0xDF, 32, 0, 0, 0)
+decl_instruction(RST_0x20, 0xE7, 32, 0, 0, 0)
+decl_instruction(RST_0x28, 0xEF, 32, 0, 0, 0)
+decl_instruction(RST_0x30, 0xF7, 32, 0, 0, 0)
+decl_instruction(RST_0x38, 0xFF, 32, 0, 0, 0)

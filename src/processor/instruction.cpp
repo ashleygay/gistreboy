@@ -1217,3 +1217,24 @@ void CALLC::exec(Processor *p)
 		p->PC.value = boost::get<uint16_t>(this->_args[0]);
 	}
 }
+
+
+/////////////////////////////////////
+/////////////// RESET ///////////////
+/////////////////////////////////////
+
+#define RST_def(x) \
+	void RST_##x::exec(Processor *p) \
+	{\
+		_callPush(p);\
+		p->PC.value = x;\
+	}
+
+RST_def(0x00)
+RST_def(0x08)
+RST_def(0x10)
+RST_def(0x18)
+RST_def(0x20)
+RST_def(0x28)
+RST_def(0x30)
+RST_def(0x38)
