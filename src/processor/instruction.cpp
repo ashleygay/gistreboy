@@ -57,6 +57,14 @@ static void _callPush(Processor *p)
 	p->_write(PC_high, p->SP.value--);
 }
 
+static void _return(Processor *p)
+{
+	uint8_t PC_high = p->_read(p->SP.value++);
+	uint8_t PC_low = p->_read(p->SP.value++);
+
+	p->PC.value = PC_low | (PC_high >> 8);
+}
+
 /////////////////////////////////////
 /////////////// LOADS ///////////////
 /////////////////////////////////////
@@ -1238,3 +1246,37 @@ RST_def(0x20)
 RST_def(0x28)
 RST_def(0x30)
 RST_def(0x38)
+
+/////////////////////////////////////
+////////////// RETURNS //////////////
+/////////////////////////////////////
+
+
+void RET::exec(Processor *p)
+{
+	_return(p);
+}
+
+void RETNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO))
+		_return(p);
+}
+
+void RETZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO))
+		_return(p);
+}
+
+void RETNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY))
+		_return(p);
+}
+
+void RETC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY))
+		_return(p);
+}

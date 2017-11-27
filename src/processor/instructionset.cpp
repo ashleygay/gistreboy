@@ -336,6 +336,11 @@ InstructionSet::InstructionSet()
 	add_instr(RST_0x30)
 	add_instr(RST_0x38)
 
+	add_instr(RET)
+	add_instr(RETNZ)
+	add_instr(RETZ)
+	add_instr(RETNC)
+	add_instr(RETC)
         #undef add_instr
 }
 
