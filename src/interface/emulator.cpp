@@ -68,6 +68,11 @@ void Emulator::stop()
 	}
 }
 
+void Emulator::key_press(KeyPress press)
+{
+	display_key_press(press);
+}
+
 void Emulator::changeCartridge(uint8_t *data)
 {
 	stop();

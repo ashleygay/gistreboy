@@ -9,6 +9,7 @@
 #include <debug.hpp>
 #include <open_button_helper.hpp>
 #include <emulator.hpp>
+#include <keypress.hpp>
 
 #include <gtk/gtk.h>
 #include <unordered_map>

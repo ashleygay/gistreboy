@@ -7,6 +7,19 @@
 
 #include <callback.hpp>
 
+#include <unordered_map>
+static std::unordered_map<std::string, KeyPress> bindings =
+	{{"Up", KeyPress::UP},
+	 {"Down", KeyPress::DOWN},
+	 {"Left", KeyPress::LEFT},
+	 {"Right", KeyPress::RIGHT},
+	 {"h", KeyPress::A},
+	 {"j", KeyPress::B},
+	 {"k", KeyPress::START},
+	 {"l", KeyPress::SELECT},
+	};
+
+
 void NYI(GtkWidget * b, gpointer user_data)
 {
 	(void)user_data;
@@ -17,8 +30,12 @@ void NYI(GtkWidget * b, gpointer user_data)
 gboolean key_pressed_callback(GtkWidget *widget, GdkEventKey *event)
 {
 	if (!event) return false;
+	
+	std::string str(gdk_keyval_name(event->keyval));
+	//TODO: Implement a way to rebind keys
+	if (bindings.find(str) != bindings.end())
+		Emulator::getInstance().key_press(bindings[str]);
 
-	DEBUG_STREAM << "Key pressed " << gdk_keyval_name(event->keyval) << std::endl;
 	return true;
 }
 
