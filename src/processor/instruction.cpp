@@ -1492,3 +1492,23 @@ void SRL_HL::exec(Processor *p)
     p->L.value = temp & 0xFF;
     p->H.value = temp << 8;
 } 
+
+void HALT::exec(Processor *p)
+{
+  p->HALT();
+}
+
+void STOP::exec(Processor *p)
+{
+  p->STOP();
+} 
+
+void EI::exec(Processor *p)
+{
+  p->enableIME();
+}
+
+void DI::exec(Processor *p)
+{
+  p->disableIME();
+} 

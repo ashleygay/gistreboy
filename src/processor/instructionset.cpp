@@ -514,6 +514,13 @@ InstructionSet::InstructionSet()
 	add_instr(SRL_LX)
 	add_instr(SRL_HL) 
 
+        add_instr(HALT)
+
+	add_instr(STOP)
+
+	add_instr(EI)
+	add_instr(DI)
+	  
         #undef add_instr
 }
 

@@ -589,3 +589,16 @@ decl_instruction(SRL_EX, 0xCB3B, 8, 0, 0, 0)
 decl_instruction(SRL_HX, 0xCB3C, 8, 0, 0, 0)
 decl_instruction(SRL_LX, 0xCB3D, 8, 0, 0, 0)
 decl_instruction(SRL_HL, 0xCB3E, 16, 0, 0, 0) 
+
+//HALT
+
+decl_instruction(HALT, 0x76, 4, 0, 0, 0)
+
+// STOP
+
+decl_instruction(STOP, 0x10, 4, 0, 0, 0) 
+
+// EI/DI
+
+decl_instruction(EI, 0xFB, 4, 0, 0, 0)
+decl_instruction(DI, 0xF3, 4, 0, 0, 0) 

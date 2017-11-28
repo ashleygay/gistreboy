@@ -48,10 +48,10 @@ CPL		 -> done
 CCF		 -> done
 SCF		 -> done
 NOP 		 -> done
-HALT 		 -> not done
-STOP		 -> not done
-DI		 -> not done
-EI		 -> not done
+HALT 		 -> done
+STOP		 -> done
+DI		 -> done
+EI		 -> done
 
 RLC(n)		 -> done  
 RL(n)		 -> done  
