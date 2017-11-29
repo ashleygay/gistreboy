@@ -35,12 +35,13 @@ void GameBoy::step()
 	boost::asio::deadline_timer t(io,
 			boost::posix_time::nanoseconds(GB_CYCLE));
 
-	if (!_handler_cycles)
-	 	_handler_cycles = _handler.doInterrupt();
+//	if (!_handler_cycles)
+//	 	_handler_cycles = _handler.doInterrupt();
 
 	// If there was no interrupt to service we execute the next instruction
-	if (!_handler_cycles)
+	if (!_handler_cycles && !_cpu_cycles)
 		_cpu_cycles = p.step();
+	DEBUG_STREAM << "Cycles : " << _cpu_cycles << std::endl;
 /*
 	_checkLCD();
 */

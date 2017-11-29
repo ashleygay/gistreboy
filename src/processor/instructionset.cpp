@@ -20,6 +20,7 @@ InstructionSet::InstructionSet()
 
 	add_instr(NOP)
 
+	add_instr(LD_AX)
 	add_instr(LD_BX)
 	add_instr(LD_CX)
 	add_instr(LD_DX)

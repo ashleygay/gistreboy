@@ -265,6 +265,8 @@ void LDI_HLA::exec(Processor *p)
 void LDH_nA::exec(Processor *p)
 {
 	uint16_t address = 0xFF00 + boost::get<uint8_t>(this->_args[0]);
+	DEBUG_STREAM << "LDH_nA address is " << std::hex << (int)address << std::dec << std::endl;
+	DEBUG_STREAM << "LDH_nA value is " << std::hex << (int)p->A.value << std::dec << std::endl;
 	p->_write(p->A.value, address);
 }
 
