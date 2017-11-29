@@ -520,7 +520,41 @@ InstructionSet::InstructionSet()
 
 	add_instr(EI)
 	add_instr(DI)
-	  
+	//add_instr(SRL_HLX) 
+	
+
+	add_instr(JP)
+	add_instr(JPNZ)
+	add_instr(JPZ)
+	add_instr(JPNC)
+	add_instr(JPC)
+	add_instr(JPHL)
+	add_instr(JR)
+	add_instr(JRNZ)
+	add_instr(JRZ)
+	add_instr(JRNC)
+	add_instr(JRC)
+
+	add_instr(CALL)
+	add_instr(CALLNZ)
+	add_instr(CALLZ)
+	add_instr(CALLNC)
+	add_instr(CALLC)
+	
+	add_instr(RST_0x00)
+	add_instr(RST_0x08)
+	add_instr(RST_0x10)
+	add_instr(RST_0x18)
+	add_instr(RST_0x20)
+	add_instr(RST_0x28)
+	add_instr(RST_0x30)
+	add_instr(RST_0x38)
+
+	add_instr(RET)
+	add_instr(RETNZ)
+	add_instr(RETZ)
+	add_instr(RETNC)
+	add_instr(RETC)
         #undef add_instr
 }
 

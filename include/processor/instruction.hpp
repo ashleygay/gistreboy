@@ -602,3 +602,49 @@ decl_instruction(STOP, 0x10, 4, 0, 0, 0)
 
 decl_instruction(EI, 0xFB, 4, 0, 0, 0)
 decl_instruction(DI, 0xF3, 4, 0, 0, 0) 
+/*
+decl_instruction(SRL_AX, 0xCB3F, 8, 1, 1, 0)
+decl_instruction(SRL_BX, 0xCB38, 8, 1, 1, 0)
+decl_instruction(SRL_CX, 0xCB39, 8, 1, 1, 0)
+decl_instruction(SRL_DX, 0xCB3A, 8, 1, 1, 0)
+decl_instruction(SRL_EX, 0xCB3B, 8, 1, 1, 0)
+decl_instruction(SRL_HX, 0xCB3C, 8, 1, 1, 0)
+decl_instruction(SRL_LX, 0xCB3D, 8, 1, 1, 0)
+//decl_instruction(SRL_HLX, 0xCB3E, 16, 1, 2, 0) 
+*/
+
+#warning "See SRL instructions with PA"
+
+decl_instruction(JP, 0xC3, 12, 1, 2, 0)
+decl_instruction(JPNZ, 0xC2, 12, 1, 2, 0)
+decl_instruction(JPZ, 0xCA, 12, 1, 2, 0)
+decl_instruction(JPNC, 0xD2, 12, 1, 2, 0)
+decl_instruction(JPC, 0xDA, 12, 1, 2, 0)
+decl_instruction(JPHL, 0xE9, 12, 0, 0, 0)
+decl_instruction(JR, 0x18, 8, 1, 1, 0)
+decl_instruction(JRNZ, 0x20, 8, 1, 1, 0)
+decl_instruction(JRZ, 0x28, 8, 1, 1, 0)
+decl_instruction(JRNC, 0x30, 8, 1, 1, 0)
+decl_instruction(JRC, 0x38, 8, 1, 1, 0)
+
+decl_instruction(CALL, 0xCD, 12, 1, 2, 0)
+decl_instruction(CALLNZ, 0xC4, 12, 1, 2, 0)
+decl_instruction(CALLZ, 0xCC, 12, 1, 2, 0)
+decl_instruction(CALLNC, 0xD4, 12, 1, 2, 0)
+decl_instruction(CALLC, 0xDC, 12, 1, 2, 0)
+
+
+decl_instruction(RST_0x00, 0xC7, 32, 0, 0, 0)
+decl_instruction(RST_0x08, 0xCF, 32, 0, 0, 0)
+decl_instruction(RST_0x10, 0xD7, 32, 0, 0, 0)
+decl_instruction(RST_0x18, 0xDF, 32, 0, 0, 0)
+decl_instruction(RST_0x20, 0xE7, 32, 0, 0, 0)
+decl_instruction(RST_0x28, 0xEF, 32, 0, 0, 0)
+decl_instruction(RST_0x30, 0xF7, 32, 0, 0, 0)
+decl_instruction(RST_0x38, 0xFF, 32, 0, 0, 0)
+
+decl_instruction(RET, 0xC9, 8, 0, 0, 0)
+decl_instruction(RETNZ, 0xC0, 8, 0, 0, 0)
+decl_instruction(RETZ, 0xC8, 8, 0, 0, 0)
+decl_instruction(RETNC, 0xD0, 8, 0, 0, 0)
+decl_instruction(RETC, 0xD8, 8, 0, 0, 0)

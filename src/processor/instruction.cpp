@@ -49,6 +49,26 @@ static uint8_t set_bit_to(uint8_t value, uint8_t bit, bool on)
   return on ? set_bit(value, bit) : clear_bit(value, bit);
 }
 
+static void _callPush(Processor *p)
+{
+	uint8_t PC_low = p->PC.value & 0xFF;
+	uint8_t PC_high = p->PC.value << 8;
+	p->_write(PC_low, p->SP.value--);
+	p->_write(PC_high, p->SP.value--);
+}
+
+static void _return(Processor *p)
+{
+	uint8_t PC_high = p->_read(p->SP.value++);
+	uint8_t PC_low = p->_read(p->SP.value++);
+
+	p->PC.value = PC_low | (PC_high >> 8);
+}
+
+/////////////////////////////////////
+/////////////// LOADS ///////////////
+/////////////////////////////////////
+
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
@@ -312,6 +332,9 @@ void LD_HLSPn::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 }
 
+/////////////////////////////////////
+///////////// PUSH-POP //////////////
+/////////////////////////////////////
 
 void PUSH_BC::exec(Processor *p)
 {
@@ -1512,3 +1535,167 @@ void DI::exec(Processor *p)
 {
   p->disableIME();
 } 
+//SRL_RegX_def(HL) 
+
+/////////////////////////////////////
+/////////////// JUMPS ///////////////
+/////////////////////////////////////
+
+void JP::exec(Processor *p)
+{
+	p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+}
+
+void JPHL::exec(Processor *p)
+{
+	p->PC.value = p->L.value | (p->H.value >> 8);
+}
+
+void JR::exec(Processor *p)
+{
+	p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO))
+		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+void JRC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY))
+		p->PC.value = (int8_t) boost::get<uint8_t>(this->_args[0]);
+}
+
+/////////////////////////////////////
+/////////////// CALLS ///////////////
+/////////////////////////////////////
+
+void CALL::exec(Processor *p)
+{
+	_callPush(p);
+}
+
+void CALLNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+void CALLZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+void CALLNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+void CALLC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY)) {
+		_callPush(p);
+		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	}
+}
+
+
+/////////////////////////////////////
+/////////////// RESET ///////////////
+/////////////////////////////////////
+
+#define RST_def(x) \
+	void RST_##x::exec(Processor *p) \
+	{\
+		_callPush(p);\
+		p->PC.value = x;\
+	}
+
+RST_def(0x00)
+RST_def(0x08)
+RST_def(0x10)
+RST_def(0x18)
+RST_def(0x20)
+RST_def(0x28)
+RST_def(0x30)
+RST_def(0x38)
+
+/////////////////////////////////////
+////////////// RETURNS //////////////
+/////////////////////////////////////
+
+
+void RET::exec(Processor *p)
+{
+	_return(p);
+}
+
+void RETNZ::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::ZERO))
+		_return(p);
+}
+
+void RETZ::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::ZERO))
+		_return(p);
+}
+
+void RETNC::exec(Processor *p)
+{
+	if ( !p->flag.getFlag(FlagRegister::CARRY))
+		_return(p);
+}
+
+void RETC::exec(Processor *p)
+{
+	if ( p->flag.getFlag(FlagRegister::CARRY))
+		_return(p);
+}
