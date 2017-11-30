@@ -52,14 +52,3 @@ bool FlagRegister::getFlag(FlagRegister::Flag flag)
 	}
 	return false;
 }
-
-
-void InterruptRegister::setInterrupt(InterruptRegister::Interrupt interrupt)
-{
-	value |= (1 << interrupt);
-}
-		
-void InterruptRegister::resetInterrupt(InterruptRegister::Interrupt interrupt)
-{
-	value ^= (1 << interrupt);
-}
