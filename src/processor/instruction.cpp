@@ -422,7 +422,7 @@ void ADD_AHL::exec(Processor *p)
 
 void ADD_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
   uint val = p->A.value + tmp;
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -477,7 +477,7 @@ void ADC_AHL::exec(Processor *p)
 
 void ADC_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0])); 
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0])); 
   uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -533,7 +533,7 @@ void SUB_AHL::exec(Processor *p)
 
 void SUB_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));    
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));    
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -588,7 +588,7 @@ void SBC_AHL::exec(Processor *p)
 
 void SBC_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
   uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)
@@ -635,7 +635,7 @@ void AND_AHL::exec(Processor *p)
 
 void AND_Aaddress::exec(Processor *p)
 {
-  auto tmp =  p->_read(boost::get<uint16_t>(this->_args[0]));
+  auto tmp =  p->_read(boost::get<uint8_t>(this->_args[0]));
   p->A.value &= tmp;
   if (p->A.value == 0)
     p->flag.setFlag(FlagRegister::ZERO);\
@@ -679,7 +679,7 @@ void OR_AHL::exec(Processor *p)
 
 void OR_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
   p->A.value |= tmp;
   if (p->A.value == 0)
   p->flag.setFlag(FlagRegister::ZERO);
@@ -723,7 +723,7 @@ void XOR_AHL::exec(Processor *p)
 
 void XOR_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0])); 
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0])); 
   p->A.value ^= tmp;
   if (p->A.value == 0)
     p->flag.setFlag(FlagRegister::ZERO);
@@ -773,7 +773,7 @@ void CP_AHL::exec(Processor *p)
 
 void CP_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint16_t>(this->_args[0]));
+  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   if (result == 0)

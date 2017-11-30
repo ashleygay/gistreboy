@@ -162,7 +162,7 @@ decl_instruction(ADD_AE, 0x83, 4, 0, 0, 0)
 decl_instruction(ADD_AH, 0x84, 4, 0, 0, 0)  
 decl_instruction(ADD_AL, 0x85, 4, 0, 0, 0)
 decl_instruction(ADD_AHL, 0x86, 8, 0, 0, 0)  
-decl_instruction(ADD_Aaddress, 0xC6, 8, 1, 2, 0)
+decl_instruction(ADD_Aaddress, 0xC6, 8, 1, 1, 0)
 
 // ADC Instructions
 
@@ -174,7 +174,7 @@ decl_instruction(ADC_AE, 0x8B, 4, 0, 0, 0)
 decl_instruction(ADC_AH, 0x8C, 4, 0, 0, 0)
 decl_instruction(ADC_AL, 0x8D, 4, 0, 0, 0)
 decl_instruction(ADC_AHL, 0x8E, 8, 0, 0, 0)
-decl_instruction(ADC_Aaddress, 0xCE, 8, 1, 2, 0) 
+decl_instruction(ADC_Aaddress, 0xCE, 8, 1, 1, 0) 
 
 
 // SUB Instructions
@@ -187,7 +187,7 @@ decl_instruction(SUB_AE, 0x93, 4, 0, 0, 0)
 decl_instruction(SUB_AH, 0x94, 4, 0, 0, 0)
 decl_instruction(SUB_AL, 0x95, 4, 0, 0, 0)
 decl_instruction(SUB_AHL, 0x96, 8, 0, 0, 0)
-decl_instruction(SUB_Aaddress, 0xD6, 8, 1, 2, 0)  
+decl_instruction(SUB_Aaddress, 0xD6, 8, 1, 1, 0)  
 
 // SBC Instructions
 
@@ -199,7 +199,7 @@ decl_instruction(SBC_AE, 0x9B, 4, 0, 0, 0)
 decl_instruction(SBC_AH, 0x9C, 4, 0, 0, 0)
 decl_instruction(SBC_AL, 0x9D, 4, 0, 0, 0)
 decl_instruction(SBC_AHL, 0x9E, 8, 0, 0, 0)
-decl_instruction(SBC_Aaddress, 0xDE, 8, 1, 2, 1) //pas d'opcode in manual
+decl_instruction(SBC_Aaddress, 0xDE, 8, 1, 1, 0) //pas d'opcode in manual
 
 // AND Instructions
 
@@ -211,7 +211,7 @@ decl_instruction(AND_AE, 0xA3, 4, 0, 0, 0)
 decl_instruction(AND_AH, 0xA4, 4, 0, 0, 0)
 decl_instruction(AND_AL, 0xA5, 4, 0, 0, 0)
 decl_instruction(AND_AHL, 0xA6, 8, 0, 0, 0)
-decl_instruction(AND_Aaddress, 0xE6, 8, 1, 2, 0)  
+decl_instruction(AND_Aaddress, 0xE6, 8, 1, 1, 0)  
 
 // OR Instructions
 
@@ -223,7 +223,7 @@ decl_instruction(OR_AE, 0xB3, 4, 0, 0, 0)
 decl_instruction(OR_AH, 0xB4, 4, 0, 0, 0)
 decl_instruction(OR_AL, 0xB5, 4, 0, 0, 0)
 decl_instruction(OR_AHL, 0xB6, 8, 0, 0, 0)
-decl_instruction(OR_Aaddress, 0xF6, 8, 1, 2, 0)
+decl_instruction(OR_Aaddress, 0xF6, 8, 1, 1, 0)
 
 // XOR Instructions
 
@@ -235,7 +235,7 @@ decl_instruction(XOR_AE, 0xAB, 4, 0, 0, 0)
 decl_instruction(XOR_AH, 0xAC, 4, 0, 0, 0)
 decl_instruction(XOR_AL, 0xAD, 4, 0, 0, 0)
 decl_instruction(XOR_AHL, 0xAE, 8, 0, 0, 0)
-decl_instruction(XOR_Aaddress, 0xEE, 8, 1, 2, 0)  
+decl_instruction(XOR_Aaddress, 0xEE, 8, 1, 1, 0)  
 
 // CP Instructions
 
@@ -247,7 +247,7 @@ decl_instruction(CP_AE, 0xBB, 4, 0, 0, 0)
 decl_instruction(CP_AH, 0xBC, 4, 0, 0, 0)
 decl_instruction(CP_AL, 0xBD, 4, 0, 0, 0)
 decl_instruction(CP_AHL, 0xBE, 8, 0, 0, 0)
-decl_instruction(CP_Aaddress, 0xFE, 8, 1, 2, 0) 
+decl_instruction(CP_Aaddress, 0xFE, 8, 1, 1, 0) 
 
 
 // INC Instructions
