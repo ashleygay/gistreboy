@@ -73,7 +73,7 @@ Addr_0062:
 	LD C,$0c		; $0062
 Addr_0064:
 	LD A,($FF00+$44)	; $0064  wait for screen frame
-	CP $90		; $0066
+	CP $90			; $0066
 	JR NZ, Addr_0064	; $0068
 	DEC C			; $006a
 	JR NZ, Addr_0064	; $006b
