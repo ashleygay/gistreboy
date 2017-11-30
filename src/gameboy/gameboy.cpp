@@ -31,7 +31,7 @@ void GameBoy::step()
 
 	// Start chrono here for a cycle
 	//sleep(1);
-	std::cout << "GAMEBOY STEP" << std::endl;
+//	std::cout << "GAMEBOY STEP" << std::endl;
 	boost::asio::deadline_timer t(io,
 			boost::posix_time::nanoseconds(GB_CYCLE));
 

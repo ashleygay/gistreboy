@@ -265,8 +265,6 @@ void LDI_HLA::exec(Processor *p)
 void LDH_nA::exec(Processor *p)
 {
 	uint16_t address = 0xFF00 + boost::get<uint8_t>(this->_args[0]);
-	DEBUG_STREAM << "LDH_nA address is " << std::hex << (int)address << std::dec << std::endl;
-	DEBUG_STREAM << "LDH_nA value is " << std::hex << (int)p->A.value << std::dec << std::endl;
 	p->_write(p->A.value, address);
 }
 
@@ -814,7 +812,7 @@ INC_RegX_def(SP)
 #define INC_DReg_def(reg1, reg2)\
   void INC_##reg1##reg2::exec(Processor *p)\
   {\
-	uint16_t value = (p->reg1.value << 8) | p->reg2.value;\
+	uint16_t value = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
 	++value;\
 	uint8_t reg1_val = (value & 0xFF00);\
 	uint8_t reg2_val = (value & 0x00FF);\
@@ -1596,7 +1594,9 @@ void JPHL::exec(Processor *p)
 
 void JR::exec(Processor *p)
 {
-	p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+	int8_t t_val = (int8_t) boost::get<uint8_t>(this->_args[0]);
+	DEBUG_STREAM << "Modifying PC with 0x"<< std::hex << (int)t_val << std::dec << std::endl;
+	p->PC.value += t_val;
 }
 
 void JRNZ::exec(Processor *p)

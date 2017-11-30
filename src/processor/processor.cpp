@@ -30,6 +30,7 @@ void Processor::enableIMEDelay()
 
 int Processor::step()
 {
+//	DEBUG_STREAM << "Processor STEP" << std::endl;
 	if (!_handler || !_mem)
 		throw std::runtime_error("Memory or handler pointer not set.");
 	if (halted || stopped) {
@@ -95,9 +96,10 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
+	DEBUG_STREAM << "PC is 0x"<< std::hex << (int)PC.value << std::dec << std::endl;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
-	DEBUG_STREAM << "Fetching 8 first bits 0x"<< std::hex << opcode << std::dec << std::endl;
+//	DEBUG_STREAM << "Fetching 8 first bits 0x"<< std::hex << opcode << std::dec << std::endl;
 	if (!iset.isValidOpCode(opcode)) {
 		// We try the to get the instruction over 16bits
 		opcode = (opcode << 8) | (_mem->read(PC.value));
@@ -110,7 +112,7 @@ void Processor::_fetchNextInstruction()
 		else //OpCode is on 16bits, we increment PC for args
 			++PC.value;
 	}
-	DEBUG_STREAM << "Fetching instruction 0x"<< std::hex << opcode << std::dec << std::endl;
+	DEBUG_STREAM << "Fetching instruction 0x"<< std::hex << (int)opcode << std::dec << std::endl;
 	// Opcode is valid
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArgs args;
@@ -121,16 +123,16 @@ void Processor::_fetchNextInstruction()
 		int size = currentInstruction->argSize(i);
 		if (size == 1) { // We add a byte to the argument vector
 			uint8_t arg = _mem->read(PC.value);
-			DEBUG_STREAM << "Fetching argument 0x"<< std::hex
-				     << (int)arg << std::dec << std::endl;
+//			DEBUG_STREAM << "Fetching argument 0x"<< std::hex
+//				     << (int)arg << std::dec << std::endl;
 			addByte(args, arg);
 		}
 		else { // Argument of size 1, we add a short to the argument vector
 			uint16_t arg = _mem->read(PC.value);
 			++PC.value;
 			arg = arg | (_mem->read(PC.value) << 8);
-			DEBUG_STREAM << "Fetching argument 0x"<< std::hex
-				     << (int)arg << std::dec << std::endl;
+//			DEBUG_STREAM << "Fetching argument 0x"<< std::hex
+//				     << (int)arg << std::dec << std::endl;
 			addShort(args, arg);
 		}
 		++PC.value;
