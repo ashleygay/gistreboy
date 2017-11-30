@@ -208,8 +208,12 @@ InstructionSet::InstructionSet()
 	add_instr(INC_EX)
 	add_instr(INC_HX)
 	add_instr(INC_LX)
-	add_instr(INC_HL)
+	add_instr(INC_HLdereference)
 
+	add_instr(INC_BC)
+	add_instr(INC_DE)
+	add_instr(INC_HL)
+	add_instr(INC_SPX)
 
 	add_instr(DEC_AX)
 	add_instr(DEC_BX)

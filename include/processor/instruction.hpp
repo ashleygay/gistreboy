@@ -259,7 +259,16 @@ decl_instruction(INC_DX, 0x14, 4, 1, 1, 0)
 decl_instruction(INC_EX, 0x1C, 4, 1, 1, 0)
 decl_instruction(INC_HX, 0x24, 4, 1, 1, 0)
 decl_instruction(INC_LX, 0x2C, 4, 1, 1, 0)
-decl_instruction(INC_HL, 0x34, 12, 1, 1, 0)
+
+#warning "HL is dereferenced here, what is up with that"
+decl_instruction(INC_HLdereference, 0x34, 12, 1, 1, 0)
+
+
+// INC on double registers
+decl_instruction(INC_BC, 0x03, 8, 0, 0, 0)
+decl_instruction(INC_DE, 0x13, 8, 0, 0, 0)
+decl_instruction(INC_HL, 0x23, 8, 0, 0, 0)
+decl_instruction(INC_SPX, 0x33, 8, 0, 0, 0)
 
 // DEC Instructions
 

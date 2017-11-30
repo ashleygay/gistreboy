@@ -808,8 +808,25 @@ INC_RegX_def(E)
 INC_RegX_def(H)
 INC_RegX_def(L)
 
+INC_RegX_def(SP)
 
-void INC_HL::exec(Processor *p)
+
+#define INC_DReg_def(reg1, reg2)\
+  void INC_##reg1##reg2::exec(Processor *p)\
+  {\
+	uint16_t value = (p->reg1.value << 8) | p->reg2.value;\
+	++value;\
+	uint8_t reg1_val = (value & 0xFF00);\
+	uint8_t reg2_val = (value & 0x00FF);\
+	p->reg1.value = reg1_val;\
+	p->reg2.value = reg2_val;\
+  }
+
+INC_DReg_def(B,C)
+INC_DReg_def(D,E)
+INC_DReg_def(H,L)
+
+void INC_HLdereference::exec(Processor *p)
 {
   auto tmp = HLReadDereference(p);
   tmp += 1;
