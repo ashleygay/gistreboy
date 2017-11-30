@@ -112,7 +112,7 @@ void Processor::_fetchNextInstruction()
 		else //OpCode is on 16bits, we increment PC for args
 			++PC.value;
 	}
-	DEBUG_STREAM << "Fetching instruction 0x"<< std::hex << (int)opcode << std::dec << std::endl;
+	DEBUG_STREAM << "FETCH: 0x"<< std::hex << (int)opcode << std::dec << std::endl;
 	// Opcode is valid
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArgs args;

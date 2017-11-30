@@ -787,8 +787,8 @@ void CP_Aaddress::exec(Processor *p)
 
 // INC instructions
 
-#define INC_RegX_def(reg)                  \
-  void INC_##reg##X::exec(Processor *p)\
+#define INC_Reg_def(reg)                  \
+  void INC_##reg::exec(Processor *p)\
   {\
     p->reg.value += 1;\
     if (p->reg.value == 0)\
@@ -798,15 +798,15 @@ void CP_Aaddress::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);\
   }
 
-INC_RegX_def(A)
-INC_RegX_def(B)
-INC_RegX_def(C)
-INC_RegX_def(D)
-INC_RegX_def(E)
-INC_RegX_def(H)
-INC_RegX_def(L)
+INC_Reg_def(A)
+INC_Reg_def(B)
+INC_Reg_def(C)
+INC_Reg_def(D)
+INC_Reg_def(E)
+INC_Reg_def(H)
+INC_Reg_def(L)
 
-INC_RegX_def(SP)
+INC_Reg_def(SP)
 
 
 #define INC_DReg_def(reg1, reg2)\
@@ -839,24 +839,25 @@ void INC_HLdereference::exec(Processor *p)
 
 // DEC instructions
 
-#define DEC_RegX_def(reg)                  \
-  void DEC_##reg##X::exec(Processor *p)\
+#define DEC_Reg_def(reg)                  \
+  void DEC_##reg::exec(Processor *p)\
   {\
     p->reg.value -= 1;\
-    if (p->reg.value == 0)\
+    if (p->reg.value == 0) {\
       p->flag.setFlag(FlagRegister::ZERO);\
+	}\
     p->flag.setFlag(FlagRegister::SUBTRACT);\
     if ((p->reg.value & 0xF) == 0x0F) \
       p->flag.setFlag(FlagRegister::HALFCARRY);\
   }
 
-DEC_RegX_def(A)
-DEC_RegX_def(B)
-DEC_RegX_def(C)
-DEC_RegX_def(D)
-DEC_RegX_def(E)
-DEC_RegX_def(H)
-DEC_RegX_def(L)
+DEC_Reg_def(A)
+DEC_Reg_def(B)
+DEC_Reg_def(C)
+DEC_Reg_def(D)
+DEC_Reg_def(E)
+DEC_Reg_def(H)
+DEC_Reg_def(L)
 
 void DEC_HL::exec(Processor *p)
 {
@@ -1594,9 +1595,7 @@ void JPHL::exec(Processor *p)
 
 void JR::exec(Processor *p)
 {
-	int8_t t_val = (int8_t) boost::get<uint8_t>(this->_args[0]);
-	DEBUG_STREAM << "Modifying PC with 0x"<< std::hex << (int)t_val << std::dec << std::endl;
-	p->PC.value += t_val;
+	p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
 }
 
 void JRNZ::exec(Processor *p)
@@ -1607,8 +1606,11 @@ void JRNZ::exec(Processor *p)
 
 void JRZ::exec(Processor *p)
 {
-	if ( p->flag.getFlag(FlagRegister::ZERO))
-		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+	bool t = p->flag.getFlag(FlagRegister::ZERO);
+	if ( p->flag.getFlag(FlagRegister::ZERO)) {
+		int8_t t = (int8_t) boost::get<uint8_t>(this->_args[0]);
+		p->PC.value += t;
+	}
 }
 
 void JRNC::exec(Processor *p)

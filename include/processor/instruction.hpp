@@ -252,13 +252,13 @@ decl_instruction(CP_Aaddress, 0xFE, 8, 1, 2, 0)
 
 // INC Instructions
 
-decl_instruction(INC_AX, 0x3C, 4, 1, 1, 0)
-decl_instruction(INC_BX, 0x04, 4, 1, 1, 0)
-decl_instruction(INC_CX, 0x0C, 4, 1, 1, 0)
-decl_instruction(INC_DX, 0x14, 4, 1, 1, 0)
-decl_instruction(INC_EX, 0x1C, 4, 1, 1, 0)
-decl_instruction(INC_HX, 0x24, 4, 1, 1, 0)
-decl_instruction(INC_LX, 0x2C, 4, 1, 1, 0)
+decl_instruction(INC_A, 0x3C, 4, 0, 0, 0)
+decl_instruction(INC_B, 0x04, 4, 0, 0, 0)
+decl_instruction(INC_C, 0x0C, 4, 0, 0, 0)
+decl_instruction(INC_D, 0x14, 4, 0, 0, 0)
+decl_instruction(INC_E, 0x1C, 4, 0, 0, 0)
+decl_instruction(INC_H, 0x24, 4, 0, 0, 0)
+decl_instruction(INC_L, 0x2C, 4, 0, 0, 0)
 
 #warning "HL is dereferenced here, what is up with that"
 decl_instruction(INC_HLdereference, 0x34, 12, 1, 1, 0)
@@ -268,18 +268,26 @@ decl_instruction(INC_HLdereference, 0x34, 12, 1, 1, 0)
 decl_instruction(INC_BC, 0x03, 8, 0, 0, 0)
 decl_instruction(INC_DE, 0x13, 8, 0, 0, 0)
 decl_instruction(INC_HL, 0x23, 8, 0, 0, 0)
-decl_instruction(INC_SPX, 0x33, 8, 0, 0, 0)
+decl_instruction(INC_SP, 0x33, 8, 0, 0, 0)
 
 // DEC Instructions
 
-decl_instruction(DEC_AX, 0x3D, 4, 1, 1, 0)
-decl_instruction(DEC_BX, 0x05, 4, 1, 1, 0)
-decl_instruction(DEC_CX, 0x0D, 4, 1, 1, 0)
-decl_instruction(DEC_DX, 0x15, 4, 1, 1, 0)
-decl_instruction(DEC_EX, 0x1D, 4, 1, 1, 0)
-decl_instruction(DEC_HX, 0x25, 4, 1, 1, 0)
-decl_instruction(DEC_LX, 0x2D, 4, 1, 1, 0)
-decl_instruction(DEC_HL, 0x35, 12, 1, 1, 0)  
+decl_instruction(DEC_A, 0x3D, 4, 0, 0, 0)
+decl_instruction(DEC_B, 0x05, 4, 0, 0, 0)
+decl_instruction(DEC_C, 0x0D, 4, 0, 0, 0)
+decl_instruction(DEC_D, 0x15, 4, 0, 0, 0)
+decl_instruction(DEC_E, 0x1D, 4, 0, 0, 0)
+decl_instruction(DEC_H, 0x25, 4, 0, 0, 0)
+decl_instruction(DEC_L, 0x2D, 4, 0, 0, 0)
+decl_instruction(DEC_HL, 0x35, 12, 0, 0, 0)  
+
+//decl_instruction(DEC_HLdereference, 0x35, 12, 0, 0, 0)  
+// DEC on double registers
+//decl_instruction(DEC_BC, 0x0B, 8, 0, 0, 0)
+//decl_instruction(DEC_DE, 0x0B, 8, 0, 0, 0)
+//decl_instruction(DEC_HL, 0x0B, 8, 0, 0, 0)
+//decl_instruction(DEC_SP, 0x0B, 8, 0, 0, 0)
+
 
 // SWAP Instructions
 

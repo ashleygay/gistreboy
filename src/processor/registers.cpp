@@ -18,6 +18,8 @@ void FlagRegister::setFlag(FlagRegister::Flag flag)
 			value |= 0x10;
 			break;
 	}
+	std::bitset<8> bt(value);
+	DEBUG_STREAM << "FlagRegister binary : " << bt << std::endl;
 }
 
 void FlagRegister::unsetFlag(FlagRegister::Flag flag)
