@@ -33,6 +33,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_AC)
 	add_instr(LD_AD)
 	add_instr(LD_AE)
+	add_instr(LD_AH)
 	add_instr(LD_AL)
 	add_instr(LD_AHL)
 
