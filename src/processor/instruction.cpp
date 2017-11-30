@@ -1606,7 +1606,6 @@ void JRNZ::exec(Processor *p)
 
 void JRZ::exec(Processor *p)
 {
-	bool t = p->flag.getFlag(FlagRegister::ZERO);
 	if ( p->flag.getFlag(FlagRegister::ZERO)) {
 		int8_t t = (int8_t) boost::get<uint8_t>(this->_args[0]);
 		p->PC.value += t;
