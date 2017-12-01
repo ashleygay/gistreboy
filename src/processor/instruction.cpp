@@ -790,6 +790,8 @@ void CP_Aaddress::exec(Processor *p)
 #define INC_Reg_def(reg)                  \
   void INC_##reg::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     p->reg.value += 1;\
     if (p->reg.value == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
@@ -828,6 +830,8 @@ void INC_HLdereference::exec(Processor *p)
 {
   auto tmp = HLReadDereference(p);
   tmp += 1;
+  p->flag.unsetFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::HALFCARRY);
   if (tmp == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::SUBTRACT);
@@ -842,6 +846,8 @@ void INC_HLdereference::exec(Processor *p)
 #define DEC_Reg_def(reg)                  \
   void DEC_##reg::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     p->reg.value -= 1;\
     if (p->reg.value == 0) {\
       p->flag.setFlag(FlagRegister::ZERO);\
@@ -863,6 +869,8 @@ void DEC_HL::exec(Processor *p)
 {
   auto tmp = HLReadDereference(p);
   tmp -= 1;
+  p->flag.unsetFlag(FlagRegister::ZERO);
+  p->flag.unsetFlag(FlagRegister::HALFCARRY);
   if (tmp == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.setFlag(FlagRegister::SUBTRACT);
