@@ -8,7 +8,7 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy(): _mem(p)
+GameBoy::GameBoy(): _mem(p), _lcd(_handler, _mem)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();
@@ -41,6 +41,9 @@ void GameBoy::step()
 	// If there was no interrupt to service we execute the next instruction
 	if (!_handler_cycles && !_cpu_cycles)
 		_cpu_cycles = p.step();
+
+	if (!_lcd_cycles)
+		_lcd_cycles = lcd.step();
 /*
 	_checkLCD();
 */

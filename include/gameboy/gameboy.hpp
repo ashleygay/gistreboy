@@ -13,6 +13,7 @@
 #include <interrupthandler.hpp>
 #include <processor.hpp>
 #include <memory.hpp>
+#include <lcd.hpp>
 
 #include <gtk/gtk.h>
 #include <iostream>
@@ -55,13 +56,12 @@ class GameBoy
 
 		Processor p;
 		Memory _mem;
-		//LCD lcd;
-
 
 		// Used to handle periodic interrupts or interrupts provided by
 		// the software (joypad inputs)
 		InterruptHandler _handler;
 
+		LCD _lcd;
 		int _handler_cycles = 0;
 		int _cpu_cycles = 0;
 		int _lcd_cycles = 0;
