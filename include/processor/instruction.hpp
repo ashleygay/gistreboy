@@ -279,14 +279,13 @@ decl_instruction(DEC_D, 0x15, 4, 0, 0, 0)
 decl_instruction(DEC_E, 0x1D, 4, 0, 0, 0)
 decl_instruction(DEC_H, 0x25, 4, 0, 0, 0)
 decl_instruction(DEC_L, 0x2D, 4, 0, 0, 0)
-decl_instruction(DEC_HL, 0x35, 12, 0, 0, 0)  
 
-//decl_instruction(DEC_HLdereference, 0x35, 12, 0, 0, 0)  
+decl_instruction(DEC_HLdereference, 0x35, 12, 0, 0, 0)  
 // DEC on double registers
-//decl_instruction(DEC_BC, 0x0B, 8, 0, 0, 0)
-//decl_instruction(DEC_DE, 0x0B, 8, 0, 0, 0)
-//decl_instruction(DEC_HL, 0x0B, 8, 0, 0, 0)
-//decl_instruction(DEC_SP, 0x0B, 8, 0, 0, 0)
+decl_instruction(DEC_BC, 0x0B, 8, 0, 0, 0)
+decl_instruction(DEC_DE, 0x1B, 8, 0, 0, 0)
+decl_instruction(DEC_HL, 0x2B, 8, 0, 0, 0)
+decl_instruction(DEC_SP, 0x3B, 8, 0, 0, 0)
 
 
 // SWAP Instructions

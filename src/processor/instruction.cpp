@@ -862,8 +862,6 @@ INC_Reg_def(E)
 INC_Reg_def(H)
 INC_Reg_def(L)
 
-INC_Reg_def(SP)
-
 
 #define INC_DReg_def(reg1, reg2)\
   void INC_##reg1##reg2::exec(Processor *p)\
@@ -879,6 +877,14 @@ INC_Reg_def(SP)
 INC_DReg_def(B,C)
 INC_DReg_def(D,E)
 INC_DReg_def(H,L)
+
+void INC_SP::exec(Processor *p)
+{
+  uint16_t value = p->SP.value;
+  ++value;
+  p->SP.value = value;
+}
+
 
 void INC_HLdereference::exec(Processor *p)
 {
@@ -919,7 +925,29 @@ DEC_Reg_def(E)
 DEC_Reg_def(H)
 DEC_Reg_def(L)
 
-void DEC_HL::exec(Processor *p)
+#define DEC_DReg_def(reg1, reg2)\
+  void DEC_##reg1##reg2::exec(Processor *p)\
+  {\
+	uint16_t value = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
+	--value;\
+	uint8_t reg1_val = (value & 0xFF00);\
+	uint8_t reg2_val = (value & 0x00FF);\
+	p->reg1.value = reg1_val;\
+	p->reg2.value = reg2_val;\
+  }
+
+DEC_DReg_def(B,C)
+DEC_DReg_def(D,E)
+DEC_DReg_def(H,L)
+
+void DEC_SP::exec(Processor *p)
+{
+  uint16_t value = p->SP.value;
+  ++value;
+  p->SP.value = value;
+}
+
+void DEC_HLdereference::exec(Processor *p)
 {
   auto tmp = HLReadDereference(p);
   tmp -= 1;
