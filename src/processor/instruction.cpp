@@ -433,7 +433,7 @@ void ADD_Aaddress::exec(Processor *p)
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
-  p⁻>flag.unsetFlag(FlagRegister::CARRY);
+  p->flag.unsetFlag(FlagRegister::CARRY);
   if (result == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::SUBTRACT);
@@ -478,7 +478,7 @@ void ADC_AHL::exec(Processor *p)
     uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
     uint8_t result = static_cast<uint8_t>(val);
     p->flag.unsetFlag(FlagRegister::ZERO);
-    p⁻>flag.unsetFlag(FlagRegister::HALFCARRY);
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);
     p->flag.unsetFlag(FlagRegister::CARRY);
     if (result == 0)
       p->flag.setFlag(FlagRegister::ZERO);	
@@ -663,7 +663,7 @@ void AND_AHL::exec(Processor *p)
 {
   auto tmp = HLReadDereference(p);
   p->A.value &= tmp;
-  p->flag.unsetFlag(FlagRegiter::ZERO);
+  p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::SUBTRACT);
