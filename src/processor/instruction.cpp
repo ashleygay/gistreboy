@@ -323,6 +323,8 @@ void LD_HLSPn::exec(Processor *p)
 	p->L.value = HL & 0xFF;
 	p->H.value = HL << 8;
 
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	p->flag.unsetFlag(FlagRegister::CARRY);
 	// Carry if (b1 + b1) != (b1 | b2)
 	if ((HL & 0xF) != ((p->SP.value | n) & 0xF))
 		p->flag.setFlag(FlagRegister::HALFCARRY);
@@ -406,7 +408,7 @@ ADD_XY_def(A, C)
 ADD_XY_def(A, D)
 ADD_XY_def(A, E)
 ADD_XY_def(A, H)
-ADD_XY_def(A, L)  
+ADD_XY_def(A, L) 
 
 void ADD_AHL::exec(Processor *p)
   {
@@ -428,7 +430,7 @@ void ADD_AHL::exec(Processor *p)
 
 void ADD_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
+  auto tmp = boost::get<uint8_t>(this->_args[0]);
   uint val = p->A.value + tmp;
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -442,7 +444,63 @@ void ADD_Aaddress::exec(Processor *p)
   if (val > 0xFF)
     p->flag.setFlag(FlagRegister::CARRY);
   p->A.value = (result & 0xFF);
-} 
+}
+
+#define ADD_HLXY_def(reg1, reg2)\
+  void ADD_HL##reg1##reg2::exec(Processor *p)\
+  {\
+	uint16_t value_reg = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
+	uint16_t hl = p->L.value | (p->H.value << 8);\
+  	uint val = hl + value_reg;\
+	uint16_t result = static_cast<uint16_t>(result);\
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);\
+	p->flag.unsetFlag(FlagRegister::CARRY);\
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+	if (((hl & 0xFFF) + (value_reg & 0xFFF)) > 0xFFF)\
+	  p->flag.setFlag(FlagRegister::HALFCARRY);\
+	if (val & 0x10000 != 0)\
+	  p->flag.setFlag(FlagRegister::CARRY);	\
+	p->H.value = (result & 0xFF00);\
+	p->L.value = (result & 0x00FF);\
+}
+
+ADD_HLXY_def(B,C)
+ADD_HLXY_def(D,E)
+ADD_HLXY_def(H,L)
+
+void ADD_HLSP::exec(Processor *p)
+{
+	uint16_t value_reg = p->SP.value;
+	uint16_t hl = p->L.value | (p->H.value << 8);
+  	uint val = hl + value_reg;
+	uint16_t result = static_cast<uint16_t>(result);
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	p->flag.unsetFlag(FlagRegister::CARRY);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+	if (((hl & 0xFFF) + (value_reg & 0xFFF)) > 0xFFF)
+	  p->flag.setFlag(FlagRegister::HALFCARRY);
+	if (val & 0x10000 != 0)
+	  p->flag.setFlag(FlagRegister::CARRY);
+	p->H.value = (result & 0xFF00);
+	p->L.value = (result & 0x00FF);
+}
+
+void ADD_SPaddress::exec(Processor *p)
+{
+	uint8_t byte = boost::get<uint8_t>(this->_args[0]);
+	uint16_t sp = p->SP.value;
+	uint val = sp + byte;
+	uint16_t result = static_cast<uint16_t>(result);
+	p->flag.unsetFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	p->flag.unsetFlag(FlagRegister::CARRY);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+	if (((sp ^ byte ^ (result & 0xFFFF)) & 0x10) == 0x10)
+	  p->flag.setFlag(FlagRegister::HALFCARRY);
+	if (((sp ^ byte ^ (result & 0xFFFF)) & 0x100) == 0x100)
+	  p->flag.setFlag(FlagRegister::CARRY);
+	p->SP.value = result;
+}
 
 //ADC instructions
 
@@ -492,7 +550,7 @@ void ADC_AHL::exec(Processor *p)
 
 void ADC_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0])); 
+  auto tmp = boost::get<uint8_t>(this->_args[0]); 
   uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -557,7 +615,7 @@ void SUB_AHL::exec(Processor *p)
 
 void SUB_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));    
+  auto tmp = boost::get<uint8_t>(this->_args[0]);    
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -621,7 +679,7 @@ void SBC_AHL::exec(Processor *p)
 
 void SBC_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
+  auto tmp = boost::get<uint8_t>(this->_args[0]);
   uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -673,7 +731,7 @@ void AND_AHL::exec(Processor *p)
 
 void AND_Aaddress::exec(Processor *p)
 {
-  auto tmp =  p->_read(boost::get<uint8_t>(this->_args[0]));
+  auto tmp = boost::get<uint8_t>(this->_args[0]);
   p->A.value &= tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
@@ -720,7 +778,7 @@ void OR_AHL::exec(Processor *p)
 
 void OR_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
+  auto tmp = boost::get<uint8_t>(this->_args[0]);
   p->A.value |= tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
@@ -767,7 +825,7 @@ void XOR_AHL::exec(Processor *p)
 
 void XOR_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0])); 
+  auto tmp = boost::get<uint8_t>(this->_args[0]); 
   p->A.value ^= tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
@@ -824,7 +882,7 @@ void CP_AHL::exec(Processor *p)
 
 void CP_Aaddress::exec(Processor *p)
 {
-  auto tmp = p->_read(boost::get<uint8_t>(this->_args[0]));
+  auto tmp = boost::get<uint8_t>(this->_args[0]);
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);

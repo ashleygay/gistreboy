@@ -164,6 +164,13 @@ decl_instruction(ADD_AL, 0x85, 4, 0, 0, 0)
 decl_instruction(ADD_AHL, 0x86, 8, 0, 0, 0)  
 decl_instruction(ADD_Aaddress, 0xC6, 8, 1, 1, 0)
 
+decl_instruction(ADD_HLBC, 0x09, 8, 0, 0, 0)
+decl_instruction(ADD_HLDE, 0x19, 8, 0, 0, 0)
+decl_instruction(ADD_HLHL, 0x29, 8, 0, 0, 0)
+decl_instruction(ADD_HLSP, 0x39, 8, 0, 0, 0)
+
+decl_instruction(ADD_SPaddress, 0xE8, 16, 1, 1, 0)
+
 // ADC Instructions
 
 decl_instruction(ADC_AA, 0x8F, 4, 0, 0, 0)
