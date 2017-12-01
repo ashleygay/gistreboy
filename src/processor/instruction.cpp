@@ -452,13 +452,13 @@ void ADD_Aaddress::exec(Processor *p)
 	uint16_t value_reg = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
 	uint16_t hl = p->L.value | (p->H.value << 8);\
   	uint val = hl + value_reg;\
-	uint16_t result = static_cast<uint16_t>(result);\
+	uint16_t result = static_cast<uint16_t>(val);\
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);\
 	p->flag.unsetFlag(FlagRegister::CARRY);\
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
 	if (((hl & 0xFFF) + (value_reg & 0xFFF)) > 0xFFF)\
 	  p->flag.setFlag(FlagRegister::HALFCARRY);\
-	if (val & 0x10000 != 0)\
+	if ((val & 0x10000) != 0)\
 	  p->flag.setFlag(FlagRegister::CARRY);	\
 	p->H.value = (result & 0xFF00);\
 	p->L.value = (result & 0x00FF);\
@@ -473,13 +473,13 @@ void ADD_HLSP::exec(Processor *p)
 	uint16_t value_reg = p->SP.value;
 	uint16_t hl = p->L.value | (p->H.value << 8);
   	uint val = hl + value_reg;
-	uint16_t result = static_cast<uint16_t>(result);
+	uint16_t result = static_cast<uint16_t>(val);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->flag.unsetFlag(FlagRegister::CARRY);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 	if (((hl & 0xFFF) + (value_reg & 0xFFF)) > 0xFFF)
 	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (val & 0x10000 != 0)
+	if ((val & 0x10000) != 0)
 	  p->flag.setFlag(FlagRegister::CARRY);
 	p->H.value = (result & 0xFF00);
 	p->L.value = (result & 0x00FF);
@@ -490,7 +490,7 @@ void ADD_SPaddress::exec(Processor *p)
 	uint8_t byte = boost::get<uint8_t>(this->_args[0]);
 	uint16_t sp = p->SP.value;
 	uint val = sp + byte;
-	uint16_t result = static_cast<uint16_t>(result);
+	uint16_t result = static_cast<uint16_t>(val);
 	p->flag.unsetFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->flag.unsetFlag(FlagRegister::CARRY);
