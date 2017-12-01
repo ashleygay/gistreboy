@@ -82,12 +82,12 @@ Addr_0064:
 
 	LD C,$13		; $0070
 	INC H			; $0072  increment scroll count
-	LD A,H		; $0073
+	LD A,H			; $0073
 	LD E,$83		; $0074
-	CP $62		; $0076  $62 counts in, play sound #1
-	JR Z, Addr_0080	; $0078
+	CP $62			; $0076  $62 counts in, play sound #1
+	JR Z, Addr_0080		; $0078
 	LD E,$c1		; $007a
-	CP $64		; $007c
+	CP $64			; $007c
 	JR NZ, Addr_0086	; $007e  $64 counts in, play sound #2
 Addr_0080:
 	LD A,E		; $0080  play sound
