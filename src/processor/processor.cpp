@@ -55,7 +55,7 @@ int Processor::step()
 		}
 		else {
 			// Check if any selected button is pressed
-			uint8_t joypad_status = 0; _mem->read(0xFF00);
+			uint8_t joypad_status = _mem->read(0xFF00);
 
 			// Get bits [0-3] check that a button is pressed
 			int pressed = ~joypad_status & 0x0F;
