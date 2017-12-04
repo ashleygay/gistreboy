@@ -58,10 +58,10 @@ int Processor::step()
 			uint8_t joypad_status = _mem->read(0xFF00);
 
 			// Get bits [0-3] check that a button is pressed
-			int pressed = ~joypad_status & 0x0F;
+			bool pressed = ~joypad_status & 0x0F;
 
 			// Get bits [4-5], check that joypad is enabled
-			int selected = ~joypad_status & 0x30;
+			bool selected = ~joypad_status & 0x30;
 
 			if (pressed && selected) {
 				// We end STOP mode.
