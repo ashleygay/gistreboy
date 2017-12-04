@@ -1,29 +1,21 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
-/*
-static uint8_t AFReadDereference(Processor *p)
-{
-	uint16_t address = p->F.value | (p->A.value >> 8);
-	return p->_read(address);
-}
-*/
-
 static uint8_t BCReadDereference(Processor *p)
 {
-	uint16_t address = p->C.value | (p->B.value >> 8);
+	uint16_t address = p->C.value | (p->B.value << 8);
 	return p->_read(address);
 }
 
 static uint8_t DEReadDereference(Processor *p)
 {
-	uint16_t address = p->E.value | (p->D.value >> 8);
+	uint16_t address = p->E.value | (p->D.value << 8);
 	return p->_read(address);
 }
 
 static uint8_t HLReadDereference(Processor *p)
 {
-	uint16_t address = p->L.value | (p->H.value >> 8);
+	uint16_t address = p->L.value | (p->H.value << 8);
 	return p->_read(address);
 }
 
@@ -62,7 +54,7 @@ static void _return(Processor *p)
 	uint8_t PC_high = p->_read(p->SP.value++);
 	uint8_t PC_low = p->_read(p->SP.value++);
 
-	p->PC.value = PC_low | (PC_high >> 8);
+	p->PC.value = PC_low | (PC_high << 8);
 }
 
 /////////////////////////////////////
@@ -98,7 +90,7 @@ LD_RegX_def(L)
 #define LD_HLX_def(reg)\
 	void LD_HL##reg::exec(Processor *p)\
 	{\
-		uint16_t address = p->L.value | (p->H.value >> 8);\
+		uint16_t address = p->L.value | (p->H.value << 8);\
 		uint8_t value = p->A.value;\
 		p->_write(value, address);\
 	}
@@ -168,7 +160,7 @@ LD_HLX_def(L)
 
 void LD_HLn::exec(Processor *p)
 {
-	uint16_t address = p->L.value | (p->H.value >> 8);
+	uint16_t address = p->L.value | (p->H.value << 8);
 	uint8_t value = boost::get<uint8_t>(this->_args[0]);
 	p->_write(value, address);
 }
@@ -196,19 +188,19 @@ void LD_Ann::exec(Processor *p)
 
 void LD_BCA::exec(Processor *p)
 {
-	uint16_t address = p->C.value | (p->B.value >> 8);
+	uint16_t address = p->C.value | (p->B.value << 8);
 	p->_write(p->A.value, address);
 }
 
 void LD_DEA::exec(Processor *p)
 {
-	uint16_t address = p->E.value | (p->D.value >> 8);
+	uint16_t address = p->E.value | (p->D.value << 8);
 	p->_write(p->A.value, address);
 }
 
 void LD_HLA::exec(Processor *p)
 {
-	uint16_t address = p->L.value | (p->H.value >> 8);
+	uint16_t address = p->L.value | (p->H.value << 8);
 	p->_write(p->A.value, address);
 }
 
@@ -233,14 +225,14 @@ void LD_C2A::exec(Processor *p)
 void LDD_AHL::exec(Processor *p)
 {
 	p->A.value = HLReadDereference(p);
-	uint16_t HL_dec = (p->L.value | (p->H.value >> 8)) - 1;
+	uint16_t HL_dec = (p->L.value | (p->H.value << 8)) - 1;
 	p->L.value = HL_dec & 0xFF;
 	p->H.value = HL_dec << 8;
 }
 
 void LDD_HLA::exec(Processor *p)
 {
-	uint16_t HL = p->L.value | (p->H.value >> 8);
+	uint16_t HL = p->L.value | (p->H.value << 8);
 	p->_write(p->A.value, HL--); // Note: HL decremented
 	p->L.value = HL & 0xFF;
 	p->H.value = HL << 8;
@@ -249,14 +241,14 @@ void LDD_HLA::exec(Processor *p)
 void LDI_AHL::exec(Processor *p)
 {
 	p->A.value = HLReadDereference(p);
-	uint16_t HL_inc = (p->L.value | (p->H.value >> 8)) + 1;
+	uint16_t HL_inc = (p->L.value | (p->H.value << 8)) + 1;
 	p->L.value = HL_inc & 0xFF;
 	p->H.value = HL_inc << 8;
 }
 
 void LDI_HLA::exec(Processor *p)
 {
-	uint16_t HL = p->L.value | (p->H.value >> 8);
+	uint16_t HL = p->L.value | (p->H.value << 8);
 	p->_write(p->A.value, HL++); // Note: HL incremented
 	p->L.value = HL & 0xFF;
 	p->H.value = HL << 8;
@@ -313,7 +305,7 @@ void LD_nnSP::exec(Processor *p)
 
 void LD_SPHL::exec(Processor *p)
 {
-	p->SP.value = p->L.value | (p->H.value >> 8);
+	p->SP.value = p->L.value | (p->H.value << 8);
 }
 
 void LD_HLSPn::exec(Processor *p)
@@ -1738,7 +1730,7 @@ void JPC::exec(Processor *p)
 
 void JPHL::exec(Processor *p)
 {
-	p->PC.value = p->L.value | (p->H.value >> 8);
+	p->PC.value = p->L.value | (p->H.value << 8);
 }
 
 void JR::exec(Processor *p)
