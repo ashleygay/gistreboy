@@ -267,7 +267,6 @@ decl_instruction(INC_E, 0x1C, 4, 0, 0, 0)
 decl_instruction(INC_H, 0x24, 4, 0, 0, 0)
 decl_instruction(INC_L, 0x2C, 4, 0, 0, 0)
 
-#warning "HL is dereferenced here, what is up with that"
 decl_instruction(INC_HLdereference, 0x34, 12, 1, 1, 0)
 
 
@@ -635,8 +634,6 @@ decl_instruction(SRL_HX, 0xCB3C, 8, 1, 1, 0)
 decl_instruction(SRL_LX, 0xCB3D, 8, 1, 1, 0)
 //decl_instruction(SRL_HLX, 0xCB3E, 16, 1, 2, 0) 
 */
-
-#warning "See SRL instructions with PA"
 
 decl_instruction(JP, 0xC3, 12, 1, 2, 0)
 decl_instruction(JPNZ, 0xC2, 12, 1, 2, 0)
