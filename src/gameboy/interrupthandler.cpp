@@ -37,10 +37,11 @@ int InterruptHandler::doInterrupt()
 				++index;
 			}
 
-			// We set the cleanup routine and the execution of
-			// the interrupt.
+			// We set the cleanup routine, we clean IF
+			// and we execute the interrupt.
 			if (res.any()) {
 				unsigned long i = res.to_ulong();
+				_m->reset_interrupt_flag((Memory::Interrupt)i);
 				_cleanup = _interruptRoutines[i].cleanup;
 				return _interruptRoutines[i].exec();
 			}
@@ -70,7 +71,7 @@ int InterruptHandler::_VBLANK()
 	//TODO
 	//Changes permissions to be able to write to VRAM/OAM
 	// _mem->VBLANK();
-	return 4560;
+	return 0;
 }
 
 void InterruptHandler::_VBLANK_END()
