@@ -8,7 +8,7 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy(): _mem(p), _lcd(_handler, _mem)
+GameBoy::GameBoy(): _mem(p), _lcd(_mem)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();

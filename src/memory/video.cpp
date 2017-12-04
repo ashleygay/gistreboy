@@ -47,19 +47,26 @@ void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
 
 bool Video::can_read(uint16_t address)
 {
-	//FIXME
 	return true;
 }
 
 bool Video::can_write(uint8_t byte, uint16_t address)
 {
-	//FIXME
-	return true;
+	if (_is_VRAM(address))
+		return _VRAM_accessible;
+	if (_is_OAM(address))
+		return _OAM_accessible;
+	return true;}
+
+void Video::set_VRAM_accessible(bool accessible)
+{
+	_VRAM_accessible = accessible;
 }
 
-void Video::set_accessible(bool accessible)
+
+void Video::set_OAM_accessible(bool accessible)
 {
-	//FIXME
+	_OAM_accessible = accessible;
 }
 
 uint8_t Video::get_lcd_control()
@@ -115,4 +122,17 @@ uint8_t Video::get_obp0()
 uint8_t Video::get_obp1()
 {
 	return video_memory[0xFF49];
+}
+
+
+bool Video::_is_VRAM(uint16_t address)
+{
+ 	// VRAM (0x8000-0x9FFF)
+	return (address <= 0x9FFF && address >= 0x8000);
+}
+
+bool Video::_is_OAM(uint16_t address)
+{
+ 	// OAM (0xFE00-0xFE9F)
+	return (address <= 0xFE9F && address >= 0xFE00);
 }

@@ -8,10 +8,9 @@
 #include "lcd.hpp"
 
 
-LCD::LCD(InterruptHandler &it, Memory &mem) :
-		_it(it),
-		_mem(mem),
-		_video(mem.get_video())
+LCD::LCD(Memory &mem) :
+	_mem(mem),
+	_video(mem.get_video())
 {
 
 }
@@ -22,7 +21,8 @@ int LCD::step()
 	update_variables();
 
 	// We update the permissions of the video memory
-	_video.set_accessible(_state_iter->can_access());
+	_video.set_OAM_accessible(_state_iter->can_access_OAM());
+	_video.set_VRAM_accessible(_state_iter->can_access_VRAM());
 
 	// As we enter Mode1, we trigger the VBLANK interrupt
 	if (_state_iter->state == LCDState::Mode1)

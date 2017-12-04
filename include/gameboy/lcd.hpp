@@ -14,6 +14,34 @@
 class LCD
 {
 
+/*
+<===================================>
+	LCD CONTROLLER STATES
+<===================================>
+
+ Different status of the LCD controller:
+
+ Mode 0: The LCD controller is in the H-Blank period and
+         the CPU can access both the display RAM (8000h-9FFFh)
+         and OAM (FE00h-FE9Fh)
+
+ Mode 1: The LCD controller is in the V-Blank period (or the
+         display is disabled) and the CPU can access both the
+         display RAM (8000h-9FFFh) and OAM (FE00h-FE9Fh)
+
+ Mode 2: The LCD controller is reading from OAM memory.
+         The CPU <cannot> access OAM memory (FE00h-FE9Fh)
+         during this period.
+
+ Mode 3: The LCD controller is reading from both OAM and VRAM,
+         The CPU <cannot> access OAM and VRAM during this period.
+         CGB Mode: Cannot access Palette Data (FF69,FF6B) either.
+
+ Mode 2  2_____2_____2_____2_____2_____2___________________2____
+ Mode 3  _33____33____33____33____33____33__________________3___
+ Mode 0  ___000___000___000___000___000___000________________000
+ Mode 1  ____________________________________11111111111111_____
+*/
 	enum LCDState {Mode0, Mode1, Mode2, Mode3};
 
 	struct State
@@ -25,7 +53,10 @@ class LCD
 		// that we are spending in that mode.
 		int duration = 0;
 
-		bool can_access() const
+		bool can_access_VRAM() const
+		{return state != LCDState::Mode3;}
+
+		bool can_access_OAM() const
 		{return (state != LCDState::Mode2
 			&& state != LCDState::Mode3);}
 
@@ -33,7 +64,7 @@ class LCD
 
 
 	public:
-		LCD(InterruptHandler &it, Memory &mem);
+		LCD(Memory &mem);
 
 		/*
 		 *	This function updates the bitset that are used
@@ -74,42 +105,18 @@ class LCD
 */
 		std::bitset<8> _STAT;
 
+		//FIXME: getter for pixels in VideoModule
+		// so that we can actually render them in GTK
 
 	private:
-		InterruptHandler &_it;
 		Memory &_mem;
 		Video &_video;
 
-/*
-<===================================>
-	LCD CONTROLLER STATES
-<===================================>
+		// Current line that we are rendering
+		// 0-144
+		int line = 0;
 
- Different status of the LCD controller:
-
- Mode 0: The LCD controller is in the H-Blank period and
-         the CPU can access both the display RAM (8000h-9FFFh)
-         and OAM (FE00h-FE9Fh)
-
- Mode 1: The LCD controller is in the V-Blank period (or the
-         display is disabled) and the CPU can access both the
-         display RAM (8000h-9FFFh) and OAM (FE00h-FE9Fh)
-
- Mode 2: The LCD controller is reading from OAM memory.
-         The CPU <cannot> access OAM memory (FE00h-FE9Fh)
-         during this period.
-
- Mode 3: The LCD controller is reading from both OAM and VRAM,
-         The CPU <cannot> access OAM and VRAM during this period.
-         CGB Mode: Cannot access Palette Data (FF69,FF6B) either.
-
- Mode 2  2_____2_____2_____2_____2_____2___________________2____
- Mode 3  _33____33____33____33____33____33__________________3___
- Mode 0  ___000___000___000___000___000___000________________000
- Mode 1  ____________________________________11111111111111_____
-*/
 	using StatesArray = std::array<State, 19>;
-
 	const StatesArray states ={{
 		{LCDState::Mode2, 80},
 		{LCDState::Mode3, 169},
