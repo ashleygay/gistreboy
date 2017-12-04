@@ -26,7 +26,7 @@ public :
 	bool can_read(uint16_t address);
 	bool can_write(uint8_t byte, uint16_t address);
 
-	uint8_t get_lcd_control();
+	uint8_t& get_lcd_control();
 	uint8_t get_lcd_status();
 	uint8_t get_scrolly();
 	uint8_t get_scrollx();

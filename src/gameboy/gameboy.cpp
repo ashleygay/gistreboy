@@ -43,10 +43,7 @@ void GameBoy::step()
 		_cpu_cycles = p.step();
 
 	if (!_lcd_cycles)
-		_lcd_cycles = lcd.step();
-/*
-	_checkLCD();
-*/
+		_lcd_cycles = _lcd.step();
 	// wait for chrono here
 	t.wait();
 	_clockCycle();

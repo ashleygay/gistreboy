@@ -7,6 +7,15 @@
 
 #include "lcd.hpp"
 
+
+LCD::LCD(InterruptHandler &it, Memory &mem) :
+		_it(it),
+		_video(mem.get_video())
+{
+
+}
+
+
 int LCD::step()
 {
 	//TODO: do a step of the LCD screen

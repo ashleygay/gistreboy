@@ -57,7 +57,7 @@ bool Video::can_write(uint8_t byte, uint16_t address)
 	return true;
 }
 
-uint8_t Video::get_lcd_control()
+uint8_t& Video::get_lcd_control()
 {
 	return video_memory[0xFF40];
 }
