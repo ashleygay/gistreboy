@@ -27,13 +27,15 @@ int InterruptHandler::doInterrupt()
 		if (!IME)
 			return 0;
 		else {
-			std::bitset<8> IF = 0; /*_m->getInterruptFlags();*/
-			std::bitset<8> IE = 0; /*_m->getInterruptEnable();*/
+			std::bitset<8> IF = _m->get_interrupt_flags();
+			std::bitset<8> IE = _m->get_interrupt_enable();
 			std::bitset<8> res = IF & IE;
 
 			// We compute the nth interrupt index
 			int index = 0;
-			for (; !res[index] && index < 8; ++index);
+			while (!res[index] && (index < 8)) {
+				++index;
+			}
 
 			// We set the cleanup routine and the execution of
 			// the interrupt.

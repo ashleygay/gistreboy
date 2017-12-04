@@ -7,6 +7,79 @@
 
 #pragma once
 
+
+#include <interrupthandler.hpp>
+#include <array>
+
+class LCD
+{
+
+	enum LCDState {Mode0, Mode1, Mode2, Mode3};
+
+	struct State
+	{
+
+		LCDState state = LCDState::Mode0;
+
+		// Represents the number of clock cycles
+		// that we are spending in that mode.
+		int duration = 0;
+
+		bool can_access() const
+		{return (state != LCDState::Mode2
+			&& state != LCDState::Mode3);}
+
+	};
+
+
+	public:
+		LCD(InterruptHandler &it, Memory &mem);
+
+		/*
+		 *	This function updates the bitset that are used
+		 *	to represent the different registers of the LCD.
+		 */
+		void update_variables();
+
+		int step();
+
+/*
+	<==========================>
+		LCD CONTROL
+	<==========================>
+	 Bit 7 - LCD Display Enable             (0=Off, 1=On)
+	 Bit 6 - Window Tile Map Display Select (0=9800-9BFF, 1=9C00-9FFF)
+	 Bit 5 - Window Display Enable          (0=Off, 1=On)
+	 Bit 4 - BG & Window Tile Data Select   (0=8800-97FF, 1=8000-8FFF)
+	 Bit 3 - BG Tile Map Display Select     (0=9800-9BFF, 1=9C00-9FFF)
+	 Bit 2 - OBJ (Sprite) Size              (0=8x8, 1=8x16)
+	 Bit 1 - OBJ (Sprite) Display Enable    (0=Off, 1=On)
+	 Bit 0 - BG/Window Display/Priority     (0=Off, 1=On)
+*/
+		std::bitset<8> _CONTROL;
+/*
+	<==========================>
+		STAT REGISTER
+	<==========================>
+	 Bit 6 - LYC=LY Coincidence Interrupt (1=Enable) (Read/Write)
+	 Bit 5 - Mode 2 OAM Interrupt         (1=Enable) (Read/Write)
+	 Bit 4 - Mode 1 V-Blank Interrupt     (1=Enable) (Read/Write)
+	 Bit 3 - Mode 0 H-Blank Interrupt     (1=Enable) (Read/Write)
+	 Bit 2 - Coincidence Flag  (0:LYC<>LY, 1:LYC=LY) (Read Only)
+	 Bit 1-0 - Mode Flag       (Mode 0-3, see below) (Read Only)
+           0: During H-Blank
+           1: During V-Blank
+           2: During Searching OAM
+           3: During Transferring Data to LCD Driver
+*/
+		std::bitset<8> _STAT;
+
+
+	private:
+		InterruptHandler &_it;
+		Memory &_mem;
+		Video &_video;
+
 /*
 <===================================>
 	LCD CONTROLLER STATES
@@ -35,51 +108,35 @@
  Mode 0  ___000___000___000___000___000___000________________000
  Mode 1  ____________________________________11111111111111_____
 */
+	using StatesArray = std::array<State, 19>;
 
+	const StatesArray states ={{
+		{LCDState::Mode2, 80},
+		{LCDState::Mode3, 169},
+		{LCDState::Mode0, 207},
 
+		{LCDState::Mode2, 80},
+		{LCDState::Mode3, 169},
+		{LCDState::Mode0, 207},
 
-#include <interrupthandler.hpp>
+		{LCDState::Mode2, 80},
+		{LCDState::Mode3, 169},
+		{LCDState::Mode0, 207},
 
-class LCD
-{
-	public:
-		LCD(InterruptHandler &it, Memory &mem);
-		int step();
+		{LCDState::Mode2, 80},
+		{LCDState::Mode3, 169},
+		{LCDState::Mode0, 207},
 
-/*
-	<==========================>
-		LCD CONTROL
-	<==========================>
-	 Bit 7 - LCD Display Enable             (0=Off, 1=On)
-	 Bit 6 - Window Tile Map Display Select (0=9800-9BFF, 1=9C00-9FFF)
-	 Bit 5 - Window Display Enable          (0=Off, 1=On)
-	 Bit 4 - BG & Window Tile Data Select   (0=8800-97FF, 1=8000-8FFF)
-	 Bit 3 - BG Tile Map Display Select     (0=9800-9BFF, 1=9C00-9FFF)
-	 Bit 2 - OBJ (Sprite) Size              (0=8x8, 1=8x16)
-	 Bit 1 - OBJ (Sprite) Display Enable    (0=Off, 1=On)
-	 Bit 0 - BG/Window Display/Priority     (0=Off, 1=On)
-*/
-		//std::bitset<8>& _CONTROL;
-/*
-	<==========================>
-		STAT REGISTER
-	<==========================>
-	 Bit 6 - LYC=LY Coincidence Interrupt (1=Enable) (Read/Write)
-	 Bit 5 - Mode 2 OAM Interrupt         (1=Enable) (Read/Write)
-	 Bit 4 - Mode 1 V-Blank Interrupt     (1=Enable) (Read/Write)
-	 Bit 3 - Mode 0 H-Blank Interrupt     (1=Enable) (Read/Write)
-	 Bit 2 - Coincidence Flag  (0:LYC<>LY, 1:LYC=LY) (Read Only)
-	 Bit 1-0 - Mode Flag       (Mode 0-3, see below) (Read Only)
-           0: During H-Blank
-           1: During V-Blank
-           2: During Searching OAM
-           3: During Transferring Data to LCD Driver
-*/
-	//TODO: maybe use a reference with a bitset, it would be nice
-		//std::bitset<8>& _STAT;
+		{LCDState::Mode2, 80},
+		{LCDState::Mode3, 169},
+		{LCDState::Mode0, 207},
 
+		{LCDState::Mode2, 80},
+		{LCDState::Mode3, 169},
+		{LCDState::Mode0, 207},
 
-	private:
-		InterruptHandler &_it;
-		Video &_video;
+		{LCDState::Mode1, 4560}
+		}};
+
+	StatesArray::const_iterator _state_iter = states.cbegin();
 };

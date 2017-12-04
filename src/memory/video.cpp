@@ -40,8 +40,8 @@ void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
 	{
 		byte = _proc._read(inc_src);
 		_proc._write(byte, inc_dest);
-		inc_src++;
-		inc_dest++;
+		++inc_src;
+		++inc_dest;
 	}
 }
 
@@ -57,7 +57,12 @@ bool Video::can_write(uint8_t byte, uint16_t address)
 	return true;
 }
 
-uint8_t& Video::get_lcd_control()
+void Video::set_accessible(bool accessible)
+{
+	//FIXME
+}
+
+uint8_t Video::get_lcd_control()
 {
 	return video_memory[0xFF40];
 }

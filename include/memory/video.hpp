@@ -10,9 +10,6 @@
 class Video : public MemoryObject {
 
 public :
-	/*
-	 *  TODO: do dma_transfer and actually check permissions
-	 */
 
  	Video(Processor& proc,
 		std::vector<std::pair<uint16_t, uint16_t>> range);
@@ -26,7 +23,10 @@ public :
 	bool can_read(uint16_t address);
 	bool can_write(uint8_t byte, uint16_t address);
 
-	uint8_t& get_lcd_control();
+	// FIXME: function to change the permissions for the LCD
+	void set_accessible(bool accessible);
+
+	uint8_t get_lcd_control();
 	uint8_t get_lcd_status();
 	uint8_t get_scrolly();
 	uint8_t get_scrollx();

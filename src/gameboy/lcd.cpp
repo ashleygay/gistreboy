@@ -10,6 +10,7 @@
 
 LCD::LCD(InterruptHandler &it, Memory &mem) :
 		_it(it),
+		_mem(mem),
 		_video(mem.get_video())
 {
 
@@ -18,7 +19,24 @@ LCD::LCD(InterruptHandler &it, Memory &mem) :
 
 int LCD::step()
 {
-	//TODO: do a step of the LCD screen
-	return 0;
+	update_variables();
+
+	// We update the permissions of the video memory
+	_video.set_accessible(_state_iter->can_access());
+
+	// As we enter Mode1, we trigger the VBLANK interrupt
+	if (_state_iter->state == LCDState::Mode1)
+		_mem.set_interrupt_flag(Memory::Interrupt::VBLANK);
+
+	return _state_iter->duration;
 }
 
+
+void LCD::update_variables()
+{
+		_CONTROL = _video.get_lcd_control();
+		_STAT = _video.get_lcd_status();
+		++_state_iter;
+		if (_state_iter == states.cend())
+			_state_iter = states.cbegin();
+}
