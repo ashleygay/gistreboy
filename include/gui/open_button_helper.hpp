@@ -57,6 +57,5 @@ class OpenButtonHelper : public Helper
 		bool verify_attributes(GFile * f);
 
 	private:
-		size_t _min_size;
 		str_to_str _attributes;
 };
