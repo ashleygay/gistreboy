@@ -65,6 +65,4 @@ class Emulator
 		std::future<void> _future;
 
 		uint8_t _pixels[600 * 400];
-		uint8_t * _mem = NULL;
-		size_t _s;
 };
