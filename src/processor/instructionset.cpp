@@ -148,6 +148,11 @@ InstructionSet::InstructionSet()
 	add_instr(ADC_AHL)
 	add_instr(ADC_AX)
 
+	add_instr(ADD_HLBC)
+	add_instr(ADD_HLDE)
+	add_instr(ADD_HLHL)
+	add_instr(ADD_HLSP)
+	add_instr(ADD_SPX)
 
 	add_instr(SUB_AA)
 	add_instr(SUB_AB)
@@ -233,7 +238,10 @@ InstructionSet::InstructionSet()
 	add_instr(DEC_L)
 	add_instr(DEC_HL)
 
-#warning "Add DEC on double registers HERE"
+	add_instr(DEC_BC)
+	add_instr(DEC_DE)
+	add_instr(DEC_HL)
+	add_instr(DEC_SP)
 
 	add_instr(SWAP_AX)
 	add_instr(SWAP_BX)
@@ -464,8 +472,9 @@ InstructionSet::InstructionSet()
 	add_instr(RES_4HL)
 	add_instr(RES_5HL)
 	add_instr(RES_6HL)
-	add_instr(RES_7HL) 
-	  
+	add_instr(RES_7HL)
+
+	add_instr(RRCA) 
 	add_instr(RRC_AX)
 	add_instr(RRC_BX)
 	add_instr(RRC_CX)
@@ -475,6 +484,7 @@ InstructionSet::InstructionSet()
 	add_instr(RRC_LX)
 	add_instr(RRC_HL)
 
+	add_instr(RLCA)
 	add_instr(RLC_AX)
 	add_instr(RLC_BX)
 	add_instr(RLC_CX)
@@ -482,8 +492,9 @@ InstructionSet::InstructionSet()
 	add_instr(RLC_EX)
 	add_instr(RLC_HX)
 	add_instr(RLC_LX)
-	add_instr(RLC_HL)  
-	  
+	add_instr(RLC_HL)
+
+	add_instr(RLA)
 	add_instr(RL_AX)
 	add_instr(RL_BX)
 	add_instr(RL_CX)
@@ -493,6 +504,7 @@ InstructionSet::InstructionSet()
 	add_instr(RL_LX)
 	add_instr(RL_HL)
 
+	add_instr(RRA)
 	add_instr(RR_AX)
 	add_instr(RR_BX)
 	add_instr(RR_CX)
@@ -536,8 +548,6 @@ InstructionSet::InstructionSet()
 
 	add_instr(EI)
 	add_instr(DI)
-	//add_instr(SRL_HLX) 
-	
 
 	add_instr(JP)
 	add_instr(JPNZ)

@@ -1388,6 +1388,26 @@ RES_BITHL_def(5)
 RES_BITHL_def(6)
 RES_BITHL_def(7)
 
+
+void RRCA::exec(Processor *p)
+{
+	p->flag.unsetFlag(FlagRegister::ZERO);
+	auto flag_carry = check_bit(p->A.value, 0);
+	auto truncated_bit = check_bit(p->A.value, 0);
+	auto temp = static_cast<uint8_t>((p->A.value >> 1)
+					 | (truncated_bit << 7));
+	p->A.value = temp;
+	if (p->A.value == 0)
+		p->flag.setFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	if (flag_carry)
+		p->flag.setFlag(FlagRegister::CARRY);
+	else
+		p->flag.unsetFlag(FlagRegister::CARRY);
+}
+
+
 #define RRC_RegX_def(reg)                  \
   void RRC_##reg##X::exec(Processor *p)\
   {\
@@ -1434,6 +1454,23 @@ void RRC_HL::exec(Processor *p)
     HLWriteDereference(p, temp);
 }
 
+void RLCA::exec(Processor *p)
+{
+	p->flag.unsetFlag(FlagRegister::ZERO);
+	auto flag_carry = check_bit(p->A.value, 7);
+	auto truncated_bit = check_bit(p->A.value, 7);
+	auto temp = static_cast<uint8_t>((p->A.value << 1) | truncated_bit);
+	p->A.value = temp;
+	if (p->A.value == 0)
+		p->flag.setFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	if (flag_carry)
+		p->flag.setFlag(FlagRegister::CARRY);
+	else
+		p->flag.unsetFlag(FlagRegister::CARRY);
+}
+
 #define RLC_RegX_def(reg)                  \
   void RLC_##reg##X::exec(Processor *p)\
   {\
@@ -1476,6 +1513,25 @@ void RLC_HL::exec(Processor *p)
     else
       p->flag.unsetFlag(FlagRegister::CARRY);
     HLWriteDereference(p, temp);
+}
+
+
+void RLA::exec(Processor *p)
+{
+	p->flag.unsetFlag(FlagRegister::ZERO);
+	auto carry = p->flag.getFlag(FlagRegister::CARRY);
+	auto flag_carry = check_bit(p->A.value, 7);
+	if (flag.carry)
+		p->flag.setFlag(FlagRegister::CARRY);
+	else
+		p->flag.unsetFlag(FlagRegister::CARRY);
+	auto temp = static_cast<uint8_t>(p->A.value << 1);
+	temp |= carry;
+	if (temp == 0)
+		p->flag.setFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	p->A.value = temp;
 }
 
 
@@ -1525,6 +1581,26 @@ void RL_HL::exec(Processor *p)
     p->flag.unsetFlag(FlagRegister::HALFCARRY);
     HLWriteDereference(p, temp);
 }
+
+
+void RRA::exec(Processor *p)
+{
+	p->flag.unsetFlag(FlagRegister::ZERO);
+	auto carry = p->flag.getFlag(FlagRegister::CARRY);
+	auto flag_carry = check_bit(p->A.value, 0);
+	if (flag_carry)
+		p->flag.setFlag(FlagRegister::CARRY);
+	else
+		p->flag.unsetFlag(FlagRegister::CARRY);
+	auto temp = static_cast<uint8_t>(p->A.value >> 1);
+	temp |= carry;
+	if (temp == 0)
+		p->flag.setFlag(FlagRegister::ZERO);
+	p->flag.unsetFlag(FlagRegister::SUBTRACT);
+	p->flag.unsetFlag(FlagRegister::HALFCARRY);
+	p->A.value = temp;
+}
+
 
 #define RR_RegX_def(reg)                  \
   void RR_##reg##X::exec(Processor *p)\
