@@ -385,7 +385,7 @@ void NOP::exec(Processor *p)
 #define ADD_XY_def(reg1, reg2)\
   void ADD_##reg1##reg2::exec(Processor *p)\
   {\
-  	uint val = p->reg1.value + p->reg2.value;\
+        uint val = p->reg1.value + p->reg2.value;\
 	uint8_t result = static_cast<uint8_t>(val);\
 	p->flag.unsetFlag(FlagRegister::ZERO);\
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);\
@@ -1021,6 +1021,7 @@ void DEC_HLdereference::exec(Processor *p)
 #define SWAP_RegX_def(reg)                  \
   void SWAP_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto a = p->reg.value >> 4;			\
     auto b = p->reg.value << 4;\
     auto temp = a | b;\
@@ -1042,6 +1043,7 @@ SWAP_RegX_def(L)
 
 void SWAP_HL::exec(Processor *p)
 {
+  p->flag.unsetFlag(FlagRegister::ZERO);
   auto tmp = HLReadDereference(p);
   auto a = tmp >> 4;                 \
   auto b = tmp << 4;
@@ -1058,6 +1060,8 @@ void SWAP_HL::exec(Processor *p)
 #define DAA_def()                  \
   void DAA::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto a = p->A.value;\
     auto tmp = p->flag.getFlag(FlagRegister::CARRY) ? 0x60 : 0x00;	\
     if (p->flag.getFlag(FlagRegister::CARRY) ||\
@@ -1084,6 +1088,8 @@ DAA_def()
 #define CPL_def()                  \
   void CPL::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     auto temp = p->A.value;\
     auto result = ~temp;\
     p->A.value = result;\
@@ -1109,6 +1115,7 @@ CCF_def()
 #define SCF_def()                  \
   void SCF::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::CARRY);\
     p->flag.unsetFlag(FlagRegister::SUBTRACT);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     p->flag.setFlag(FlagRegister::CARRY);\
@@ -1119,6 +1126,8 @@ SCF_def()
 #define BIT_BITX_def(bit, reg)		\
   void BIT_##bit##reg::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     if (p->reg.value & (1 << bit))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
     p->flag.unsetFlag(FlagRegister::Flag::SUBTRACT);\
@@ -1185,6 +1194,8 @@ BIT_BITX_def(7, L)
 #define BIT_BITHL_def(bit)          \
   void BIT_##bit##HL::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
+    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     auto tmp = HLReadDereference(p);\
     if (tmp & (1 << bit))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
@@ -1369,6 +1380,7 @@ RES_BITHL_def(7)
 #define RRC_RegX_def(reg)                  \
   void RRC_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto flag_carry = check_bit(p->reg.value, 0);\
     auto truncated_bit = check_bit(p->reg.value, 0);\
     auto temp = static_cast<uint8_t>((p->reg.value >> 1)\
@@ -1395,6 +1407,7 @@ RRC_RegX_def(L)
 
 void RRC_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO);
     auto tmp = HLReadDereference(p);
     auto flag_carry = check_bit(tmp, 0);
     auto truncated_bit = check_bit(tmp, 0);
@@ -1413,6 +1426,7 @@ void RRC_HL::exec(Processor *p)
 #define RLC_RegX_def(reg)                  \
   void RLC_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto flag_carry = check_bit(p->reg.value, 7);\
     auto truncated_bit = check_bit(p->reg.value, 7);\
     auto temp = static_cast<uint8_t>((p->reg.value << 1) | truncated_bit); \
@@ -1437,6 +1451,7 @@ RLC_RegX_def(L)
 
 void RLC_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO);
     auto tmp = HLReadDereference(p);
     auto flag_carry = check_bit(tmp, 7);
     auto truncated_bit = check_bit(tmp, 7);
@@ -1456,6 +1471,7 @@ void RLC_HL::exec(Processor *p)
 #define RL_RegX_def(reg)                  \
   void RL_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto carry = p->flag.getFlag(FlagRegister::CARRY);\
     auto flag_carry = check_bit(p->reg.value, 7);\
     if (flag_carry)\
@@ -1482,6 +1498,7 @@ RL_RegX_def(L)
 
 void RL_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO); 
     auto tmp = HLReadDereference(p);
     auto carry = p->flag.getFlag(FlagRegister::CARRY);
     auto flag_carry = check_bit(tmp, 7);
@@ -1501,6 +1518,7 @@ void RL_HL::exec(Processor *p)
 #define RR_RegX_def(reg)                  \
   void RR_##reg##X::exec(Processor *p)\
   {\
+   p->flag.unsetFlag(FlagRegister::ZERO);\
    auto carry = p->flag.getFlag(FlagRegister::CARRY);\
    auto flag_carry = check_bit(p->reg.value, 0);\
    if (flag_carry)\
@@ -1527,6 +1545,7 @@ RR_RegX_def(L)
 
 void RR_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO);
     auto tmp = HLReadDereference(p);
     auto carry = p->flag.getFlag(FlagRegister::CARRY);
     auto flag_carry = check_bit(tmp, 0);
@@ -1546,6 +1565,7 @@ void RR_HL::exec(Processor *p)
 #define SLA_RegX_def(reg)                  \
   void SLA_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto flag_carry = check_bit(p->reg.value, 7);\
     if (flag_carry)\
       p->flag.setFlag(FlagRegister::CARRY);\
@@ -1570,6 +1590,7 @@ SLA_RegX_def(L)
 
 void SLA_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO);
     auto tmp = HLReadDereference(p);
     auto flag_carry = check_bit(tmp, 7);
     if (flag_carry)
@@ -1587,6 +1608,7 @@ void SLA_HL::exec(Processor *p)
 #define SRA_RegX_def(reg)                  \
   void SRA_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     auto bit_carry = check_bit(p->reg.value, 0);\
     auto top_bit = check_bit(p->reg.value, 7);\
     auto temp = static_cast<uint8_t>(p->reg.value >> 1);        \
@@ -1613,6 +1635,7 @@ SRA_RegX_def(L)
 
 void SRA_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO);
     auto tmp = HLReadDereference(p);
     auto bit_carry = check_bit(tmp, 0);
     auto top_bit = check_bit(tmp, 7);
@@ -1632,6 +1655,7 @@ void SRA_HL::exec(Processor *p)
 #define SRL_RegX_def(reg)                  \
   void SRL_##reg##X::exec(Processor *p)\
   {\
+    p->flag.unsetFlag(FlagRegister::ZERO);\
     bool leastbitset = check_bit(p->reg.value, 0);\
     auto temp = static_cast<uint8_t>(p->reg.value >> 1);        \
     if (temp == 0)\
@@ -1655,6 +1679,7 @@ SRL_RegX_def(L)
 
 void SRL_HL::exec(Processor *p)
 {
+    p->flag.unsetFlag(FlagRegister::ZERO); 
     auto tmp = HLReadDereference(p);
     bool leastbitset = check_bit(tmp, 0);
     auto temp = static_cast<uint8_t>(tmp >> 1);
