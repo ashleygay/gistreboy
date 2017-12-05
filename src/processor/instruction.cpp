@@ -233,15 +233,16 @@ void LDD_AHL::exec(Processor *p)
 	p->A.value = HLReadDereference(p);
 	uint16_t HL_dec = (p->L.value | (p->H.value << 8)) - 1;
 	p->L.value = HL_dec & 0xFF;
-	p->H.value = HL_dec << 8;
+	p->H.value = HL_dec >> 8;
 }
 
 void LDD_HLA::exec(Processor *p)
 {
 	uint16_t HL = p->L.value | (p->H.value << 8);
+
 	p->_write(p->A.value, HL--); // Note: HL decremented
-	p->L.value = HL & 0xFF;
-	p->H.value = HL << 8;
+	p->L.value = HL & 0x00FF;
+	p->H.value = HL >> 8;
 }
 
 void LDI_AHL::exec(Processor *p)
@@ -290,7 +291,7 @@ void LD_HLnn::exec(Processor *p)
 {
 	uint16_t HL = boost::get<uint16_t>(this->_args[0]);
 	p->L.value = HL & 0xFF;
-	p->H.value = HL << 8;
+	p->H.value = HL >> 8;
 }
 
 void LD_SPnn::exec(Processor *p)
@@ -1128,9 +1129,8 @@ SCF_def()
   {\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
-    if (p->reg.value & (1 << bit))\
+    if (!(p->reg.value & (1 << bit)))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
-    p->flag.unsetFlag(FlagRegister::Flag::SUBTRACT);\
     p->flag.setFlag(FlagRegister::Flag::HALFCARRY);\
   }
 
