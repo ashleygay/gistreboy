@@ -116,8 +116,8 @@ class Processor {
 
 
 		// Functions for pushing word on the stack
-		void push_word(uint16_t word);
-		uint16_t pop_word();
+		//void push_word(uint16_t word);
+		//uint16_t pop_word();
 
 	private:
 		// Returns 0 if there was no interrupt to do

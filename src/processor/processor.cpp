@@ -53,6 +53,7 @@ int Processor::_handleInterrupts()
 {
 	//TODO maybe factorize IF and IE
 	if (stopped) {
+			DEBUG_STREAM << "STOPPED" << std::endl;
 			// Check if any selected button is pressed
 			uint8_t joypad_status = _mem->read(0xFF00);
 
@@ -70,31 +71,30 @@ int Processor::_handleInterrupts()
 	}
 	else { // We are either halted or doing an interrupt
 
+		DEBUG_STREAM << "HALTED" << std::endl;
 		std::bitset<5> IF = _mem->get_interrupt_flags();
 		std::bitset<5> IE = _mem->get_interrupt_enable();
 		std::bitset<5> res = IF & IE;
 
 		// Check that the selected interrupt is triggered
 		int inter = res.any();
-		if (inter) {
+		if (inter && IME) {
+			DEBUG_STREAM << "INTERRUPTING" << std::endl;
 
-			//The handler will not do the interrupt
-			// if IME is not set.
-
-			if (IME) {
-				// We compute the nth interrupt index
-				unsigned int index = 0;
-				for (; !res[index] && index < res.size();
-					++index);
-				_mem->reset_interrupt_flag(index);
-
-				halted = false;
-				_setupInterrupt(index);
+			// We compute the nth interrupt index
+			unsigned int index = 0;
+			while (!res[index] && (index < res.size())) {
+				++index;
 			}
+			_mem->reset_interrupt_flag(index);
+
+			halted = false;
+			_setupInterrupt(index);
+			//TODO: figure out which value to return
 			return 4;
 		}
-
 	}
+	// No interrupts, we return 0
 	return 0;
 }
 
