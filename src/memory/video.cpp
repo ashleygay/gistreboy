@@ -1,5 +1,7 @@
 #include <video.hpp>
+#include <sprite.hpp>
 #include <bitset>
+#include <array>
 
 Video::Video(Processor& proc,
 	std::vector<std::pair<uint16_t, uint16_t>> range) :
@@ -110,4 +112,16 @@ uint8_t Video::get_obp0()
 uint8_t Video::get_obp1()
 {
 	return video_memory[0xFF49];
+}
+
+std::vector<Sprite> Video::get_sprites()
+{
+	std::vector<Sprite> sprites;
+	for (uint16_t i = 0xFE00; i <= 0xFE9F; i+=4)
+	{
+		Sprite sprite(video_memory[i], video_memory[i+1],
+			      video_memory[i+2], video_memory[i+3]);
+		sprites.push_back(sprite);
+	}
+	return sprites;
 }

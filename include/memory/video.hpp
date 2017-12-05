@@ -2,6 +2,7 @@
 
 #include <processor.hpp>
 #include <memoryobject.hpp>
+#include <sprite.hpp>
 
 #include <array>
 #include <vector>
@@ -25,6 +26,8 @@ public :
 	// FIXME: actually implement permissions
 	bool can_read(uint16_t address);
 	bool can_write(uint8_t byte, uint16_t address);
+
+	std::vector<Sprite> get_sprites();
 
 	uint8_t get_lcd_control();
 	uint8_t get_lcd_status();
