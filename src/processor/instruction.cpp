@@ -19,6 +19,8 @@ static uint8_t HLReadDereference(Processor *p)
 	return p->_read(address);
 }
 
+
+
 static uint8_t check_bit(uint8_t value, uint8_t bit)
 {
   return (value & (1 << bit)) != 0;
@@ -1858,4 +1860,10 @@ void RETC::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::CARRY))
 		_return(p);
+}
+
+void RETI::exec(Processor *p)
+{
+  _return(p);
+  p->enableIME(); 
 }
