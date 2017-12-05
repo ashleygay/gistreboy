@@ -11,7 +11,10 @@ Video::Video(Processor& proc,
 
 uint8_t Video::read(uint16_t address)
 {
-	return video_memory[address];
+	if (is_accessible(address))
+		return video_memory[address];
+	else
+		return 0;
 }
 
 void Video::write(uint8_t byte, uint16_t address)
@@ -25,7 +28,8 @@ void Video::write(uint8_t byte, uint16_t address)
 		
 	}
 
-	video_memory[address] = byte;
+	if (is_accessible(address))
+		video_memory[address] = byte;
 }
 
 void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
@@ -45,18 +49,25 @@ void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
 	}
 }
 
-bool Video::can_read(uint16_t address)
-{
-	return true;
-}
-
-bool Video::can_write(uint8_t byte, uint16_t address)
+bool Video::is_accessible(uint16_t address)
 {
 	if (_is_VRAM(address))
 		return _VRAM_accessible;
 	if (_is_OAM(address))
 		return _OAM_accessible;
-	return true;}
+	return true;
+}
+
+
+bool Video::can_read(uint16_t address)
+{
+	return is_accessible(address);
+}
+
+bool Video::can_write(uint16_t address)
+{
+	return is_accessible(address);
+}
 
 void Video::set_VRAM_accessible(bool accessible)
 {

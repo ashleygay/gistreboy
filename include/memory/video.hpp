@@ -19,11 +19,13 @@ public :
 
 	void dma_transfer(uint16_t beg_src, uint16_t end_src);
 
-	//FIXME
-	// If we try to access potentially protected memory,
+	// NOTE: There is no difference between read/write for perms
+	// If we try to read/write potentially protected memory,
 	// we return _accessible otherwise we return true.
+	bool is_accessible(uint16_t address);
+
 	bool can_read(uint16_t address);
-	bool can_write(uint8_t byte, uint16_t address);
+	bool can_write(uint16_t address);
 
 	// Change permission on protected memory:
  	// VRAM (0x8000-0x9FFF) and OAM (0xFE00-0xFE9F)

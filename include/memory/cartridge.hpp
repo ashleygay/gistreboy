@@ -24,7 +24,7 @@ public :
 
 	// FIXME: actually implement permissions
 	bool can_read(uint16_t address);
-	bool can_write(uint8_t byte, uint16_t address);
+	bool can_write(uint16_t address);
 
 	bool ram_enable();
 	bool has_boot();

@@ -245,11 +245,13 @@ void Cartridge::write(uint8_t byte, uint16_t address)
 
 bool Cartridge::can_read(uint16_t address)
 {
+	//FIXME
 	return true;
 }
 
-bool Cartridge::can_write(uint8_t byte, uint16_t address)
+bool Cartridge::can_write(uint16_t address)
 {
+	//FIXME
 	return true;
 }
 
