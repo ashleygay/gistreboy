@@ -1521,7 +1521,7 @@ void RLA::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::ZERO);
 	auto carry = p->flag.getFlag(FlagRegister::CARRY);
 	auto flag_carry = check_bit(p->A.value, 7);
-	if (flag.carry)
+	if (flag_carry)
 		p->flag.setFlag(FlagRegister::CARRY);
 	else
 		p->flag.unsetFlag(FlagRegister::CARRY);

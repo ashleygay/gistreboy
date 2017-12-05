@@ -236,7 +236,7 @@ InstructionSet::InstructionSet()
 	add_instr(DEC_E)
 	add_instr(DEC_H)
 	add_instr(DEC_L)
-	add_instr(DEC_HL)
+	add_instr(DEC_HLdereference)
 
 	add_instr(DEC_BC)
 	add_instr(DEC_DE)
