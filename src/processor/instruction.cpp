@@ -1,33 +1,48 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
+static uint16_t make_word(uint8_t low, uint8_t high)
+{
+	return (low | (high << 8));
+}
+
+static uint8_t get_high(uint16_t word)
+{
+	return (word << 8);
+}
+
+static uint8_t get_low(uint16_t word)
+{
+	return (word & 0xFF);
+}
+
 static uint8_t BCReadDereference(Processor *p)
 {
-	uint16_t address = p->C.value | (p->B.value << 8);
+	uint16_t address = make_word(p->C.value, p->B.value);
 	return p->_read(address);
 }
 
 static uint8_t DEReadDereference(Processor *p)
 {
-	uint16_t address = p->E.value | (p->D.value << 8);
+	uint16_t address = make_word(p->E.value, p->D.value);
 	return p->_read(address);
 }
 
 static uint8_t HLReadDereference(Processor *p)
 {
-	uint16_t address = p->L.value | (p->H.value << 8);
+	uint16_t address = make_word(p->L.value, p->H.value);
 	return p->_read(address);
 }
 
 static void HLWriteDereference(Processor *p, uint8_t value)
 {
-  uint16_t address = p->L.value | (p->H.value << 8);
-  p->_write(value, address);
+	uint16_t address = make_word(p->L.value, p->H.value);
+	p->_write(value, address);
 }
 
 static uint8_t check_bit(uint8_t value, uint8_t bit)
 {
-  return (value & (1 << bit)) != 0;
+	return (value & (1 << bit)) != 0;
 }
 
 static uint8_t clear_bit(uint8_t value, uint8_t bit)
@@ -49,8 +64,8 @@ static uint8_t set_bit_to(uint8_t value, uint8_t bit, bool on)
 
 static void _callPush(Processor *p)
 {
-	uint8_t PC_low = p->PC.value & 0xFF;
-	uint8_t PC_high = p->PC.value << 8;
+	uint8_t PC_low = get_low(p->PC.value);
+	uint8_t PC_high = get_high(p->PC.value);
 	p->_write(PC_low, p->SP.value--);
 	p->_write(PC_high, p->SP.value--);
 }
@@ -60,8 +75,9 @@ static void _return(Processor *p)
 	uint8_t PC_high = p->_read(p->SP.value++);
 	uint8_t PC_low = p->_read(p->SP.value++);
 
-	p->PC.value = PC_low | (PC_high << 8);
+	p->PC.value = make_word(PC_low, PC_high);
 }
+
 
 /////////////////////////////////////
 /////////////// LOADS ///////////////
@@ -96,7 +112,7 @@ LD_RegX_def(L)
 #define LD_HLX_def(reg)\
 	void LD_HL##reg::exec(Processor *p)\
 	{\
-		uint16_t address = p->L.value | (p->H.value << 8);\
+		uint16_t address = make_word(p->L.value, p->H.value);\
 		uint8_t value = p->A.value;\
 		p->_write(value, address);\
 	}
@@ -166,7 +182,7 @@ LD_HLX_def(L)
 
 void LD_HLn::exec(Processor *p)
 {
-	uint16_t address = p->L.value | (p->H.value << 8);
+	uint16_t address = make_word(p->L.value, p->H.value);
 	uint8_t value = boost::get<uint8_t>(this->_args[0]);
 	p->_write(value, address);
 }
@@ -194,19 +210,19 @@ void LD_Ann::exec(Processor *p)
 
 void LD_BCA::exec(Processor *p)
 {
-	uint16_t address = p->C.value | (p->B.value << 8);
+	uint16_t address = make_word(p->C.value, p->B.value);
 	p->_write(p->A.value, address);
 }
 
 void LD_DEA::exec(Processor *p)
 {
-	uint16_t address = p->E.value | (p->D.value << 8);
+	uint16_t address = make_word(p->E.value, p->D.value);
 	p->_write(p->A.value, address);
 }
 
 void LD_HLA::exec(Processor *p)
 {
-	uint16_t address = p->L.value | (p->H.value << 8);
+	uint16_t address = make_word(p->L.value, p->H.value);
 	p->_write(p->A.value, address);
 }
 
@@ -231,34 +247,34 @@ void LD_C2A::exec(Processor *p)
 void LDD_AHL::exec(Processor *p)
 {
 	p->A.value = HLReadDereference(p);
-	uint16_t HL_dec = (p->L.value | (p->H.value << 8)) - 1;
-	p->L.value = HL_dec & 0xFF;
-	p->H.value = HL_dec >> 8;
+	uint16_t HL_dec = make_word(p->L.value, p->H.value) - 1;
+	p->L.value = get_low(HL_dec);
+	p->H.value = get_high(HL_dec);
 }
 
 void LDD_HLA::exec(Processor *p)
 {
-	uint16_t HL = p->L.value | (p->H.value << 8);
+	uint16_t HL = make_word(p->L.value, p->H.value);
 
 	p->_write(p->A.value, HL--); // Note: HL decremented
-	p->L.value = HL & 0x00FF;
-	p->H.value = HL >> 8;
+	p->L.value = get_low(HL);
+	p->H.value = get_high(HL);
 }
 
 void LDI_AHL::exec(Processor *p)
 {
 	p->A.value = HLReadDereference(p);
-	uint16_t HL_inc = (p->L.value | (p->H.value << 8)) + 1;
-	p->L.value = HL_inc & 0xFF;
-	p->H.value = HL_inc << 8;
+	uint16_t HL_inc = make_word(p->L.value, p->H.value) + 1;
+	p->L.value = get_low(HL_inc);
+	p->H.value = get_high(HL_inc);
 }
 
 void LDI_HLA::exec(Processor *p)
 {
-	uint16_t HL = p->L.value | (p->H.value << 8);
+	uint16_t HL = make_word(p->L.value, p->H.value);
 	p->_write(p->A.value, HL++); // Note: HL incremented
-	p->L.value = HL & 0xFF;
-	p->H.value = HL << 8;
+	p->L.value = get_low(HL);
+	p->H.value = get_high(HL);
 }
 
 void LDH_nA::exec(Processor *p)
@@ -276,22 +292,22 @@ void LDH_An::exec(Processor *p)
 void LD_BCnn::exec(Processor *p)
 {
 	uint16_t BC = boost::get<uint16_t>(this->_args[0]);
-	p->C.value = BC & 0xFF;
-	p->B.value = BC << 8;
+	p->C.value = get_low(BC);
+	p->B.value = get_high(BC);
 }
 
 void LD_DEnn::exec(Processor *p)
 {
 	uint16_t DE = boost::get<uint16_t>(this->_args[0]);
-	p->E.value = DE & 0xFF;
-	p->D.value = DE << 8;
+	p->E.value = get_low(DE);
+	p->D.value = get_high(DE);
 }
 
 void LD_HLnn::exec(Processor *p)
 {
 	uint16_t HL = boost::get<uint16_t>(this->_args[0]);
-	p->L.value = HL & 0xFF;
-	p->H.value = HL >> 8;
+	p->L.value = get_low(HL);
+	p->H.value = get_high(HL);
 }
 
 void LD_SPnn::exec(Processor *p)
@@ -302,8 +318,8 @@ void LD_SPnn::exec(Processor *p)
 void LD_nnSP::exec(Processor *p)
 {
 	uint16_t address = boost::get<uint16_t>(this->_args[0]);
-	uint8_t SP_low = p->SP.value & 0xFF;
-	uint8_t SP_high = p->SP.value << 8;
+	uint8_t SP_low = get_low(p->SP.value);
+	uint8_t SP_high = get_low(p->SP.value);
 
 	p->_write(SP_low, address);
 	p->_write(SP_high, address + 1);
@@ -312,15 +328,15 @@ void LD_nnSP::exec(Processor *p)
 
 void LD_SPHL::exec(Processor *p)
 {
-	p->SP.value = p->L.value | (p->H.value << 8);
+	p->SP.value = make_word(p->L.value, p->H.value);
 }
 
 void LD_HLSPn::exec(Processor *p)
 {
 	uint8_t n = boost::get<uint8_t>(this->_args[0]);
 	uint16_t HL = p->SP.value + n;
-	p->L.value = HL & 0xFF;
-	p->H.value = HL << 8;
+	p->L.value = get_low(HL);
+	p->H.value = get_high(HL);
 
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->flag.unsetFlag(FlagRegister::CARRY);
@@ -427,7 +443,7 @@ void ADD_AHL::exec(Processor *p)
     p->A.value = (result & 0xFF);
   }
 
-void ADD_Aaddress::exec(Processor *p)
+void ADD_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]);
   uint val = p->A.value + tmp;
@@ -448,7 +464,7 @@ void ADD_Aaddress::exec(Processor *p)
 #define ADD_HLXY_def(reg1, reg2)\
   void ADD_HL##reg1##reg2::exec(Processor *p)\
   {\
-	uint16_t value_reg = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
+	uint16_t value_reg = make_word(p->reg2.value, p->reg1.value);\
 	uint16_t hl = p->L.value | (p->H.value << 8);\
   	uint val = hl + value_reg;\
 	uint16_t result = static_cast<uint16_t>(val);\
@@ -459,8 +475,8 @@ void ADD_Aaddress::exec(Processor *p)
 	  p->flag.setFlag(FlagRegister::HALFCARRY);\
 	if ((val & 0x10000) != 0)\
 	  p->flag.setFlag(FlagRegister::CARRY);	\
-	p->H.value = (result & 0xFF00);\
-	p->L.value = (result & 0x00FF);\
+	p->H.value = get_high(result);\
+	p->L.value = get_low(result);\
 }
 
 ADD_HLXY_def(B,C)
@@ -470,7 +486,7 @@ ADD_HLXY_def(H,L)
 void ADD_HLSP::exec(Processor *p)
 {
 	uint16_t value_reg = p->SP.value;
-	uint16_t hl = p->L.value | (p->H.value << 8);
+	uint16_t hl = make_word(p->L.value, p->H.value);
   	uint val = hl + value_reg;
 	uint16_t result = static_cast<uint16_t>(val);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
@@ -480,11 +496,11 @@ void ADD_HLSP::exec(Processor *p)
 	  p->flag.setFlag(FlagRegister::HALFCARRY);
 	if ((val & 0x10000) != 0)
 	  p->flag.setFlag(FlagRegister::CARRY);
-	p->H.value = (result & 0xFF00);
-	p->L.value = (result & 0x00FF);
+	p->H.value = get_high(result);
+	p->L.value = get_low(result);
 }
 
-void ADD_SPaddress::exec(Processor *p)
+void ADD_SPX::exec(Processor *p)
 {
 	uint8_t byte = boost::get<uint8_t>(this->_args[0]);
 	uint16_t sp = p->SP.value;
@@ -498,7 +514,7 @@ void ADD_SPaddress::exec(Processor *p)
 	  p->flag.setFlag(FlagRegister::HALFCARRY);
 	if (((sp ^ byte ^ (result & 0xFFFF)) & 0x100) == 0x100)
 	  p->flag.setFlag(FlagRegister::CARRY);
-	p->SP.value = result;
+	p->SP.value = (result & 0xFF);
 }
 
 //ADC instructions
@@ -518,7 +534,7 @@ void ADD_SPaddress::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);\
     if (val > 0xFF)\
       p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg1.value = (result & 0xFF);	   \
+    p->reg1.value = result;	   \
   }
 
 ADC_XY_def(A, A)
@@ -544,10 +560,10 @@ void ADC_AHL::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);
     if (val > 0xFF)
       p->flag.setFlag(FlagRegister::CARRY);
-    p->A.value = (result & 0xFF);       
+    p->A.value = result;       
 }
 
-void ADC_Aaddress::exec(Processor *p)
+void ADC_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]); 
   uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
@@ -562,7 +578,7 @@ void ADC_Aaddress::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (val > 0xFF)
     p->flag.setFlag(FlagRegister::CARRY);
-  p->A.value = (result & 0xFF);
+  p->A.value = result;
 }  
 
 //SUB instructions
@@ -582,7 +598,7 @@ void ADC_Aaddress::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);\
     if (p->reg1.value < p->reg2.value)		       \
       p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg1.value = (result & 0xFF);       \
+    p->reg1.value = result;       \
   }
 
 SUB_XY_def(A, A)
@@ -608,11 +624,11 @@ void SUB_AHL::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);
     if (p->A.value < tmp)                 
       p->flag.setFlag(FlagRegister::CARRY);
-    p->A.value = (result & 0xFF);       
+    p->A.value = result;       
 }
 
 
-void SUB_Aaddress::exec(Processor *p)
+void SUB_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]);    
   uint val = p->A.value - tmp;
@@ -627,7 +643,7 @@ void SUB_Aaddress::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (p->A.value < tmp)
     p->flag.setFlag(FlagRegister::CARRY);
-  p->A.value = (result & 0xFF);
+  p->A.value = result;
 }
 
 //SBC instructions
@@ -647,7 +663,7 @@ void SUB_Aaddress::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);\
     if (p->reg1.value < p->reg2.value)                 \
       p->flag.setFlag(FlagRegister::CARRY);\
-    p->reg1.value = (result & 0xFF);       \
+    p->reg1.value = result;       \
   }
 
 SBC_XY_def(A, A)
@@ -673,10 +689,10 @@ void SBC_AHL::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (p->A.value < tmp)                 
     p->flag.setFlag(FlagRegister::CARRY);
-  p->A.value = (result & 0xFF);       
+  p->A.value = result;       
 }
 
-void SBC_Aaddress::exec(Processor *p)
+void SBC_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]);
   uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
@@ -691,7 +707,7 @@ void SBC_Aaddress::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (p->A.value < tmp)
     p->flag.setFlag(FlagRegister::CARRY);
-  p->A.value = (result & 0xFF);
+  p->A.value = result;
 }
 
 //AND instructions
@@ -728,7 +744,7 @@ void AND_AHL::exec(Processor *p)
   p->flag.unsetFlag(FlagRegister::CARRY);
 }
 
-void AND_Aaddress::exec(Processor *p)
+void AND_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]);
   p->A.value &= tmp;
@@ -775,7 +791,7 @@ void OR_AHL::exec(Processor *p)
   p->flag.unsetFlag(FlagRegister::CARRY);
 }
 
-void OR_Aaddress::exec(Processor *p)
+void OR_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]);
   p->A.value |= tmp;
@@ -822,7 +838,7 @@ void XOR_AHL::exec(Processor *p)
   p->flag.unsetFlag(FlagRegister::CARRY);
 }
 
-void XOR_Aaddress::exec(Processor *p)
+void XOR_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]); 
   p->A.value ^= tmp;
@@ -879,7 +895,7 @@ void CP_AHL::exec(Processor *p)
       p->flag.setFlag(FlagRegister::CARRY);
 }
 
-void CP_Aaddress::exec(Processor *p)
+void CP_AX::exec(Processor *p)
 {
   auto tmp = boost::get<uint8_t>(this->_args[0]);
   uint val = p->A.value - tmp;
@@ -923,10 +939,10 @@ INC_Reg_def(L)
 #define INC_DReg_def(reg1, reg2)\
   void INC_##reg1##reg2::exec(Processor *p)\
   {\
-	uint16_t value = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
+	uint16_t value = make_word(p->reg2.value, p->reg1.value);\
 	++value;\
-	uint8_t reg1_val = (value & 0xFF00);\
-	uint8_t reg2_val = (value & 0x00FF);\
+	uint8_t reg1_val = get_high(value);\
+	uint8_t reg2_val = get_low(value);\
 	p->reg1.value = reg1_val;\
 	p->reg2.value = reg2_val;\
   }
@@ -984,10 +1000,10 @@ DEC_Reg_def(L)
 #define DEC_DReg_def(reg1, reg2)\
   void DEC_##reg1##reg2::exec(Processor *p)\
   {\
-	uint16_t value = (p->reg1.value << 8) | (p->reg2.value & 0xFF);\
+	uint16_t value = make_word(p->reg2.value, p->reg1.value);\
 	--value;\
-	uint8_t reg1_val = (value & 0xFF00);\
-	uint8_t reg2_val = (value & 0x00FF);\
+	uint8_t reg1_val = get_high(value);\
+	uint8_t reg2_val = get_low(value);\
 	p->reg1.value = reg1_val;\
 	p->reg2.value = reg2_val;\
   }
@@ -999,7 +1015,7 @@ DEC_DReg_def(H,L)
 void DEC_SP::exec(Processor *p)
 {
   uint16_t value = p->SP.value;
-  ++value;
+  --value;
   p->SP.value = value;
 }
 
@@ -1089,8 +1105,6 @@ DAA_def()
 #define CPL_def()                  \
   void CPL::exec(Processor *p)\
   {\
-    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
-    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     auto temp = p->A.value;\
     auto result = ~temp;\
     p->A.value = result;\
@@ -1116,7 +1130,6 @@ CCF_def()
 #define SCF_def()                  \
   void SCF::exec(Processor *p)\
   {\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
     p->flag.unsetFlag(FlagRegister::SUBTRACT);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     p->flag.setFlag(FlagRegister::CARRY);\
@@ -1128,7 +1141,6 @@ SCF_def()
   void BIT_##bit##reg::exec(Processor *p)\
   {\
     p->flag.unsetFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     if (!(p->reg.value & (1 << bit)))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
     p->flag.setFlag(FlagRegister::Flag::HALFCARRY);\
@@ -1195,7 +1207,6 @@ BIT_BITX_def(7, L)
   void BIT_##bit##HL::exec(Processor *p)\
   {\
     p->flag.unsetFlag(FlagRegister::ZERO);\
-    p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     auto tmp = HLReadDereference(p);\
     if (tmp & (1 << bit))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
@@ -1713,7 +1724,6 @@ void DI::exec(Processor *p)
 {
   p->disableIME();
 }
-//SRL_RegX_def(HL)
 
 /////////////////////////////////////
 /////////////// JUMPS ///////////////
@@ -1750,7 +1760,7 @@ void JPC::exec(Processor *p)
 
 void JPHL::exec(Processor *p)
 {
-	p->PC.value = p->L.value | (p->H.value << 8);
+	p->PC.value = get_word(p->L.value, p->H.value);
 }
 
 void JR::exec(Processor *p)
