@@ -4,12 +4,12 @@
 	LD HL,$9fff		; $0004
 Addr_0007:
 	LD (HL-),A		; $0007
-	BIT 7,H		; $0008
+	BIT 7,H			; $0008
 	JR NZ, Addr_0007	; $000a
 
 	LD HL,$ff26		; $000c  Setup Audio
 	LD C,$11		; $000f
-	LD A,$80		; $0011 
+	LD A,$80		; $0011
 	LD (HL-),A		; $0013
 	LD ($FF00+C),A	; $0014
 	INC C			; $0015
