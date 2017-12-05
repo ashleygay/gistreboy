@@ -57,9 +57,9 @@ void Memory::set_interrupt_flag(Interrupt inter)
 	memory[0xFF0F] &= (~(1 << inter));
 }
 
-void Memory::reset_interrupt_flag(Interrupt inter)
+void Memory::reset_interrupt_flag(int interrupt)
 {
-	memory[0xFF0F] |= (1 << inter);
+	memory[0xFF0F] |= (1 << interrupt);
 }
 
 uint8_t Memory::get_interrupt_enable()

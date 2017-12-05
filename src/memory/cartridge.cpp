@@ -2,7 +2,8 @@
 
 Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range) :
 			MemoryObject(range)
-{}
+{
+}
 
 
 void Cartridge::change_game(uint8_t *cart)

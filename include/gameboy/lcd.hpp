@@ -7,9 +7,12 @@
 
 #pragma once
 
-
-#include <interrupthandler.hpp>
 #include <array>
+
+class Memory;
+
+#include <memory.hpp>
+#include <video.hpp>
 
 class LCD
 {

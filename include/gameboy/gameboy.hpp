@@ -10,7 +10,6 @@
 #include <debug.hpp>
 #include <processor.hpp>
 #include <memory.hpp>
-#include <interrupthandler.hpp>
 #include <processor.hpp>
 #include <memory.hpp>
 #include <lcd.hpp>
@@ -51,15 +50,8 @@ class GameBoy
 		void _clockCycle();
 
 	private:
-		//TODO:	Each class is actually inside a Component class that
-		// handles each processor/clock/memory/lcd.
-
 		Processor p;
 		Memory _mem;
-
-		// Used to handle periodic interrupts or interrupts provided by
-		// the software (joypad inputs)
-		InterruptHandler _handler;
 
 		LCD _lcd;
 		int _handler_cycles = 0;

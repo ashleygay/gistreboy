@@ -12,9 +12,9 @@
 #include <iostream>
 
 class InstructionSet;
-class InterruptHandler;
 class Memory;
 
+#include <interrupts.hpp>
 #include <debug.hpp>
 #include <instructionset.hpp>
 #include <instructionargs.hpp>
@@ -55,16 +55,16 @@ class Processor {
 		DRegister SP;
 
 	private:
-		// Boolean is set to false when we end the bootcode.
-		bool isBooting = true;
+
+		static const uint16_t INTERRUPT_VECTOR = 0x0040;
+
+		bool IME = true;
+		bool IMEDelay = false;
 
 		Instruction * currentInstruction;
 
 		// InstructionSet containing all instructions.
 		InstructionSet iset;
-
-		// Interrupt Handler, will handle all interrupts
-		InterruptHandler *_handler = nullptr;
 
 		// Used to resolve all memory operations
 		// Read/Write as wall as charging next instruction etc
@@ -84,9 +84,6 @@ class Processor {
 		uint8_t _read(uint16_t address);
 
 		void _write(uint8_t value, uint16_t address);
-
-		void setInterruptHandler(InterruptHandler *handler)
-			{_handler = handler;}
 
 		void setMemory(Memory *mem)
 			{_mem = mem;}
@@ -116,7 +113,19 @@ class Processor {
 		// The programmer must select bits prior to entering
 		// stop mode in order to be able to leave it correctly
 		void STOP();
+
+
+		// Functions for pushing word on the stack
+		void push_word(uint16_t word);
+		uint16_t pop_word();
+
 	private:
+		// Returns 0 if there was no interrupt to do
+		int _handleInterrupts();
+	
+		// Setup PC and the stack for a jump to the interrupt vect
+		void _setupInterrupt(unsigned int inter);
+
 		int _execCurrentInstruction();
 
 		void _BUG(std::string str, int value) const;

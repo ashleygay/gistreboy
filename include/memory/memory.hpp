@@ -39,7 +39,7 @@ public :
 
 	// Set the desired interrupt to 1
 	// Called from interrupt handler to "consume" the interrupt
-	void reset_interrupt_flag(Interrupt inter);
+	void reset_interrupt_flag(int interrupt);
 
 	// Get specific values in memory
 	uint8_t get_interrupt_flags();

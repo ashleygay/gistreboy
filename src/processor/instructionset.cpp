@@ -571,6 +571,7 @@ InstructionSet::InstructionSet()
 	add_instr(RETZ)
 	add_instr(RETNC)
 	add_instr(RETC)
+	add_instr(RETI)
         #undef add_instr
 }
 

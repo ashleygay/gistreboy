@@ -1867,3 +1867,9 @@ void RETC::exec(Processor *p)
 	if ( p->flag.getFlag(FlagRegister::CARRY))
 		_return(p);
 }
+
+void RETI::exec(Processor *p)
+{
+  _return(p);
+  p->enableIME();
+}

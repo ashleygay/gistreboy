@@ -35,11 +35,7 @@ void GameBoy::step()
 	boost::asio::deadline_timer t(io,
 			boost::posix_time::nanoseconds(GB_CYCLE));
 
-//	if (!_handler_cycles)
-//	 	_handler_cycles = _handler.doInterrupt();
-
-	// If there was no interrupt to service we execute the next instruction
-	if (!_handler_cycles && !_cpu_cycles)
+	if (!_cpu_cycles)
 		_cpu_cycles = p.step();
 
 	if (!_lcd_cycles)
@@ -51,17 +47,12 @@ void GameBoy::step()
 
 void GameBoy::_wireComponents()
 {
-	// TODO: Init all here
 	p.setMemory(&_mem);
-	p.setInterruptHandler(&_handler);
-	// lcd.setMemory(&m);
-	_handler.setMemory(&_mem);
 }
 
 void GameBoy::_clockCycle()
 {
 	// Decrease all pending timers
-	if (_handler_cycles) --_handler_cycles;
 	if (_cpu_cycles) --_cpu_cycles;
 	if (_lcd_cycles) --_lcd_cycles;
 }
@@ -69,13 +60,11 @@ void GameBoy::_clockCycle()
 
 void GameBoy::_resetComponents()
 {
-	// TODO Reset components here
 	_mem.reset();
 }
 
 void GameBoy::changeGame(uint8_t *mem)
 {
-	//TODO: memory copies the content of the pointer.
 	_resetComponents();
 	_mem.change_game(mem);
 }

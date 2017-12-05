@@ -7,53 +7,52 @@
 
 #include <processor.hpp>
 #include <instruction.hpp>
-#include <interrupthandler.hpp>
 #include <memory.hpp>
 
 /* PUBLIC METHODS */
 
 void Processor::enableIME()
 {
-	_handler->enableIME();
+	IME = true;
 }
 
 void Processor::disableIME()
 {
-	_handler->disableIME();
+	IME = false;
 }
 
 
 void Processor::enableIMEDelay()
 {
-	_handler->enableIMEDelay();
+	IMEDelay = true;
 }
 
 int Processor::step()
 {
-//	DEBUG_STREAM << "Processor STEP" << std::endl;
-	if (!_handler || !_mem)
-		throw std::runtime_error("Memory or handler pointer not set.");
-	if (halted || stopped) {
-		if (halted) {
-			// Check that the selected interrupt is triggered
-			std::bitset<8> IF = _mem->get_interrupt_flags();
-			std::bitset<8> IE = _mem->get_interrupt_enable();
-			std::bitset<8> res = IF & IE;
+	if (!_mem)
+	throw std::runtime_error("Memory or handler pointer not set.");
 
-			int inter = res.any();
-			if (inter) {
+	int interrupts = _handleInterrupts();
 
-				//The handler will not do the interrupt
-				// if IME is not set.
+	if (!interrupts) {
 
-				(void)_handler->doInterrupt();
-				halted = false;
-				return 4;
-			}
-			else
-				return 0;
+		if (IMEDelay) {
+			// Interrupts will be called on the next step
+			IME = true;
+			IMEDelay = false;
 		}
-		else {
+		// No interrupts to handle and we are not halted/stopped
+		_fetchNextInstruction();
+		return _execCurrentInstruction();
+	}
+	else
+		return interrupts;
+}
+
+int Processor::_handleInterrupts()
+{
+	//TODO maybe factorize IF and IE
+	if (stopped) {
 			// Check if any selected button is pressed
 			uint8_t joypad_status = _mem->read(0xFF00);
 
@@ -68,13 +67,63 @@ int Processor::step()
 				stopped = false;
 				return 4;
 			}
-		}
-		return 0;
 	}
-	_fetchNextInstruction();
-	return _execCurrentInstruction();
+	else { // We are either halted or doing an interrupt
+
+		std::bitset<5> IF = _mem->get_interrupt_flags();
+		std::bitset<5> IE = _mem->get_interrupt_enable();
+		std::bitset<5> res = IF & IE;
+
+		// Check that the selected interrupt is triggered
+		int inter = res.any();
+		if (inter) {
+
+			//The handler will not do the interrupt
+			// if IME is not set.
+
+			if (IME) {
+				// We compute the nth interrupt index
+				unsigned int index = 0;
+				for (; !res[index] && index < res.size();
+					++index);
+				_mem->reset_interrupt_flag(index);
+
+				halted = false;
+				_setupInterrupt(index);
+			}
+			return 4;
+		}
+
+	}
+	return 0;
 }
 
+/*
+void Processor::push_word(uint16_t word)
+{
+
+	_mem->write(get_low(word), SP.value--);
+	_mem->write(get_high(word), SP.value--);
+}
+
+uint16_t Processor::pop_word()
+{
+	uint8_t high = p->_read(++SP.value);
+	uint8_t low = p->_read(++SP.value);
+	return make_word(low, high);
+}
+*/
+
+void Processor::_setupInterrupt(unsigned int interrupt)
+{
+//FIXME
+#warning "Finish that stuff with fixed instructions"
+	// We push PC onto the stack
+//	push_word(PC.value);
+
+	// We set PC to the correct interrupt
+//	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
+}
 
 void Processor::HALT()
 {
