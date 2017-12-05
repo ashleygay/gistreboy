@@ -1760,7 +1760,7 @@ void JPC::exec(Processor *p)
 
 void JPHL::exec(Processor *p)
 {
-	p->PC.value = get_word(p->L.value, p->H.value);
+	p->PC.value = make_word(p->L.value, p->H.value);
 }
 
 void JR::exec(Processor *p)
