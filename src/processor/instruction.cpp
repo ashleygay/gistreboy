@@ -8,7 +8,7 @@ static uint16_t make_word(uint8_t low, uint8_t high)
 
 static uint8_t get_high(uint16_t word)
 {
-	return (word << 8);
+	return (word >> 8);
 }
 
 static uint8_t get_low(uint16_t word)
