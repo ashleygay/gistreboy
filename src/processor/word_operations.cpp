@@ -1,3 +1,10 @@
+/*
+ * File : word_operations.cpp
+ *
+ * File created by : Corentin Gay
+ * File was created the : 06/12/2017
+ */
+
 #include <word_operations.hpp>
 
 uint16_t make_word(uint8_t low, uint8_t high)

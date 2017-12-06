@@ -1,3 +1,9 @@
+/*
+ * File : word_operations.hpp
+ *
+ * File created by : Corentin Gay
+ * File was created at : 06/12/2017
+ */
 
 #pragma once
 
