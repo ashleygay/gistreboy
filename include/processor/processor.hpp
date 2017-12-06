@@ -10,6 +10,8 @@
 #pragma once
 
 #include <iostream>
+#include <atomic>
+#include <exception>
 
 class InstructionSet;
 class Memory;
@@ -20,8 +22,7 @@ class Memory;
 #include <instructionargs.hpp>
 #include <registers.hpp>
 #include <opcode.hpp>
-#include <atomic>
-#include <exception>
+#include <word_operations.hpp>
 
 class Processor {
 
@@ -116,8 +117,8 @@ class Processor {
 
 
 		// Functions for pushing word on the stack
-		//void push_word(uint16_t word);
-		//uint16_t pop_word();
+		void push_word(uint16_t word);
+		uint16_t pop_word();
 
 	private:
 		// Returns 0 if there was no interrupt to do

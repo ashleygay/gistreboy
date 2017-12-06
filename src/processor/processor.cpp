@@ -97,31 +97,26 @@ int Processor::_handleInterrupts()
 	return 0;
 }
 
-/*
 void Processor::push_word(uint16_t word)
 {
-
 	_mem->write(get_low(word), SP.value--);
 	_mem->write(get_high(word), SP.value--);
 }
 
 uint16_t Processor::pop_word()
 {
-	uint8_t high = p->_read(++SP.value);
-	uint8_t low = p->_read(++SP.value);
+	uint8_t high = _read(++SP.value);
+	uint8_t low = _read(++SP.value);
 	return make_word(low, high);
 }
-*/
 
 void Processor::_setupInterrupt(unsigned int interrupt)
 {
-//FIXME
-#warning "Finish that stuff with fixed instructions"
 	// We push PC onto the stack
-//	push_word(PC.value);
+	push_word(PC.value);
 
 	// We set PC to the correct interrupt
-//	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
+	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
 }
 
 void Processor::HALT()

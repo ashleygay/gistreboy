@@ -1,21 +1,6 @@
 #include <instruction.hpp>
 #include <processor.hpp>
 
-static uint16_t make_word(uint8_t low, uint8_t high)
-{
-	return (low | (high << 8));
-}
-
-static uint8_t get_high(uint16_t word)
-{
-	return (word >> 8);
-}
-
-static uint8_t get_low(uint16_t word)
-{
-	return (word & 0xFF);
-}
-
 static uint8_t BCReadDereference(Processor *p)
 {
 	uint16_t address = make_word(p->C.value, p->B.value);
@@ -64,18 +49,12 @@ static uint8_t set_bit_to(uint8_t value, uint8_t bit, bool on)
 
 static void _callPush(Processor *p)
 {
-	uint8_t PC_low = get_low(p->PC.value);
-	uint8_t PC_high = get_high(p->PC.value);
-	p->_write(PC_low, p->SP.value--);
-	p->_write(PC_high, p->SP.value--);
+	p->push_word(p->PC.value);
 }
 
 static void _return(Processor *p)
 {
-	uint8_t PC_high = p->_read(p->SP.value++);
-	uint8_t PC_low = p->_read(p->SP.value++);
-
-	p->PC.value = make_word(PC_low, PC_high);
+	p->PC.value = p->pop_word();
 }
 
 
@@ -97,7 +76,6 @@ LD_RegX_def(D)
 LD_RegX_def(E)
 LD_RegX_def(H)
 LD_RegX_def(L)
-
 
 #undef LD_RegX_def
 
@@ -255,7 +233,6 @@ void LDD_AHL::exec(Processor *p)
 void LDD_HLA::exec(Processor *p)
 {
 	uint16_t HL = make_word(p->L.value, p->H.value);
-
 	p->_write(p->A.value, HL--); // Note: HL decremented
 	p->L.value = get_low(HL);
 	p->H.value = get_high(HL);

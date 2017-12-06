@@ -7,6 +7,7 @@
 #include <processor.hpp>
 #include <instructionargs.hpp>
 #include <registers.hpp>
+#include <word_operations.hpp>
 
 class Instruction {
 	public:

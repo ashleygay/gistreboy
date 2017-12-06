@@ -14,6 +14,7 @@ _PROCESSOR_SRC += instructionargs.cpp
 _PROCESSOR_SRC += instructionset.cpp
 _PROCESSOR_SRC += processor.cpp
 _PROCESSOR_SRC += registers.cpp
+_PROCESSOR_SRC += word_operations.cpp
 PROCESSOR_SRC = $(patsubst %,$(subst include,src,$(PROCESSOR))/%,\
 		$(_PROCESSOR_SRC))
 
