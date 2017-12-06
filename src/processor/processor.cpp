@@ -53,21 +53,21 @@ int Processor::_handleInterrupts()
 {
 	//TODO maybe factorize IF and IE
 	if (stopped) {
-			DEBUG_STREAM << "STOPPED" << std::endl;
-			// Check if any selected button is pressed
-			uint8_t joypad_status = _mem->read(0xFF00);
+		DEBUG_STREAM << "STOPPED" << std::endl;
+		// Check if any selected button is pressed
+		uint8_t joypad_status = _mem->get_joypad();
 
-			// Get bits [0-3] check that a button is pressed
-			bool pressed = ~joypad_status & 0x0F;
+		// Get bits [0-3] check that a button is pressed
+		bool pressed = ~joypad_status & 0x0F;
 
-			// Get bits [4-5], check that joypad is enabled
-			bool selected = ~joypad_status & 0x30;
+		// Get bits [4-5], check that joypad is enabled
+		bool selected = ~joypad_status & 0x30;
 
-			if (pressed && selected) {
-				// We end STOP mode.
-				stopped = false;
-				return 4;
-			}
+		if (pressed && selected) {
+			// We end STOP mode.
+			stopped = false;
+			return 4;
+		}
 	}
 	else { // We are either halted or doing an interrupt
 

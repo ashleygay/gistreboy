@@ -34,9 +34,9 @@ int LCD::step()
 
 void LCD::update_variables()
 {
-		_CONTROL = _video.get_lcd_control();
-		_STAT = _video.get_lcd_status();
-		++_state_iter;
-		if (_state_iter == states.cend())
-			_state_iter = states.cbegin();
+	_CONTROL = _video.get_lcd_control();
+	_STAT = _video.get_lcd_status();
+	++_state_iter;
+	if (_state_iter == states.cend())
+		_state_iter = states.cbegin();
 }

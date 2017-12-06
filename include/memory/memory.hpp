@@ -44,6 +44,7 @@ public :
 	// Get specific values in memory
 	uint8_t get_interrupt_flags();
 	uint8_t get_interrupt_enable();
+	uint8_t get_joypad();
 
 private :
 

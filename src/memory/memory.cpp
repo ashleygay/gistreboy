@@ -72,6 +72,11 @@ uint8_t Memory::get_interrupt_flags()
 	return memory[0xFF0F];
 }
 
+uint8_t Memory::get_joypad()
+{
+	return memory[0xFF00];
+}
+
 Video& Memory::get_video()
 {
 	return video;
