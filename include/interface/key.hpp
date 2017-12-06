@@ -8,6 +8,6 @@
 
 #include <debug.hpp>
 
-enum KeyPress {START, SELECT, A, B, LEFT, DOWN, UP, RIGHT};
+enum Key {START, SELECT, A, B, LEFT, DOWN, UP, RIGHT};
 
-void display_key_press(KeyPress p);
+void display_key(Key k);

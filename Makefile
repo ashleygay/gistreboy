@@ -23,12 +23,12 @@ GAMEBOY=include/gameboy
 _GAMEBOY_SRC += gameboy.cpp
 _GAMEBOY_SRC += lcd.cpp
 _GAMEBOY_SRC += interrupthandler.cpp
-_GAMEBOY_SRC += keypress.cpp
 GAMEBOY_SRC = $(patsubst %,$(subst include,src,$(GAMEBOY))/%,\
 		$(_GAMEBOY_SRC))
 
 INTERFACE=include/interface
 _INTERFACE_SRC += emulator.cpp
+_INTERFACE_SRC += key.cpp
 INTERFACE_SRC = $(patsubst %,$(subst include,src,$(INTERFACE))/%,\
 		$(_INTERFACE_SRC))
 

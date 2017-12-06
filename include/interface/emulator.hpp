@@ -13,7 +13,7 @@
 
 #include <gameboy.hpp>
 #include <debug.hpp>
-#include <keypress.hpp>
+#include <key.hpp>
 
 #include <iostream>
 #include <array>
@@ -44,7 +44,8 @@ class Emulator
 		void stop();
 
 		// Receive a key press from the GUI thread
-		void key_press(KeyPress press);
+		void key_press(Key k);
+		void key_release(Key k);
 
 	private:
 		// Renders the VRAM onto the pixel buffer

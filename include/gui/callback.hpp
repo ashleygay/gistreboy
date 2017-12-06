@@ -9,7 +9,7 @@
 #include <debug.hpp>
 #include <open_button_helper.hpp>
 #include <emulator.hpp>
-#include <keypress.hpp>
+#include <key.hpp>
 
 #include <gtk/gtk.h>
 #include <unordered_map>
@@ -41,3 +41,4 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data);
 int trigger_draw(GtkWidget * area, GdkFrameClock * c, gpointer user_data);
 
 gboolean key_pressed_callback(GtkWidget *widget, GdkEventKey *event);
+gboolean key_released_callback(GtkWidget *widget, GdkEventKey *event);

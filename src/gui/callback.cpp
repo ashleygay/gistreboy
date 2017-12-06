@@ -8,15 +8,15 @@
 #include <callback.hpp>
 
 #include <unordered_map>
-static std::unordered_map<std::string, KeyPress> bindings =
-	{{"Up", KeyPress::UP},
-	 {"Down", KeyPress::DOWN},
-	 {"Left", KeyPress::LEFT},
-	 {"Right", KeyPress::RIGHT},
-	 {"h", KeyPress::A},
-	 {"j", KeyPress::B},
-	 {"k", KeyPress::START},
-	 {"l", KeyPress::SELECT},
+static std::unordered_map<std::string, Key> bindings =
+	{{"k", Key::UP},
+	 {"j", Key::DOWN},
+	 {"h", Key::LEFT},
+	 {"l", Key::RIGHT},
+	 {"a", Key::A},
+	 {"s", Key::B},
+	 {"d", Key::START},
+	 {"f", Key::SELECT},
 	};
 
 
@@ -30,11 +30,19 @@ void NYI(GtkWidget * b, gpointer user_data)
 gboolean key_pressed_callback(GtkWidget *widget, GdkEventKey *event)
 {
 	if (!event) return false;
-	
 	std::string str(gdk_keyval_name(event->keyval));
-	//TODO: Implement a way to rebind keys
 	if (bindings.find(str) != bindings.end())
 		Emulator::getInstance().key_press(bindings[str]);
+
+	return true;
+}
+
+gboolean key_released_callback(GtkWidget *widget, GdkEventKey *event)
+{
+	if (!event) return false;
+	std::string str(gdk_keyval_name(event->keyval));
+	if (bindings.find(str) != bindings.end())
+		Emulator::getInstance().key_release(bindings[str]);
 
 	return true;
 }
@@ -115,8 +123,8 @@ int trigger_draw(GtkWidget * area, GdkFrameClock * c, gpointer user_data)
 	(void)c;
 	(void)user_data;
 //	DEBUG_STREAM << "Triggering draw event on the area. clock " << (void*)c << std::endl;
-	gtk_widget_queue_draw_area(area, 0, 0,
-			gtk_widget_get_allocated_width(area),
-			gtk_widget_get_allocated_height(area));
+//	gtk_widget_queue_draw_area(area, 0, 0,
+//			gtk_widget_get_allocated_width(area),
+//			gtk_widget_get_allocated_height(area));
 	return 42;
 }

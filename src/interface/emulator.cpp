@@ -68,9 +68,18 @@ void Emulator::stop()
 	}
 }
 
-void Emulator::key_press(KeyPress press)
+void Emulator::key_press(Key k)
 {
-	display_key_press(press);
+	DEBUG_STREAM << "PRESS ";
+	display_key(k);
+	//TODO: notify the gameboy memory
+}
+
+void Emulator::key_release(Key k)
+{
+	DEBUG_STREAM << "RELEASE ";
+	display_key(k);
+	//TODO: notify the gameboy memory
 }
 
 void Emulator::changeCartridge(uint8_t *data)
