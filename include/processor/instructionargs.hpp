@@ -9,8 +9,8 @@
 class Processor;
 
 using Argument = boost::variant<uint8_t, uint16_t>;
-using InstructionArgs = std::vector<Argument>;
+using InstructionArg = std::vector<Argument>;
 
 // Helper functions to add correponding elements to a vector
-void addShort(InstructionArgs& args, uint16_t val);
-void addByte(InstructionArgs& args, uint8_t val);
+void addShort(InstructionArg& arg, uint16_t val);
+void addByte(InstructionArg& arg, uint8_t val);

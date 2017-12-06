@@ -16,7 +16,7 @@ class Instruction {
 		virtual uint16_t opCode() = 0;
 		virtual int nbCycles() = 0;
 		virtual int nbArgs() = 0;
-		virtual void setArgs(InstructionArgs & args) = 0;
+		virtual void setArg(InstructionArg & args) = 0;
 		virtual int argSize(int i) = 0;
 };
 
@@ -35,11 +35,11 @@ class Instruction {
 			virtual uint16_t opCode() { return opc; } \
 			virtual int nbCycles() { return nb_cycles; } \
 			virtual int nbArgs() {return nb_args;}\
-			virtual void setArgs(InstructionArgs &args) {_args = args;}\
+			virtual void setArg(InstructionArg &arg) {_arg = arg;}\
 			virtual int argSize(int i)\
 				{return i ? size_arg1 : size_arg0;}\
 		private:\
-			InstructionArgs _args; \
+			InstructionArg _arg; \
 	};
 
 // LD INSTRUCTIONS
