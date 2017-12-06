@@ -159,19 +159,18 @@ void Processor::_fetchNextInstruction()
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArg arg;
 
-	// We get each argument for the instruction, according to its length.
-	for (int i = 0; i < currentInstruction->nbArgs() ; ++i) {
+	// This instruction takes an argument
+	if(currentInstruction->hasArg()) {
 
-		int size = currentInstruction->argSize(i);
+		int size = currentInstruction->argSize();
 		if (size == 1) { // We add a byte to the argument vector
-			uint8_t byte = _mem->read(PC.value);
-			addByte(arg, byte);
+			arg.byte = _mem->read(PC.value);
 		}
 		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t word = _mem->read(PC.value);
 			++PC.value;
 			word = word | (_mem->read(PC.value) << 8);
-			addShort(arg, word);
+			arg.word = word;
 		}
 		++PC.value;
 	}
