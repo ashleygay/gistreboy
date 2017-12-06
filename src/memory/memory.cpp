@@ -11,8 +11,8 @@ Memory::Memory(Processor& proc) : processor(proc),
 			    std::make_pair(0xFE00, 0xFE9F)})
 {
 	memory.fill(0);
-	memory[0xFFFF] = 0x00; /* interrupt enable */
-	memory[0xFF0F] = 0x00; /* interrupt flag */
+	memory[0xFFFF] = 0x0F; /* interrupt enable */
+	memory[0xFF0F] = 0x0F; /* interrupt flag */
 }
 
 
@@ -52,14 +52,14 @@ void Memory::write(uint8_t byte, uint16_t address)
 		memory[address] = byte;
 }
 
-void Memory::set_interrupt_flag(Interrupt inter)
-{
-	memory[0xFF0F] &= (~(1 << inter));
-}
-
-void Memory::reset_interrupt_flag(int interrupt)
+void Memory::set_interrupt_flag(unsigned int interrupt)
 {
 	memory[0xFF0F] |= (1 << interrupt);
+}
+
+void Memory::reset_interrupt_flag(unsigned int interrupt)
+{
+	memory[0xFF0F] &= (~(1 << interrupt));
 }
 
 uint8_t Memory::get_interrupt_enable()

@@ -71,21 +71,20 @@ int Processor::_handleInterrupts()
 	}
 	else { // We are either halted or doing an interrupt
 
-		DEBUG_STREAM << "HALTED" << std::endl;
 		std::bitset<5> IF = _mem->get_interrupt_flags();
 		std::bitset<5> IE = _mem->get_interrupt_enable();
 		std::bitset<5> res = IF & IE;
 
 		// Check that the selected interrupt is triggered
 		int inter = res.any();
-		if (inter && IME) {
-			DEBUG_STREAM << "INTERRUPTING" << std::endl;
-
+		if (inter && IME){
 			// We compute the nth interrupt index
 			unsigned int index = 0;
 			while (!res[index] && (index < res.size())) {
 				++index;
 			}
+
+			DEBUG_STREAM << "INTERRUPTING: " << index << std::endl;
 			_mem->reset_interrupt_flag(index);
 
 			halted = false;

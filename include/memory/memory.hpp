@@ -35,11 +35,11 @@ public :
 	enum Interrupt {VBLANK, STAT, SERIAL, JOYPAD, TIMER};
 
 	// Zeroes the desired interrupt to enable it
-	void set_interrupt_flag(Interrupt inter);
+	void set_interrupt_flag(unsigned int interrupt);
 
 	// Set the desired interrupt to 1
 	// Called from interrupt handler to "consume" the interrupt
-	void reset_interrupt_flag(int interrupt);
+	void reset_interrupt_flag(unsigned int interrupt);
 
 	// Get specific values in memory
 	uint8_t get_interrupt_flags();
