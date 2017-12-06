@@ -10,13 +10,3 @@ void addByte(InstructionArgs& args, uint8_t val)
 {
 	args.push_back(val);
 }
-
-void addRegRef(InstructionArgs& args, std::reference_wrapper<Register> reg)
-{
-	args.push_back(reg);
-}
-
-void addDRegRef(InstructionArgs& args, std::reference_wrapper<DRegister> reg)
-{
-	args.push_back(reg);
-}
