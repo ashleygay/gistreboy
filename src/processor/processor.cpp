@@ -147,7 +147,6 @@ void Processor::_fetchNextInstruction()
 	DEBUG_STREAM << "PC is 0x"<< std::hex << (int)PC.value << std::dec << std::endl;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
-//	DEBUG_STREAM << "Fetching 8 first bits 0x"<< std::hex << opcode << std::dec << std::endl;
 	if (!iset.isValidOpCode(opcode)) {
 		// We try the to get the instruction over 16bits
 		opcode = (opcode << 8) | (_mem->read(PC.value));
@@ -171,16 +170,12 @@ void Processor::_fetchNextInstruction()
 		int size = currentInstruction->argSize(i);
 		if (size == 1) { // We add a byte to the argument vector
 			uint8_t arg = _mem->read(PC.value);
-//			DEBUG_STREAM << "Fetching argument 0x"<< std::hex
-//				     << (int)arg << std::dec << std::endl;
 			addByte(args, arg);
 		}
-		else { // Argument of size 1, we add a short to the argument vector
+		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t arg = _mem->read(PC.value);
 			++PC.value;
 			arg = arg | (_mem->read(PC.value) << 8);
-//			DEBUG_STREAM << "Fetching argument 0x"<< std::hex
-//				     << (int)arg << std::dec << std::endl;
 			addShort(args, arg);
 		}
 		++PC.value;

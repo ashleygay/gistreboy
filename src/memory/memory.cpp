@@ -11,8 +11,8 @@ Memory::Memory(Processor& proc) : processor(proc),
 			    std::make_pair(0xFE00, 0xFE9F)})
 {
 	memory.fill(0);
-	memory[0xFFFF] = 0x0F; /* interrupt enable */
-	memory[0xFF0F] = 0x0F; /* interrupt flag */
+	memory[0xFFFF] = 0x00; /* interrupt enable */
+	memory[0xFF0F] = 0x00; /* interrupt flag */
 }
 
 

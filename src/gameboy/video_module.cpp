@@ -1,4 +1,5 @@
 #include <video_module.hpp>
+#include <bitset>
 
 void VideoModule::render_tiles(int current_line)
 {
@@ -71,7 +72,39 @@ void VideoModule::render_tiles(int current_line)
 
 void VideoModule::render_sprites(int current_line)
 {
-	/* TODO */
+	std::bitset<8> lcdc(video_mem.get_lcd_control());
+	bool sprite_enable = lcdc[1];
+	bool is_8x16 = lcdc[2];
+
+	uint8_t width = 8;
+	uint8_t height = (is_8x16) ? 16 : 8;
+
+	std::vector<Sprite> sprites = video_mem.get_sprites();
+	std::vector<Sprite> visible_sprites;
+
+	for (int i = 0; i < sprites.size(); i++)
+	{
+		if (sprites[i].get_x() == 0
+		    || sprites[i].get_x() >= 168
+		    || sprites[i].get_y() == 0
+		    || sprites[i].get_y() >= 160)
+			continue;
+
+		if (sprites[i].get_y_pos() > current_line
+		    || sprites[i].get_y_pos() + height <= current_line)
+			continue;
+
+		visible_sprites.push_back(sprites[i]);
+	}
+
+	for (auto& it = visible_sprites.begin();
+	     it != visible_sprites.end())
+	{
+		
+	}
+
+	
+	
 }
 
 int16_t VideoModule::get_tile_num(uint16_t tilemap_addr, uint8_t x,

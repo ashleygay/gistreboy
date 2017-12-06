@@ -2,6 +2,7 @@
 
 #include <processor.hpp>
 #include <memoryobject.hpp>
+#include <sprite.hpp>
 
 #include <array>
 #include <vector>
@@ -31,6 +32,8 @@ public :
  	// VRAM (0x8000-0x9FFF) and OAM (0xFE00-0xFE9F)
 	void set_VRAM_accessible(bool accessible);
 	void set_OAM_accessible(bool accessible);
+
+	std::vector<Sprite> get_sprites();
 
 	uint8_t get_lcd_control();
 	uint8_t get_lcd_status();
