@@ -1783,7 +1783,7 @@ void STOP::exec(Processor *p)
 
 void EI::exec(Processor *p)
 {
-  p->enableIME();
+  p->enableIMEDelay();
 }
 
 void DI::exec(Processor *p)
@@ -1959,6 +1959,6 @@ void RETC::exec(Processor *p)
 
 void RETI::exec(Processor *p)
 {
-  _return(p);
-  p->enableIME();
+	_return(p);
+	p->enableIME();
 }
