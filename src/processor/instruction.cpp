@@ -65,7 +65,7 @@ static void _return(Processor *p)
 #define LD_RegX_def(reg)\
 	void LD_##reg##X::exec(Processor *p)\
 	{\
-	uint8_t val = boost::get<uint8_t>(this->_args[0]);\
+	uint8_t val = _arg.byte;\
 	p->reg.value = val;\
 	}
 
@@ -161,7 +161,7 @@ LD_HLX_def(L)
 void LD_HLn::exec(Processor *p)
 {
 	uint16_t address = make_word(p->L.value, p->H.value);
-	uint8_t value = boost::get<uint8_t>(this->_args[0]);
+	uint8_t value = _arg.byte;
 	p->_write(value, address);
 }
 
@@ -182,7 +182,7 @@ void LD_ADE::exec(Processor *p)
 
 void LD_Ann::exec(Processor *p)
 {
-	uint16_t address = boost::get<uint16_t>(this->_args[0]);
+	uint16_t address = _arg.word;
 	p->A.value = p->_read(address);
 }
 
@@ -206,7 +206,7 @@ void LD_HLA::exec(Processor *p)
 
 void LD_nnA::exec(Processor *p)
 {
-	uint16_t address = boost::get<uint16_t>(this->_args[0]);
+	uint16_t address = _arg.word;
 	p->_write(p->A.value, address);
 }
 
@@ -256,45 +256,45 @@ void LDI_HLA::exec(Processor *p)
 
 void LDH_nA::exec(Processor *p)
 {
-	uint16_t address = 0xFF00 + boost::get<uint8_t>(this->_args[0]);
+	uint16_t address = 0xFF00 + _arg.byte;
 	p->_write(p->A.value, address);
 }
 
 void LDH_An::exec(Processor *p)
 {
-	uint16_t address = 0xFF00 + boost::get<uint8_t>(this->_args[0]);
+	uint16_t address = 0xFF00 + _arg.byte;
 	p->A.value = p->_read(address);
 }
 
 void LD_BCnn::exec(Processor *p)
 {
-	uint16_t BC = boost::get<uint16_t>(this->_args[0]);
+	uint16_t BC = _arg.word;
 	p->C.value = get_low(BC);
 	p->B.value = get_high(BC);
 }
 
 void LD_DEnn::exec(Processor *p)
 {
-	uint16_t DE = boost::get<uint16_t>(this->_args[0]);
+	uint16_t DE = _arg.word;
 	p->E.value = get_low(DE);
 	p->D.value = get_high(DE);
 }
 
 void LD_HLnn::exec(Processor *p)
 {
-	uint16_t HL = boost::get<uint16_t>(this->_args[0]);
+	uint16_t HL = _arg.word;
 	p->L.value = get_low(HL);
 	p->H.value = get_high(HL);
 }
 
 void LD_SPnn::exec(Processor *p)
 {
-	p->SP.value = boost::get<uint16_t>(this->_args[0]);
+	p->SP.value = _arg.word;
 }
 
 void LD_nnSP::exec(Processor *p)
 {
-	uint16_t address = boost::get<uint16_t>(this->_args[0]);
+	uint16_t address = _arg.word;
 	uint8_t SP_low = get_low(p->SP.value);
 	uint8_t SP_high = get_low(p->SP.value);
 
@@ -310,7 +310,7 @@ void LD_SPHL::exec(Processor *p)
 
 void LD_HLSPn::exec(Processor *p)
 {
-	uint8_t n = boost::get<uint8_t>(this->_args[0]);
+	uint8_t n = _arg.byte;
 	uint16_t HL = p->SP.value + n;
 	p->L.value = get_low(HL);
 	p->H.value = get_high(HL);
@@ -422,7 +422,7 @@ void ADD_AHL::exec(Processor *p)
 
 void ADD_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]);
+  auto tmp = _arg.byte;
   uint val = p->A.value + tmp;
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -479,7 +479,7 @@ void ADD_HLSP::exec(Processor *p)
 
 void ADD_SPX::exec(Processor *p)
 {
-	uint8_t byte = boost::get<uint8_t>(this->_args[0]);
+	uint8_t byte = _arg.byte;
 	uint16_t sp = p->SP.value;
 	uint val = sp + byte;
 	uint16_t result = static_cast<uint16_t>(val);
@@ -542,7 +542,7 @@ void ADC_AHL::exec(Processor *p)
 
 void ADC_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]); 
+  auto tmp = _arg.byte; 
   uint val = p->A.value + tmp + p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -607,7 +607,7 @@ void SUB_AHL::exec(Processor *p)
 
 void SUB_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]);    
+  auto tmp = _arg.byte;    
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -671,7 +671,7 @@ void SBC_AHL::exec(Processor *p)
 
 void SBC_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]);
+  auto tmp = _arg.byte;
   uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -723,7 +723,7 @@ void AND_AHL::exec(Processor *p)
 
 void AND_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]);
+  auto tmp = _arg.byte;
   p->A.value &= tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
@@ -770,7 +770,7 @@ void OR_AHL::exec(Processor *p)
 
 void OR_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]);
+  auto tmp = _arg.byte;
   p->A.value |= tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
@@ -817,7 +817,7 @@ void XOR_AHL::exec(Processor *p)
 
 void XOR_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]); 
+  auto tmp = _arg.byte; 
   p->A.value ^= tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   if (p->A.value == 0)
@@ -874,7 +874,7 @@ void CP_AHL::exec(Processor *p)
 
 void CP_AX::exec(Processor *p)
 {
-  auto tmp = boost::get<uint8_t>(this->_args[0]);
+  auto tmp = _arg.byte;
   uint val = p->A.value - tmp;
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
@@ -1784,31 +1784,31 @@ void DI::exec(Processor *p)
 
 void JP::exec(Processor *p)
 {
-	p->PC.value = boost::get<uint16_t>(this->_args[0]);
+	p->PC.value = _arg.word;
 }
 
 void JPNZ::exec(Processor *p)
 {
 	if ( !p->flag.getFlag(FlagRegister::ZERO))
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 }
 
 void JPZ::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::ZERO))
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 }
 
 void JPNC::exec(Processor *p)
 {
 	if ( !p->flag.getFlag(FlagRegister::CARRY))
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 }
 
 void JPC::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::CARRY))
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 }
 
 void JPHL::exec(Processor *p)
@@ -1818,19 +1818,19 @@ void JPHL::exec(Processor *p)
 
 void JR::exec(Processor *p)
 {
-	p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+	p->PC.value += (int8_t) _arg.byte;
 }
 
 void JRNZ::exec(Processor *p)
 {
 	if ( !p->flag.getFlag(FlagRegister::ZERO))
-		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+		p->PC.value += (int8_t) _arg.byte;
 }
 
 void JRZ::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::ZERO)) {
-		int8_t t = (int8_t) boost::get<uint8_t>(this->_args[0]);
+		int8_t t = (int8_t) _arg.byte;
 		p->PC.value += t;
 	}
 }
@@ -1838,13 +1838,13 @@ void JRZ::exec(Processor *p)
 void JRNC::exec(Processor *p)
 {
 	if ( !p->flag.getFlag(FlagRegister::CARRY))
-		p->PC.value += (int8_t) boost::get<uint8_t>(this->_args[0]);
+		p->PC.value += (int8_t) _arg.byte;
 }
 
 void JRC::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::CARRY))
-		p->PC.value = (int8_t) boost::get<uint8_t>(this->_args[0]);
+		p->PC.value = (int8_t) _arg.byte;
 }
 
 /////////////////////////////////////
@@ -1860,7 +1860,7 @@ void CALLNZ::exec(Processor *p)
 {
 	if ( !p->flag.getFlag(FlagRegister::ZERO)) {
 		_callPush(p);
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 	}
 }
 
@@ -1868,7 +1868,7 @@ void CALLZ::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::ZERO)) {
 		_callPush(p);
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 	}
 }
 
@@ -1876,7 +1876,7 @@ void CALLNC::exec(Processor *p)
 {
 	if ( !p->flag.getFlag(FlagRegister::CARRY)) {
 		_callPush(p);
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 	}
 }
 
@@ -1884,7 +1884,7 @@ void CALLC::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::CARRY)) {
 		_callPush(p);
-		p->PC.value = boost::get<uint16_t>(this->_args[0]);
+		p->PC.value = _arg.word;
 	}
 }
 

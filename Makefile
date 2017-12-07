@@ -10,7 +10,6 @@ GUI_SRC = $(patsubst %,$(subst include,src,$(GUI))/%,$(_GUI_SRC))
 
 PROCESSOR=include/processor
 _PROCESSOR_SRC += instruction.cpp
-_PROCESSOR_SRC += instructionargs.cpp
 _PROCESSOR_SRC += instructionset.cpp
 _PROCESSOR_SRC += processor.cpp
 _PROCESSOR_SRC += registers.cpp
