@@ -30,6 +30,12 @@ void Video::write(uint8_t byte, uint16_t address)
 		
 	}
 
+	else if (address == 0xFF44)
+	{
+		video_memory[address] = 0;
+		return;
+	}
+
 	if (is_accessible(address))
 		video_memory[address] = byte;
 }
@@ -159,4 +165,20 @@ std::vector<Sprite> Video::get_sprites()
 		sprites.push_back(sprite);
 	}
 	return sprites;
+}
+
+void Video::set_lcd_status_mode(uint8_t mode)
+{
+	video_memory[0xFF41] = (video_memory[0xFF41] & 0xFC) |
+			       (mode & 0x03);	
+}
+
+void Video::set_lcd_status(uint8_t status)
+{
+	video_memory[0xFF41] = status;
+}
+
+void Video::set_ly(uint8_t ly)
+{
+	video_memory[0xFF44] = ly;
 }

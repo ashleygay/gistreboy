@@ -47,6 +47,10 @@ public :
 	uint8_t get_obp0();
 	uint8_t get_obp1();
 
+	void set_lcd_status(uint8_t status);
+	void set_lcd_status_mode(uint8_t mode);
+	void set_ly(uint8_t ly);
+
 private:
 	bool _is_OAM(uint16_t address);
 	bool _is_VRAM(uint16_t address);

@@ -73,9 +73,13 @@ class LCD
 		 *	This function updates the bitset that are used
 		 *	to represent the different registers of the LCD.
 		 */
-		void update_variables();
+		void update_variables(int elapsed_time);
 
-		int step();
+		void step(int elapsed_time);
+
+		void check_lyc();
+
+		void check_interrupt_stat(int num_bit);
 
 /*
 	<==========================>
@@ -106,7 +110,7 @@ class LCD
            2: During Searching OAM
            3: During Transferring Data to LCD Driver
 */
-		std::bitset<8> _STAT;
+		std::bitset<8> _STATUS;
 
 		//FIXME: getter for pixels in VideoModule
 		// so that we can actually render them in GTK
@@ -116,37 +120,22 @@ class LCD
 		Video &_video;
 
 		// Current line that we are rendering
-		// 0-144
+		// 0-154
 		int line = 0;
 
-	using StatesArray = std::array<State, 19>;
-	const StatesArray states ={{
-		{LCDState::Mode2, 80},
-		{LCDState::Mode3, 169},
-		{LCDState::Mode0, 207},
+		// Current LCD Mode
 
-		{LCDState::Mode2, 80},
-		{LCDState::Mode3, 169},
-		{LCDState::Mode0, 207},
+		State current_mode;
 
-		{LCDState::Mode2, 80},
-		{LCDState::Mode3, 169},
-		{LCDState::Mode0, 207},
+		// Elapsed time since last mode change
 
-		{LCDState::Mode2, 80},
-		{LCDState::Mode3, 169},
-		{LCDState::Mode0, 207},
+		int clock = 0;
 
-		{LCDState::Mode2, 80},
-		{LCDState::Mode3, 169},
+		using StatesArray = std::array<State, 4>;
+		const StatesArray states ={{
 		{LCDState::Mode0, 207},
-
+		{LCDState::Mode1, 456},
 		{LCDState::Mode2, 80},
-		{LCDState::Mode3, 169},
-		{LCDState::Mode0, 207},
-
-		{LCDState::Mode1, 4560}
+		{LCDState::Mode3, 169}
 		}};
-
-	StatesArray::const_iterator _state_iter = states.cbegin();
 };

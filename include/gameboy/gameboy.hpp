@@ -56,7 +56,6 @@ class GameBoy
 		LCD _lcd;
 		int _handler_cycles = 0;
 		int _cpu_cycles = 0;
-		int _lcd_cycles = 0;
 
 		boost::asio::io_service io;
 

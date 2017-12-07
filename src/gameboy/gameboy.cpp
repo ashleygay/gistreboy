@@ -38,8 +38,7 @@ void GameBoy::step()
 	if (!_cpu_cycles)
 		_cpu_cycles = p.step();
 
-	if (!_lcd_cycles)
-		_lcd_cycles = _lcd.step();
+	_lcd.step(_cpu_cycles);
 	// wait for chrono here
 	t.wait();
 	_clockCycle();
@@ -54,7 +53,6 @@ void GameBoy::_clockCycle()
 {
 	// Decrease all pending timers
 	if (_cpu_cycles) --_cpu_cycles;
-	if (_lcd_cycles) --_lcd_cycles;
 }
 
 
