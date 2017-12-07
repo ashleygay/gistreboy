@@ -350,20 +350,20 @@ void PUSH_HL::exec(Processor *p)
 
 void POP_BC::exec(Processor *p)
 {
-	p->B.value = p->_read(p->SP.value++);
-	p->C.value = p->_read(p->SP.value++);
+	p->B.value = p->_read(++p->SP.value);
+	p->C.value = p->_read(++p->SP.value);
 }
 
 void POP_DE::exec(Processor *p)
 {
-	p->D.value = p->_read(p->SP.value++);
-	p->E.value = p->_read(p->SP.value++);
+	p->D.value = p->_read(++p->SP.value);
+	p->E.value = p->_read(++p->SP.value);
 }
 
 void POP_HL::exec(Processor *p)
 {
-	p->H.value = p->_read(p->SP.value++);
-	p->L.value = p->_read(p->SP.value++);
+	p->H.value = p->_read(++p->SP.value);
+	p->L.value = p->_read(++p->SP.value);
 }
 
 void NOP::exec(Processor *p)

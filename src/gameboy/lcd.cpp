@@ -25,6 +25,7 @@ void LCD::step(int elapsed_time)
 
 	if (clock >= current_mode.duration)
 	{
+		clock -= current_mode.duration;
 		switch (current_mode.state)
 		{
 		case LCDState::Mode0 : //HBLANK
@@ -67,7 +68,6 @@ void LCD::step(int elapsed_time)
 		default :
 			break;
 		}
-		clock = 0;
 		_video.set_OAM_accessible(current_mode.can_access_OAM());
 		_video.set_VRAM_accessible(current_mode.can_access_VRAM());
 		_video.set_lcd_status_mode((uint8_t)current_mode.state);
