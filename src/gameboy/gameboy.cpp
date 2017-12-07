@@ -12,6 +12,12 @@ GameBoy::GameBoy(): _mem(p), _lcd(_mem)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();
+
+#ifdef BENCH_STREAM
+	BENCH_STREAM << "Clock Period "
+	<< std::chrono::high_resolution_clock::period::den
+	<< std::endl;
+#endif
 }
 
 bool GameBoy::readyToLaunch()
@@ -25,22 +31,23 @@ bool GameBoy::readyToLaunch()
 
 void GameBoy::step()
 {
-	// Priority order:
-	// 	Interrupts
-	// 	Next Instruction
+#ifdef BENCH_STREAM
+	auto start_time = std::chrono::high_resolution_clock::now();
+#endif
 
-	// Start chrono here for a cycle
-	//sleep(1);
-//	std::cout << "GAMEBOY STEP" << std::endl;
-	boost::asio::deadline_timer t(io,
-			boost::posix_time::nanoseconds(GB_CYCLE));
-
-	if (!_cpu_cycles)
+	if (!_cpu_cycles) {
 		_cpu_cycles = p.step();
+		_lcd.step(_cpu_cycles);
+	}
 
-	_lcd.step(_cpu_cycles);
-	// wait for chrono here
-	t.wait();
+#ifdef BENCH_STREAM
+	auto end_time = std::chrono::high_resolution_clock::now();
+	BENCH_STREAM << "Period lasted "
+	<< std::chrono::duration_cast<std::chrono::nanoseconds>(end_time
+					- start_time).count()
+	<< " nanoseconds" << std::endl;
+	BENCH_STREAM << "Current CPU cycle " << _cpu_cycles << std::endl;
+#endif
 	_clockCycle();
 }
 

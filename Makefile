@@ -54,12 +54,13 @@ SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC)\
 OBJS = $(SRC:.cpp=.o)
 
 # SETUP ALL NECESSARY FLAGS
-LIB=`pkg-config --cflags --libs gtk+-3.0` -lboost_system
+LIB=`pkg-config --cflags --libs gtk+-3.0`
 INCLUDE_PATH= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY) -I$(HELPERS) -I$(MEMORY) -I$(PROCESSOR)
 
+# For benchmarks, add -D BENCH_STREAM_ACTIVATED
+
 CC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 \
-	-D DEBUG_STREAM_ACTIVATED\
-	-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+	-D DEBUG_STREAM_ACTIVATED
 
 CXXFLAGS = $(CC_OPTIONS) $(INCLUDES) $(LIB)
 

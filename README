@@ -1,4 +1,4 @@
-This project requires boost and GTK3 to compile.
+This project requires GTK3 to compile.
 
 To compile : make
 

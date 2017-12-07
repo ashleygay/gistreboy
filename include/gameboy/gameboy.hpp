@@ -22,8 +22,6 @@
 #include <thread>
 #include <future>
 #include <atomic>
-#include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 #define GB_CYCLE 238
 
@@ -56,8 +54,6 @@ class GameBoy
 		LCD _lcd;
 		int _handler_cycles = 0;
 		int _cpu_cycles = 0;
-
-		boost::asio::io_service io;
 
 		std::atomic<bool> _running{false};
 };

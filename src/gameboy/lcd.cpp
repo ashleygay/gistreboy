@@ -19,9 +19,6 @@ LCD::LCD(Memory &mem) :
 void LCD::step(int elapsed_time)
 {
 	update_variables(elapsed_time);
-	// We update the permissions of the video memory
-
-	// As we enter Mode1, we trigger the VBLANK interrupt
 
 	if (clock >= current_mode.duration)
 	{
