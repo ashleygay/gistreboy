@@ -145,9 +145,11 @@ decl_instruction(LD_HLSPn, 0xF8, 12, 1, 1, 0)
 decl_instruction(PUSH_BC, 0xC5, 16, 0, 0, 0)
 decl_instruction(PUSH_DE, 0xD5, 16, 0, 0, 0)
 decl_instruction(PUSH_HL, 0xE5, 16, 0, 0, 0)
+decl_instruction(PUSH_AF, 0xF5, 16, 0, 0, 0)
 decl_instruction(POP_BC, 0xC1, 12, 0, 0, 0)
 decl_instruction(POP_DE, 0xD1, 12, 0, 0, 0)
 decl_instruction(POP_HL, 0xE1, 12, 0, 0, 0)
+decl_instruction(POP_AF, 0xF1, 12, 0, 0, 0)
 
 // NOP INSTRUCTION
 

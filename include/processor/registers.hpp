@@ -18,4 +18,6 @@ class FlagRegister : private Register {
 		void setFlag(FlagRegister::Flag flag);
 		void unsetFlag(FlagRegister::Flag flag);
 		bool getFlag(FlagRegister::Flag flag);
+		unsigned char get_value();
+		void set_value(unsigned char val);
 };

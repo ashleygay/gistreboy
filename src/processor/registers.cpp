@@ -54,3 +54,13 @@ bool FlagRegister::getFlag(FlagRegister::Flag flag)
 	}
 	return false;
 }
+
+unsigned char FlagRegister::get_value()
+{
+	return value;
+}
+
+void FlagRegister::set_value(unsigned char val)
+{
+	value = val;
+}

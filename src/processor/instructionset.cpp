@@ -122,9 +122,11 @@ InstructionSet::InstructionSet()
 	add_instr(PUSH_BC)
 	add_instr(PUSH_DE)
 	add_instr(PUSH_HL)
+	add_instr(PUSH_AF)
 	add_instr(POP_BC)
 	add_instr(POP_DE)
 	add_instr(POP_HL)
+	add_instr(POP_AF)
 
 
 	add_instr(ADD_AA)

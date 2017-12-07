@@ -348,6 +348,12 @@ void PUSH_HL::exec(Processor *p)
 	p->_write(p->H.value, p->SP.value--);
 }
 
+void PUSH_AF::exec(Processor *p)
+{
+	p->_write(p->flag.get_value(), p->SP.value--);
+	p->_write(p->A.value, p->SP.value--);
+}
+
 void POP_BC::exec(Processor *p)
 {
 	p->B.value = p->_read(++p->SP.value);
@@ -364,6 +370,13 @@ void POP_HL::exec(Processor *p)
 {
 	p->H.value = p->_read(++p->SP.value);
 	p->L.value = p->_read(++p->SP.value);
+}
+
+void POP_AF::exec(Processor *p)
+{
+	p->A.value = p->_read(++p->SP.value);
+	auto val = p->_read(++p->SP.value);
+	p->flag.set_value(val);
 }
 
 void NOP::exec(Processor *p)
