@@ -1854,6 +1854,7 @@ void JRC::exec(Processor *p)
 void CALL::exec(Processor *p)
 {
 	_callPush(p);
+	p->PC.value = _arg.word;
 }
 
 void CALLNZ::exec(Processor *p)
