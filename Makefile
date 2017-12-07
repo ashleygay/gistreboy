@@ -21,7 +21,7 @@ PROCESSOR_SRC = $(patsubst %,$(subst include,src,$(PROCESSOR))/%,\
 GAMEBOY=include/gameboy
 _GAMEBOY_SRC += gameboy.cpp
 _GAMEBOY_SRC += lcd.cpp
-_GAMEBOY_SRC += interrupthandler.cpp
+#_GAMEBOY_SRC += interrupthandler.cpp
 GAMEBOY_SRC = $(patsubst %,$(subst include,src,$(GAMEBOY))/%,\
 		$(_GAMEBOY_SRC))
 
