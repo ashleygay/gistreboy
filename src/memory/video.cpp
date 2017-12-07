@@ -19,6 +19,16 @@ uint8_t Video::read(uint16_t address)
 		return 0;
 }
 
+uint8_t Video::simple_read(uint16_t address)
+{
+	return video_memory[address];
+}
+
+void Video::simple_write(uint8_t byte, uint16_t address)
+{
+	video_memory[address] = byte;
+}
+
 void Video::write(uint8_t byte, uint16_t address)
 {
 	if (address == 0xFF40)
@@ -50,8 +60,8 @@ void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
 
 	while (inc_src <= end_src)
 	{
-		byte = _proc._read(inc_src);
-		_proc._write(byte, inc_dest);
+		byte = simple_read(inc_src);
+		simple_write(byte, inc_dest);
 		++inc_src;
 		++inc_dest;
 	}

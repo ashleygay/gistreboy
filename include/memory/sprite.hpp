@@ -14,6 +14,7 @@ public :
 	}
 
 	uint8_t get_x() { return x_pos_; }
+	uint8_t get_y() { return y_pos_; }
 	uint8_t get_x_pos() { return x_pos_ - 8; }
 	uint8_t get_y_pos() { return y_pos_ - 16; }
 	uint8_t get_tile() { return tile_; }

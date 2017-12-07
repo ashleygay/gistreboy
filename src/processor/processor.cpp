@@ -8,6 +8,7 @@
 #include <processor.hpp>
 #include <instruction.hpp>
 #include <memory.hpp>
+#include <iostream>
 
 /* PUBLIC METHODS */
 

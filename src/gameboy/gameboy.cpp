@@ -48,7 +48,8 @@ void GameBoy::step()
 	<< " nanoseconds" << std::endl;
 	BENCH_STREAM << "Current CPU cycle " << _cpu_cycles << std::endl;
 #endif
-	_clockCycle();
+	//_clockCycle();
+	_cpu_cycles = 0;
 }
 
 void GameBoy::_wireComponents()
