@@ -90,8 +90,7 @@ int Processor::_handleInterrupts()
 
 			halted = false;
 			_setupInterrupt(index);
-			//TODO: figure out which value to return
-			return 4;
+			return 5;
 		}
 	}
 	// No interrupts, we return 0

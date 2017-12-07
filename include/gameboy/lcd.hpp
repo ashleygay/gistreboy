@@ -9,11 +9,10 @@
 
 #include <array>
 
-class Memory;
-
 #include <memory.hpp>
 #include <video.hpp>
 #include <video_module.hpp>
+#include <iostream>
 
 class LCD
 {
@@ -132,9 +131,6 @@ class LCD
            3: During Transferring Data to LCD Driver
 */
 		std::bitset<8> _STATUS;
-
-		//FIXME: getter for pixels in VideoModule
-		// so that we can actually render them in GTK
 
 	private:
 		Memory &_mem;

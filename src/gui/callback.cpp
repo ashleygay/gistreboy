@@ -7,7 +7,8 @@
 
 #include <callback.hpp>
 
-#include <unordered_map>
+static GdkPixbuf* global_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 160, 144);
+
 static std::unordered_map<std::string, Key> bindings =
 	{{"k", Key::UP},
 	 {"j", Key::DOWN},
@@ -19,6 +20,10 @@ static std::unordered_map<std::string, Key> bindings =
 	 {"f", Key::SELECT},
 	};
 
+GdkPixbuf* get_global_pixbuf()
+{
+	return global_pixbuf;
+}
 
 void NYI(GtkWidget * b, gpointer user_data)
 {
@@ -101,19 +106,21 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 
 //	std::this_thread::sleep_for(2s);
 //	sleep(0.5);
-//	DEBUG_STREAM << "Dimensions : " << width  << " x " << height << std::endl;
+	std::cout << "Dimensions : " << width  << " x " << height << std::endl;
 
-	gtk_render_background(context, cr, 0, 0, width, height);
-
+	gtk_render_background(context, cr, 150, 150, width, height);
+/*
   	cairo_arc (cr,
              width / 2.0, height / 2.0,
              MIN (width, height) / 2.0,
              0, 2 * G_PI);
+*/
+//	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
 
-	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
-
-	gdk_cairo_set_source_rgba(cr, &black);
-	cairo_fill(cr);
+//	gdk_cairo_set_source_rgba(cr, &black);
+	gdk_cairo_set_source_pixbuf(cr, global_pixbuf, 0, 0);
+ 	cairo_paint (cr);
+//	cairo_fill(cr);
 
 	return FALSE;
 }
@@ -123,8 +130,8 @@ int trigger_draw(GtkWidget * area, GdkFrameClock * c, gpointer user_data)
 	(void)c;
 	(void)user_data;
 //	DEBUG_STREAM << "Triggering draw event on the area. clock " << (void*)c << std::endl;
-//	gtk_widget_queue_draw_area(area, 0, 0,
-//			gtk_widget_get_allocated_width(area),
-//			gtk_widget_get_allocated_height(area));
+	gtk_widget_queue_draw_area(area, 0, 0,
+			gtk_widget_get_allocated_width(area),
+			gtk_widget_get_allocated_height(area));
 	return 42;
 }

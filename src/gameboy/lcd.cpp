@@ -5,15 +5,14 @@
  * File was created at : 01/12/2017
  */
 
-#include "lcd.hpp"
-#include <iostream>
+#include <lcd.hpp>
 
+#include <callback.hpp>
 
 LCD::LCD(Memory &mem) :
 	_mem(mem),
 	_video(mem.get_video())
 {
-
 }
 
 
@@ -74,17 +73,35 @@ void LCD::step(int elapsed_time)
 
 void LCD::draw()
 {
+	// Each pixel is an int:
+	// 0 -> white
+	// 1 -> light gray
+	// 2 -> dark gray
+	// 3 -> black
+	GdkPixbuf *pixbuf = get_global_pixbuf();
+	int rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+	unsigned char *my_pixels = gdk_pixbuf_get_pixels(pixbuf);
+	int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+
 	for (int i = 0; i < 160; i++)
 	{
 		for (int j = 0; j < 144; j++)
 		{
-			if (pixels[j][i])
-				std::cout << pixels[j][i];
-			else
-				std::cout << ' ';
-			
+			unsigned char *p = my_pixels + j * rowstride + i * n_channels;
+			if (pixels[i][j]) {
+				p[0] = 0;
+				p[1] = 0;
+				p[2] = 0;
+				//std::cout << pixels[j][i];
+			}
+			else {
+				p[0] = 255;
+				p[1] = 255;
+				p[2] = 255;
+				//std::cout << ' ';
+			}
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 	}
 }
 
