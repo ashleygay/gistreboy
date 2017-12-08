@@ -46,10 +46,8 @@ void Video::write(uint8_t byte, uint16_t address)
 		return;
 	}
 
-	//if (is_accessible(address))
-	//{
+	if (is_accessible(address))
 		video_memory[address] = byte;
-	//}
 }
 
 void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
