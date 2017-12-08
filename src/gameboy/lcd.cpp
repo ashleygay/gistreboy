@@ -65,8 +65,10 @@ void LCD::step(int elapsed_time)
 		default :
 			break;
 		}
-		_video.set_OAM_accessible(current_mode.can_access_OAM());
-		_video.set_VRAM_accessible(current_mode.can_access_VRAM());
+
+		//TODO Permission bug
+		_video.set_OAM_accessible(/*current_mode.can_access_OAM()*/true);
+		_video.set_VRAM_accessible(/*current_mode.can_access_VRAM()*/true);
 		_video.set_lcd_status_mode((uint8_t)current_mode.state);
 	}
 }
@@ -110,6 +112,7 @@ void LCD::draw_scanline()
 	line = _video.get_ly();
 	for (int i = 0; i < 160; i++)
 		pixels[i][line] = 0;
+	//std::cout << "lcdc : " << _CONTROL << std::endl;
 	if (_CONTROL[7] && _CONTROL[0])
 		render_tiles(line);
 }
