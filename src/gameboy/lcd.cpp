@@ -29,7 +29,7 @@ void LCD::step(int elapsed_time)
 			_video.set_ly(_video.get_ly()+1);
 			check_lyc();
 
-			if (_video.get_ly() >= 143)
+			if (_video.get_ly() >= 144)
 			{
 				current_mode = states[1]; //VBLANK
 				_mem.set_interrupt_flag(Memory::Interrupt::VBLANK);
@@ -110,6 +110,7 @@ void LCD::draw_scanline()
 	line = _video.get_ly();
 	for (int i = 0; i < 160; i++)
 		pixels[i][line] = 0;
+	//std::cout << "prout : " << _CONTROL << std::endl;
 	if (_CONTROL[7] && _CONTROL[0])
 		render_tiles(line);
 }
