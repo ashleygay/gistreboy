@@ -332,51 +332,50 @@ void LD_HLSPn::exec(Processor *p)
 
 void PUSH_BC::exec(Processor *p)
 {
-	p->_write(p->C.value, p->SP.value--);
-	p->_write(p->B.value, p->SP.value--);
+	p->push_word(make_word(p->C.value, p->B.value));
 }
 
 void PUSH_DE::exec(Processor *p)
 {
-	p->_write(p->E.value, p->SP.value--);
-	p->_write(p->D.value, p->SP.value--);
+	p->push_word(make_word(p->E.value, p->D.value));
 }
 
 void PUSH_HL::exec(Processor *p)
 {
-	p->_write(p->L.value, p->SP.value--);
-	p->_write(p->H.value, p->SP.value--);
+	p->push_word(make_word(p->L.value, p->H.value));
 }
 
 void PUSH_AF::exec(Processor *p)
 {
-	p->_write(p->flag.get_value(), p->SP.value--);
-	p->_write(p->A.value, p->SP.value--);
+	p->push_word(make_word(p->flag.get_value(), p->A.value));
 }
 
 void POP_BC::exec(Processor *p)
 {
-	p->B.value = p->_read(++p->SP.value);
-	p->C.value = p->_read(++p->SP.value);
+	uint16_t value = p->pop_word();
+	p->B.value = get_high(value);
+	p->C.value = get_low(value);
 }
 
 void POP_DE::exec(Processor *p)
 {
-	p->D.value = p->_read(++p->SP.value);
-	p->E.value = p->_read(++p->SP.value);
+	uint16_t value = p->pop_word();
+	p->D.value = get_high(value);
+	p->E.value = get_low(value);
 }
 
 void POP_HL::exec(Processor *p)
 {
-	p->H.value = p->_read(++p->SP.value);
-	p->L.value = p->_read(++p->SP.value);
+	uint16_t value = p->pop_word();
+	p->H.value = get_high(value);
+	p->L.value = get_low(value);
 }
 
 void POP_AF::exec(Processor *p)
 {
-	p->A.value = p->_read(++p->SP.value);
-	auto val = p->_read(++p->SP.value);
-	p->flag.set_value(val);
+	uint16_t value = p->pop_word();
+	p->A.value = get_high(value);
+	p->flag.set_value(get_low(value));
 }
 
 void NOP::exec(Processor *p)
@@ -1843,8 +1842,7 @@ void JRNZ::exec(Processor *p)
 void JRZ::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::ZERO)) {
-		int8_t t = (int8_t) _arg.byte;
-		p->PC.value += t;
+		p->PC.value += (int8_t) _arg.byte;
 	}
 }
 

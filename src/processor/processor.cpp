@@ -35,6 +35,9 @@ int Processor::step()
 
 	int interrupts = _handleInterrupts();
 
+	if (stopped || halted)
+		return 0;
+
 	if (!interrupts) {
 
 		if (IMEDelay) {
@@ -98,14 +101,14 @@ int Processor::_handleInterrupts()
 
 void Processor::push_word(uint16_t word)
 {
-	_mem->write(get_low(word), SP.value--);
-	_mem->write(get_high(word), SP.value--);
+	_mem->write(get_low(word), --SP.value);
+	_mem->write(get_high(word), --SP.value);
 }
 
 uint16_t Processor::pop_word()
 {
-	uint8_t high = _read(++SP.value);
-	uint8_t low = _read(++SP.value);
+	uint8_t high = _read(SP.value++);
+	uint8_t low = _read(SP.value++);
 	return make_word(low, high);
 }
 
@@ -115,7 +118,8 @@ void Processor::_setupInterrupt(unsigned int interrupt)
 	push_word(PC.value);
 	// We set PC to the correct interrupt
 	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
-	DEBUG_STREAM << "ISR: " << PC.value << std::endl;
+	DEBUG_STREAM << "ISR: 0x" << std::hex << (int)PC.value
+			<< std::dec << std::endl;
 }
 
 void Processor::HALT()

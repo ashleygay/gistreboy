@@ -31,7 +31,7 @@ void Video::simple_write(uint8_t byte, uint16_t address)
 
 void Video::write(uint8_t byte, uint16_t address)
 {
-	if (address == 0xFF46)
+	if (address == 0xFF46) // DMA transfer
 	{
 		uint16_t beg_src = (byte << 8);
 		uint16_t end_src = (byte << 8) | 0x9F;
@@ -40,9 +40,14 @@ void Video::write(uint8_t byte, uint16_t address)
 		return;
 	}
 
-	else if (address == 0xFF44)
+	else if (address == 0xFF44) // LYC we reset when writing
 	{
 		video_memory[address] = 0;
+		return;
+	}
+	else if (address == 0xFF41) //LCD status we keep the 3 first bits
+	{
+		video_memory[address] = (video_memory[address] & 0x07) | byte;
 		return;
 	}
 
