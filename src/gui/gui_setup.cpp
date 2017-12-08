@@ -39,7 +39,7 @@ void setup_gui (GtkApplication *app)
 	g_signal_connect(G_OBJECT (window), "destroy", G_CALLBACK (stop_callback), NULL);
 
 	area = gtk_drawing_area_new();
-	gtk_widget_set_size_request (area, 600, 400);
+	gtk_widget_set_size_request (area, 1200, 800);
 	subMenu = gtk_menu_new();
 	menuBar = gtk_menu_bar_new();
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
