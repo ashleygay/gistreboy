@@ -8,7 +8,6 @@
 #include <callback.hpp>
 
 static GdkPixbuf* global_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 160, 144);
-static GdkPixbuf* global_scaled_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 3600, 3440);
 
 static std::unordered_map<std::string, Key> bindings =
 	{{"k", Key::UP},
@@ -109,12 +108,19 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 //	sleep(0.5);
 	//std::cout << "Dimensions : " << width  << " x " << height << std::endl;
 
-	gtk_render_background(context, cr, 0, 0, width, height);
+	gtk_render_background(context, cr, 150, 150, width, height);
+/*
+  	cairo_arc (cr,
+             width / 2.0, height / 2.0,
+             MIN (width, height) / 2.0,
+             0, 2 * G_PI);
+*/
+//	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
 
-	gdk_pixbuf_scale(global_pixbuf, global_scaled_pixbuf, 0, 0, width, height,
-			1.0, 1.0, width/160, height/144, GDK_INTERP_NEAREST);
-	gdk_cairo_set_source_pixbuf(cr, global_scaled_pixbuf, 0, 0);
+//	gdk_cairo_set_source_rgba(cr, &black);
+	gdk_cairo_set_source_pixbuf(cr, global_pixbuf, 0, 0);
  	cairo_paint (cr);
+//	cairo_fill(cr);
 
 	return FALSE;
 }
