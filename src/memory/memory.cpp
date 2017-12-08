@@ -33,31 +33,7 @@ void Memory::reset()
 
 uint8_t Memory::read(uint16_t address)
 {
-	if (cartridge.has_boot())
-	{
-		/*for (uint16_t i = 0x8000; i <= 0x8FFF; i++)
-		{
-			if (video.simple_read(i))
-				std::cout << std::hex << i << std::endl;
-		}
-		for (uint16_t i = 0x8800; i <= 0x97FF; i++)
-		{
-			if (video.simple_read(i))
-				std::cout << std::hex << i << std::endl;
-		}*/
-		/*for (uint16_t i = 0xFE00; i <= 0xFE9F; i+=4)
-		{
-			if (video.simple_read(i+2))
-			{
-				uint16_t tile_address = 0x8000 + video.simple_read(i+2) * 16;
-				for (uint16_t j = tile_address; j<= tile_address+16; j++)
-				{
-					if (video.simple_read(j))
-						std::cout << (int)video.simple_read(j) << std::endl;
-				}
-			}
-		}*/
-	}
+	memory[0xFF00] = 0x0F;
 	if (cartridge.isInRange(address))
 		return cartridge.read(address);
 	else if (video.isInRange(address))
@@ -68,10 +44,33 @@ uint8_t Memory::read(uint16_t address)
 
 void Memory::write(uint8_t byte, uint16_t address)
 {
+	memory[0xFF00] = 0x0F;
 	if (cartridge.isInRange(address))
 		cartridge.write(byte, address);
 	else if (video.isInRange(address))
 		video.write(byte, address);
+	else
+		memory[address] = byte;
+}
+
+uint8_t Memory::simple_read(uint16_t address)
+{
+	memory[0xFF00] = 0x0F;
+	if (cartridge.isInRange(address))
+		return cartridge.read(address);
+	else if (video.isInRange(address))
+		return video.simple_read(address);
+	else
+		return memory[address];
+}
+
+void Memory::simple_write(uint8_t byte, uint16_t address)
+{
+	memory[0xFF00] = 0x0F;
+	if (cartridge.isInRange(address))
+		cartridge.write(byte, address);
+	else if (video.isInRange(address))
+		video.simple_write(byte, address);
 	else
 		memory[address] = byte;
 }

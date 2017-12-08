@@ -86,6 +86,10 @@ class Processor {
 
 		void _write(uint8_t value, uint16_t address);
 
+		uint8_t _simple_read(uint16_t address);
+
+		void _simple_write(uint8_t value, uint16_t address);
+
 		void setMemory(Memory *mem)
 			{_mem = mem;}
 

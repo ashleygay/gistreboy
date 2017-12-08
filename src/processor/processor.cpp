@@ -165,12 +165,14 @@ void Processor::_fetchNextInstruction()
 		int size = currentInstruction->argSize();
 		if (size == 1) { // We add a byte to the argument vector
 			arg.byte = _mem->read(PC.value);
+			DEBUG_STREAM << "ARG: 0x" << std::hex << (int)arg.byte << std::dec << std::endl;
 		}
 		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t word = _mem->read(PC.value);
 			++PC.value;
 			word = word | (_mem->read(PC.value) << 8);
 			arg.word = word;
+			DEBUG_STREAM << "ARG: 0x" << std::hex << (int)arg.word << std::dec << std::endl;
 		}
 		++PC.value;
 	}
@@ -185,6 +187,16 @@ uint8_t Processor::_read(uint16_t address)
 void Processor::_write(uint8_t value, uint16_t address)
 {
 	_mem->write(value, address);
+}
+
+uint8_t Processor::_simple_read(uint16_t address)
+{
+	return _mem->simple_read(address);
+}
+
+void Processor::_simple_write(uint8_t value, uint16_t address)
+{
+	_mem->simple_write(value, address);
 }
 
 void Processor::_BUG(std::string str, int value) const

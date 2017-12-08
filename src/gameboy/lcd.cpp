@@ -29,7 +29,7 @@ void LCD::step(int elapsed_time)
 			_video.set_ly(_video.get_ly()+1);
 			check_lyc();
 
-			if (_video.get_ly() >= 144)
+			if (_video.get_ly() >= 143)
 			{
 				current_mode = states[1]; //VBLANK
 				_mem.set_interrupt_flag(Memory::Interrupt::VBLANK);
@@ -108,7 +108,10 @@ void LCD::draw()
 void LCD::draw_scanline()
 {
 	line = _video.get_ly();
-	render_tiles(line);
+	for (int i = 0; i < 160; i++)
+		pixels[i][line] = 0;
+	if (_CONTROL[7] && _CONTROL[0])
+		render_tiles(line);
 }
 
 void LCD::check_interrupt_stat(int num_bit)
@@ -196,25 +199,10 @@ void LCD::render_tiles(int current_line)
 							 tile_num,
 							 is_signed);
 
-		/*if (_mem.get_cartridge().has_boot())
-		{
-			for (uint16_t i = tile_address; i < tile_address+16; i++)
-			{
-				if (_video.simple_read(i))
-					std::cout << std::hex << tile_address << std::endl;
-			}
-		}*/
-
 		uint8_t color_id = get_color_id(tile_address, x, y);
 
 		pixels[i][current_line] = get_color(color_id,
 						    _video.get_bgp());
-		if (_mem.get_cartridge().has_boot())
-		{
-			if (pixels[i][current_line] != 0
-			    && pixels[i][current_line] != 3)
-				std::cout << "ah\n";
-		}
 	}
 
 }

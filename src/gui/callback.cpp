@@ -105,7 +105,9 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 	width = gtk_widget_get_allocated_width(w);
 	height = gtk_widget_get_allocated_height(w);
 
-	DEBUG_STREAM << "Dimensions : " << width  << " x " << height << std::endl;
+//	std::this_thread::sleep_for(2s);
+//	sleep(0.5);
+	//std::cout << "Dimensions : " << width  << " x " << height << std::endl;
 
 	gtk_render_background(context, cr, 0, 0, width, height);
 

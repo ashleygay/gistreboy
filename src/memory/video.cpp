@@ -60,8 +60,8 @@ void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
 
 	while (inc_src <= end_src)
 	{
-		byte = simple_read(inc_src);
-		simple_write(byte, inc_dest);
+		byte = _proc._simple_read(inc_src);
+		_proc._simple_write(byte, inc_dest);
 		++inc_src;
 		++inc_dest;
 	}
