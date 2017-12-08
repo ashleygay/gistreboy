@@ -87,7 +87,6 @@ int Processor::_handleInterrupts()
 
 			DEBUG_STREAM << "INTERRUPTING: " << index << std::endl;
 			_mem->reset_interrupt_flag(index);
-
 			halted = false;
 			_setupInterrupt(index);
 			return 5;
@@ -114,9 +113,9 @@ void Processor::_setupInterrupt(unsigned int interrupt)
 {
 	// We push PC onto the stack
 	push_word(PC.value);
-
 	// We set PC to the correct interrupt
 	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
+	DEBUG_STREAM << "ISR: " << PC.value << std::endl;
 }
 
 void Processor::HALT()
@@ -139,7 +138,7 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
-	DEBUG_STREAM << "PC is 0x"<< std::hex << (int)PC.value << std::dec << std::endl;
+	DEBUG_STREAM << "PC: 0x"<< std::hex << (int)PC.value << std::dec;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
 	if (!iset.isValidOpCode(opcode)) {
@@ -154,28 +153,30 @@ void Processor::_fetchNextInstruction()
 		else //OpCode is on 16bits, we increment PC for args
 			++PC.value;
 	}
-	DEBUG_STREAM << "OPCODE: 0x"<< std::hex << (int)opcode << std::dec << std::endl;
 	// Opcode is valid
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArg arg;
 
+	//DEBUG_STREAM << "CODE: 0x"<< std::hex << (int)opcode << std::dec;
+	DEBUG_STREAM << " : "<< currentInstruction->toStr();
 	// This instruction takes an argument
 	if(currentInstruction->hasArg()) {
 
 		int size = currentInstruction->argSize();
 		if (size == 1) { // We add a byte to the argument vector
 			arg.byte = _mem->read(PC.value);
-			DEBUG_STREAM << "ARG: 0x" << std::hex << (int)arg.byte << std::dec << std::endl;
+			DEBUG_STREAM << " 0x" << std::hex << (int)arg.byte << std::dec;
 		}
 		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t word = _mem->read(PC.value);
 			++PC.value;
 			word = word | (_mem->read(PC.value) << 8);
 			arg.word = word;
-			DEBUG_STREAM << "ARG: 0x" << std::hex << (int)arg.word << std::dec << std::endl;
+			DEBUG_STREAM << " 0x" << std::hex << (int)arg.word << std::dec;
 		}
 		++PC.value;
 	}
+	DEBUG_STREAM << std::endl;
 	currentInstruction->setArg(arg);
 }
 
