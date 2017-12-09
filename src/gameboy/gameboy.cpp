@@ -73,3 +73,18 @@ void GameBoy::changeGame(uint8_t *mem)
 	_resetComponents();
 	_mem.change_game(mem);
 }
+
+void GameBoy::setatomic(uint8_t value)
+{
+  	_atomic.store(value);
+}
+
+uint8_t GameBoy::getatomic()
+{
+  	return _atomic.load();
+}  
+
+void GameBoy::update_memory(uint8_t byte, uint16_t address)
+{
+  	_mem.write(byte, address);
+}

@@ -42,6 +42,11 @@ class GameBoy
 		// returns false.
 		bool readyToLaunch();
 
+  		void setatomic(uint8_t value);
+  		uint8_t getatomic();
+  		void update_memory(uint8_t byte, uint16_t address);
+                
+
 	private:
 		void _resetComponents();
 		void _wireComponents();
@@ -50,10 +55,12 @@ class GameBoy
 	private:
 		Processor p;
 		Memory _mem;
+                
 
 		LCD _lcd;
 		int _handler_cycles = 0;
 		int _cpu_cycles = 0;
 
 		std::atomic<bool> _running{false};
+                std::atomic<uint> _atomic;
 };
