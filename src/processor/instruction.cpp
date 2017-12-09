@@ -308,6 +308,7 @@ void LD_SPHL::exec(Processor *p)
 	p->SP.value = make_word(p->L.value, p->H.value);
 }
 
+/*TODO louche check*/
 void LD_HLSPn::exec(Processor *p)
 {
 	uint8_t n = _arg.byte;
@@ -1062,6 +1063,7 @@ void SWAP_HL::exec(Processor *p)
   HLWriteDereference(p, temp);
 }
 
+/*TODO Check DAA */
 
 #define DAA_def()                  \
   void DAA::exec(Processor *p)\
@@ -1386,8 +1388,8 @@ void RRCA::exec(Processor *p)
 	auto temp = static_cast<uint8_t>((p->A.value >> 1)
 					 | (truncated_bit << 7));
 	p->A.value = temp;
-	if (p->A.value == 0)
-		p->flag.setFlag(FlagRegister::ZERO);
+	//if (p->A.value == 0)
+	//	p->flag.setFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	if (flag_carry)
@@ -1450,8 +1452,8 @@ void RLCA::exec(Processor *p)
 	auto truncated_bit = check_bit(p->A.value, 7);
 	auto temp = static_cast<uint8_t>((p->A.value << 1) | truncated_bit);
 	p->A.value = temp;
-	if (p->A.value == 0)
-		p->flag.setFlag(FlagRegister::ZERO);
+	//if (p->A.value == 0)
+	//	p->flag.setFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	if (flag_carry)
@@ -1516,8 +1518,8 @@ void RLA::exec(Processor *p)
 		p->flag.unsetFlag(FlagRegister::CARRY);
 	auto temp = static_cast<uint8_t>(p->A.value << 1);
 	temp |= carry;
-	if (temp == 0)
-		p->flag.setFlag(FlagRegister::ZERO);
+	//if (temp == 0)
+	//	p->flag.setFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->A.value = temp;
@@ -1582,9 +1584,9 @@ void RRA::exec(Processor *p)
 	else
 		p->flag.unsetFlag(FlagRegister::CARRY);
 	auto temp = static_cast<uint8_t>(p->A.value >> 1);
-	temp |= carry;
-	if (temp == 0)
-		p->flag.setFlag(FlagRegister::ZERO);
+	temp |= (carry << 7);
+	//if (temp == 0)
+	//	p->flag.setFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->A.value = temp;
@@ -1602,7 +1604,7 @@ void RRA::exec(Processor *p)
    else\
      p->flag.unsetFlag(FlagRegister::CARRY);\
    auto temp = static_cast<uint8_t>(p->reg.value >> 1);	\
-   temp |= carry;\
+   temp |= (carry << 7);\
    if (temp == 0)\
      p->flag.setFlag(FlagRegister::ZERO);\
    p->flag.unsetFlag(FlagRegister::SUBTRACT);\
@@ -1630,7 +1632,7 @@ void RR_HL::exec(Processor *p)
     else
       p->flag.unsetFlag(FlagRegister::CARRY);
     auto temp = static_cast<uint8_t>(tmp >> 1);
-    temp |= carry;
+    temp |= (carry << 7);
     if (temp == 0)
       p->flag.setFlag(FlagRegister::ZERO);
     p->flag.unsetFlag(FlagRegister::SUBTRACT);

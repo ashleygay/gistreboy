@@ -33,13 +33,14 @@ void Memory::reset()
 
 uint8_t Memory::read(uint16_t address)
 {
+	/*TODO fix joypad*/
+	memory[0xFF00] = memory[0xFF00] | 0x0F;
 	if (cartridge.isInRange(address))
 		return cartridge.read(address);
 	else if (video.isInRange(address))
 		return video.read(address);
 	else
 		return memory[address];
-	memory[0xFF00] = memory[0xFF00] | 0x0F;
 }
 
 void Memory::write(uint8_t byte, uint16_t address)
