@@ -42,6 +42,7 @@ void Emulator::mainLoop(GameBoy& gb)
 	while(gb.isRunning()) {
 		gb.step();
 		gb.update_memory(gb.getatomic(), 0xFF00);
+		gb.set_interrupt_joypad();
 	}
 }
 

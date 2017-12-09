@@ -45,6 +45,7 @@ class GameBoy
   		void setatomic(uint8_t value);
   		uint8_t getatomic();
   		void update_memory(uint8_t byte, uint16_t address);
+  		void set_interrupt_joypad();
                 
 
 	private:

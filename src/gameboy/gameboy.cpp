@@ -88,3 +88,8 @@ void GameBoy::update_memory(uint8_t byte, uint16_t address)
 {
   	_mem.write(byte, address);
 }
+
+void GameBoy::set_interrupt_joypad()
+{
+  	_mem.set_interrupt_flag(Interrupt::JOYPAD);
+}
