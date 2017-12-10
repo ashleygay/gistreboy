@@ -21,7 +21,7 @@ void TimerHandler::step(int cpu_step)
 			if (_timer_enable) {
 				if (_TIMA == 0xFF) { //we will have an overflow
 					_interrupt();
-					std::cout << "INTERRUPT TIMER"<< std::endl;
+					DEBUG_STREAM << "INTERRUPT TIMER"<< std::endl;
 					_TIMA = _TMA;
 				}
 				++_TIMA;

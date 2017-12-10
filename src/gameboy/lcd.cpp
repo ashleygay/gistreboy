@@ -90,17 +90,17 @@ void LCD::draw()
 		for (int j = 0; j < 144; j++)
 		{
 			unsigned char *p = my_pixels + j * rowstride + i * n_channels;
-			if (pixels[i][j]) {
-				p[0] = 0;
-				p[1] = 0;
-				p[2] = 0;
-				//std::cout << pixels[j][i];
+			if (pixels[i][j] == 1) {
+				p[0] = 150; p[1] = 150; p[2] = 150;
+			}
+			else if (pixels[i][j] == 2) {
+				p[0] = 80; p[1] = 80; p[2] = 80;
+			}
+			else if (pixels[i][j] == 3) {
+				p[0] = 0; p[1] = 0; p[2] = 0;
 			}
 			else {
-				p[0] = 255;
-				p[1] = 255;
-				p[2] = 255;
-				//std::cout << ' ';
+				p[0] = 255; p[1] = 255; p[2] = 255;
 			}
 		}
 		//std::cout << std::endl;
