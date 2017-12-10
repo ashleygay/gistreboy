@@ -35,8 +35,10 @@ int Processor::step()
 
 	int interrupts = _handleInterrupts();
 
+#if 0
 	if (stopped || halted)
 		return 0;
+#endif
 
 	if (!interrupts) {
 
@@ -111,9 +113,10 @@ uint16_t Processor::pop_word()
 {
 	uint8_t high = _read(SP.value++);
 	uint8_t low = _read(SP.value++);
+	uint16_t tmp = make_word(low, high);
 	DEBUG_STREAM << "	POPING 0x" <<  std::hex
-	<< (int)make_word(low, high) << std::dec<< std::endl;
-	return make_word(low, high);
+	<< (int)tmp << std::dec<< std::endl;
+	return tmp;
 }
 
 void Processor::_setupInterrupt(unsigned int interrupt)
@@ -146,6 +149,7 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
+	DEBUG_STREAM << "SP: 0x"<< std::hex << (int)SP.value << std::dec << std::endl;
 	DEBUG_STREAM << "PC: 0x"<< std::hex << (int)PC.value << std::dec;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
