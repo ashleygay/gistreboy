@@ -296,7 +296,7 @@ void LD_nnSP::exec(Processor *p)
 {
 	uint16_t address = _arg.word;
 	uint8_t SP_low = get_low(p->SP.value);
-	uint8_t SP_high = get_low(p->SP.value);
+	uint8_t SP_high = get_high(p->SP.value);
 
 	p->_write(SP_low, address);
 	p->_write(SP_high, address + 1);
@@ -311,17 +311,20 @@ void LD_SPHL::exec(Processor *p)
 /*TODO louche check*/
 void LD_HLSPn::exec(Processor *p)
 {
-	uint8_t n = _arg.byte;
-	uint16_t HL = p->SP.value + n;
+	int8_t n = static_cast<int8_t>(_arg.byte);
+	int result = p->SP.value + n;
+	uint16_t HL = static_cast<uint16_t>(result);
 	p->L.value = get_low(HL);
 	p->H.value = get_high(HL);
 
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->flag.unsetFlag(FlagRegister::CARRY);
 	// Carry if (b1 + b1) != (b1 | b2)
-	if ((HL & 0xF) != ((p->SP.value | n) & 0xF))
+	//if ((HL & 0xF) != ((p->SP.value | n) & 0xF))
+	if (((p->SP.value ^ n ^ (result & 0xFFFF)) & 0x10) == 0x10)
 		p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (HL != (p->SP.value | n))
+	//if (HL != (p->SP.value | n))
+	if (((p->SP.value ^ n ^ (result & 0xFFFF)) & 0x100) == 0x100)
 		p->flag.setFlag(FlagRegister::CARRY);
 	p->flag.unsetFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
@@ -402,9 +405,9 @@ void NOP::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
 	if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF)) > 0xF)\
 	  p->flag.setFlag(FlagRegister::HALFCARRY);\
-	if (val > 0xFF)\
+	if (result & 0x100)\
 	  p->flag.setFlag(FlagRegister::CARRY);	\
-	p->reg1.value = (result & 0xFF);\
+	p->reg1.value = result;\
 }
 
 ADD_XY_def(A, A)
@@ -428,9 +431,9 @@ void ADD_AHL::exec(Processor *p)
     p->flag.unsetFlag(FlagRegister::SUBTRACT);
     if (((p->A.value & 0xF) + (tmp & 0xF)) > 0xF)
       p->flag.setFlag(FlagRegister::HALFCARRY);
-    if (val > 0xFF)
+    if (val & 0x100)
       p->flag.setFlag(FlagRegister::CARRY); 
-    p->A.value = (result & 0xFF);
+    p->A.value = result;
   }
 
 void ADD_AX::exec(Processor *p)
@@ -446,16 +449,16 @@ void ADD_AX::exec(Processor *p)
   p->flag.unsetFlag(FlagRegister::SUBTRACT);
   if (((p->A.value & 0xF) + (tmp & 0xF)) > 0xF)
     p->flag.setFlag(FlagRegister::HALFCARRY);
-  if (val > 0xFF)
+  if (val & 0x100)
     p->flag.setFlag(FlagRegister::CARRY);
-  p->A.value = (result & 0xFF);
+  p->A.value = result;
 }
 
 #define ADD_HLXY_def(reg1, reg2)\
   void ADD_HL##reg1##reg2::exec(Processor *p)\
   {\
 	uint16_t value_reg = make_word(p->reg2.value, p->reg1.value);\
-	uint16_t hl = p->L.value | (p->H.value << 8);\
+	uint16_t hl = make_word(p->L.value, p->H.value);\
   	uint val = hl + value_reg;\
 	uint16_t result = static_cast<uint16_t>(val);\
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);\
@@ -463,7 +466,7 @@ void ADD_AX::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
 	if (((hl & 0xFFF) + (value_reg & 0xFFF)) > 0xFFF)\
 	  p->flag.setFlag(FlagRegister::HALFCARRY);\
-	if ((val & 0x10000) != 0)\
+	if (val & 0x10000)\
 	  p->flag.setFlag(FlagRegister::CARRY);	\
 	p->H.value = get_high(result);\
 	p->L.value = get_low(result);\
@@ -492,19 +495,19 @@ void ADD_HLSP::exec(Processor *p)
 
 void ADD_SPX::exec(Processor *p)
 {
-	uint8_t byte = _arg.byte;
+	int8_t byte = static_cast<int8_t>(_arg.byte);
 	uint16_t sp = p->SP.value;
-	uint val = sp + byte;
+	int val = sp + byte;
 	uint16_t result = static_cast<uint16_t>(val);
 	p->flag.unsetFlag(FlagRegister::ZERO);
 	p->flag.unsetFlag(FlagRegister::HALFCARRY);
 	p->flag.unsetFlag(FlagRegister::CARRY);
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);
-	if (((sp ^ byte ^ (result & 0xFFFF)) & 0x10) == 0x10)
+	if (((sp ^ byte ^ (val & 0xFFFF)) & 0x10) == 0x10)
 	  p->flag.setFlag(FlagRegister::HALFCARRY);
-	if (((sp ^ byte ^ (result & 0xFFFF)) & 0x100) == 0x100)
+	if (((sp ^ byte ^ (val & 0xFFFF)) & 0x100) == 0x100)
 	  p->flag.setFlag(FlagRegister::CARRY);
-	p->SP.value = (result & 0xFF);
+	p->SP.value = result;
 }
 
 //ADC instructions
@@ -516,7 +519,6 @@ void ADD_SPX::exec(Processor *p)
     uint8_t result = static_cast<uint8_t>(val);\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
     if (result == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::SUBTRACT);\
@@ -524,6 +526,8 @@ void ADD_SPX::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);\
     if (val > 0xFF)\
       p->flag.setFlag(FlagRegister::CARRY);\
+    else\
+      p->flag.unsetFlag(FlagRegister::CARRY);\
     p->reg1.value = result;	   \
   }
 
@@ -542,7 +546,6 @@ void ADC_AHL::exec(Processor *p)
     uint8_t result = static_cast<uint8_t>(val);
     p->flag.unsetFlag(FlagRegister::ZERO);
     p->flag.unsetFlag(FlagRegister::HALFCARRY);
-    p->flag.unsetFlag(FlagRegister::CARRY);
     if (result == 0)
       p->flag.setFlag(FlagRegister::ZERO);	
     p->flag.unsetFlag(FlagRegister::SUBTRACT);
@@ -550,6 +553,8 @@ void ADC_AHL::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);
     if (val > 0xFF)
       p->flag.setFlag(FlagRegister::CARRY);
+    else
+      p->flag.unsetFlag(FlagRegister::CARRY);
     p->A.value = result;       
 }
 
@@ -560,7 +565,6 @@ void ADC_AX::exec(Processor *p)
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
-  p->flag.unsetFlag(FlagRegister::CARRY);
   if (result == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::SUBTRACT);
@@ -568,6 +572,8 @@ void ADC_AX::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (val > 0xFF)
     p->flag.setFlag(FlagRegister::CARRY);
+  else
+    p->flag.unsetFlag(FlagRegister::CARRY);
   p->A.value = result;
 }  
 
@@ -645,7 +651,6 @@ void SUB_AX::exec(Processor *p)
     uint8_t result = static_cast<uint8_t>(val);\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
     if (result == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
     p->flag.setFlag(FlagRegister::SUBTRACT);\
@@ -653,6 +658,8 @@ void SUB_AX::exec(Processor *p)
       p->flag.setFlag(FlagRegister::HALFCARRY);\
     if (p->reg1.value < p->reg2.value)                 \
       p->flag.setFlag(FlagRegister::CARRY);\
+    else \
+      p->flag.unsetFlag(FlagRegister::CARRY);\
     p->reg1.value = result;       \
   }
 
@@ -671,7 +678,6 @@ void SBC_AHL::exec(Processor *p)
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
-  p->flag.unsetFlag(FlagRegister::CARRY);
   if (result == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.setFlag(FlagRegister::SUBTRACT);
@@ -679,6 +685,8 @@ void SBC_AHL::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (p->A.value < tmp)                 
     p->flag.setFlag(FlagRegister::CARRY);
+  else
+    p->flag.unsetFlag(FlagRegister::CARRY);
   p->A.value = result;       
 }
 
@@ -689,7 +697,6 @@ void SBC_AX::exec(Processor *p)
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
-  p->flag.unsetFlag(FlagRegister::CARRY);
   if (result == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.setFlag(FlagRegister::SUBTRACT);
@@ -697,6 +704,8 @@ void SBC_AX::exec(Processor *p)
     p->flag.setFlag(FlagRegister::HALFCARRY);
   if (p->A.value < tmp)
     p->flag.setFlag(FlagRegister::CARRY);
+  else
+    p->flag.unsetFlag(FlagRegister::CARRY);
   p->A.value = result;
 }
 
