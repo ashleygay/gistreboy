@@ -379,14 +379,14 @@ decl_instruction(BIT_5L, 0xCB6D, 8, 0, 0, 0)
 decl_instruction(BIT_6L, 0xCB75, 8, 0, 0, 0)
 decl_instruction(BIT_7L, 0xCB7D, 8, 0, 0, 0)
 
-decl_instruction(BIT_0HL, 0xCB46, 16, 0, 0, 0)
-decl_instruction(BIT_1HL, 0xCB4E, 16, 0, 0, 0)
-decl_instruction(BIT_2HL, 0xCB56, 16, 0, 0, 0)
-decl_instruction(BIT_3HL, 0xCB5E, 16, 0, 0, 0)
-decl_instruction(BIT_4HL, 0xCB66, 16, 0, 0, 0)
-decl_instruction(BIT_5HL, 0xCB6E, 16, 0, 0, 0)
-decl_instruction(BIT_6HL, 0xCB76, 16, 0, 0, 0)
-decl_instruction(BIT_7HL, 0xCB7E, 16, 0, 0, 0) 
+decl_instruction(BIT_0HL, 0xCB46, 12, 0, 0, 0)
+decl_instruction(BIT_1HL, 0xCB4E, 12, 0, 0, 0)
+decl_instruction(BIT_2HL, 0xCB56, 12, 0, 0, 0)
+decl_instruction(BIT_3HL, 0xCB5E, 12, 0, 0, 0)
+decl_instruction(BIT_4HL, 0xCB66, 12, 0, 0, 0)
+decl_instruction(BIT_5HL, 0xCB6E, 12, 0, 0, 0)
+decl_instruction(BIT_6HL, 0xCB76, 12, 0, 0, 0)
+decl_instruction(BIT_7HL, 0xCB7E, 12, 0, 0, 0) 
 
 //SET Instructions
 
