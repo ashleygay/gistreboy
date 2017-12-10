@@ -1919,7 +1919,6 @@ void CALLC::exec(Processor *p)
 #define RST_def(x) \
 	void RST_##x::exec(Processor *p) \
 	{\
-std::cout << "RST: PC is 0x" << std::hex << (int)p->PC.value << std::endl;\
 		_callPush(p);\
 		p->PC.value = x;\
 	}

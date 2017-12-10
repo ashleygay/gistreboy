@@ -8,7 +8,7 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy(): _mem(p), _lcd(_mem)
+GameBoy::GameBoy(): _mem(p), _lcd(_mem), _timers(_mem)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();
@@ -35,10 +35,9 @@ void GameBoy::step()
 	auto start_time = std::chrono::high_resolution_clock::now();
 #endif
 
-	if (!_cpu_cycles) {
-		_cpu_cycles = p.step();
-		_lcd.step(_cpu_cycles);
-	}
+	_cpu_cycles = p.step();
+	_lcd.step(_cpu_cycles);
+	_timers.step(_cpu_cycles);
 
 #ifdef BENCH_STREAM
 	auto end_time = std::chrono::high_resolution_clock::now();
@@ -48,8 +47,6 @@ void GameBoy::step()
 	<< " nanoseconds" << std::endl;
 	BENCH_STREAM << "Current CPU cycle " << _cpu_cycles << std::endl;
 #endif
-	//_clockCycle();
-	_cpu_cycles = 0;
 }
 
 void GameBoy::_wireComponents()

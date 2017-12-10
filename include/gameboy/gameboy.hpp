@@ -13,6 +13,7 @@
 #include <processor.hpp>
 #include <memory.hpp>
 #include <lcd.hpp>
+#include <timer_handler.hpp>
 
 #include <gtk/gtk.h>
 #include <iostream>
@@ -52,6 +53,7 @@ class GameBoy
 		Memory _mem;
 
 		LCD _lcd;
+		TimerHandler _timers;
 		int _handler_cycles = 0;
 		int _cpu_cycles = 0;
 

@@ -51,6 +51,10 @@ void Memory::write(uint8_t byte, uint16_t address)
 		video.write(byte, address);
 	else
 		memory[address] = byte;
+
+	if (address == 0xFF04) // We are writing to DIV register, we reset it
+		memory[0xFF04] = 0;
+
 	memory[0xFF00] = memory[0xFF00] | 0x0F;
 }
 
@@ -73,6 +77,10 @@ void Memory::simple_write(uint8_t byte, uint16_t address)
 		video.simple_write(byte, address);
 	else
 		memory[address] = byte;
+
+	if (address == 0xFF04) // We are writing to DIV register, we reset it
+		memory[0xFF04] = 0;
+
 	memory[0xFF00] = memory[0xFF00] | 0x0F;
 }
 
