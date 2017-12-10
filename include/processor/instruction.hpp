@@ -209,7 +209,7 @@ decl_instruction(SBC_AE, 0x9B, 4, 0, 0, 0)
 decl_instruction(SBC_AH, 0x9C, 4, 0, 0, 0)
 decl_instruction(SBC_AL, 0x9D, 4, 0, 0, 0)
 decl_instruction(SBC_AHL, 0x9E, 8, 0, 0, 0)
-decl_instruction(SBC_AX, 0xDE, 8, 1, 1, 0) //pas d'opcode in manual
+decl_instruction(SBC_AX, 0xDE, 8, 1, 1, 0) // no opcode in manual
 
 // AND Instructions
 
@@ -429,7 +429,7 @@ decl_instruction(SET_7D, 0xCBFA, 8, 0, 0, 0)
 decl_instruction(SET_0E, 0xCBC3, 8, 0, 0, 0)
 decl_instruction(SET_1E, 0xCBCB, 8, 0, 0, 0)
 decl_instruction(SET_2E, 0xCBD3, 8, 0, 0, 0)
-decl_instruction(SET_3E, 0xCBD5, 8, 0, 0, 0)
+decl_instruction(SET_3E, 0xCBDB, 8, 0, 0, 0)
 decl_instruction(SET_4E, 0xCBE3, 8, 0, 0, 0)
 decl_instruction(SET_5E, 0xCBEB, 8, 0, 0, 0)
 decl_instruction(SET_6E, 0xCBF3, 8, 0, 0, 0)

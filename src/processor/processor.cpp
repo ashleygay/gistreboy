@@ -90,8 +90,11 @@ int Processor::_handleInterrupts()
 				++index;
 			}
 
+			// Clear interrupt flag
+			// Disable IME so we do not interrupt whil interrupting
 			DEBUG_STREAM << "INTERRUPTING: " << index << std::endl;
 			_mem->reset_interrupt_flag(index);
+			IME = false;
 			halted = false;
 			_setupInterrupt(index);
 			return 5;
