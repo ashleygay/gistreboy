@@ -101,6 +101,8 @@ int Processor::_handleInterrupts()
 
 void Processor::push_word(uint16_t word)
 {
+	DEBUG_STREAM << "	PUSHING 0x" <<  std::hex
+	<< (int)word << std::dec << std::endl;
 	_mem->write(get_low(word), --SP.value);
 	_mem->write(get_high(word), --SP.value);
 }
@@ -109,6 +111,8 @@ uint16_t Processor::pop_word()
 {
 	uint8_t high = _read(SP.value++);
 	uint8_t low = _read(SP.value++);
+	DEBUG_STREAM << "	POPING 0x" <<  std::hex
+	<< (int)make_word(low, high) << std::dec<< std::endl;
 	return make_word(low, high);
 }
 

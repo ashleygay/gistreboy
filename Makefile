@@ -60,7 +60,7 @@ INCLUDE_PATH= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY) -I$(HELPERS) -I$(MEMORY) -I$(
 # For benchmarks, add -D BENCH_STREAM_ACTIVATED
 
 CC_OPTIONS= -O3 -g -Wall -Wextra -pedantic -std=c++14 \
-		#-D DEBUG_STREAM_ACTIVATED
+		-D DEBUG_STREAM_ACTIVATED
 CXXFLAGS = $(CC_OPTIONS) $(INCLUDES) $(LIB)
 
 emulator: $(OBJS)

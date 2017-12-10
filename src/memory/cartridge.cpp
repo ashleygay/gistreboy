@@ -117,8 +117,10 @@ void Cartridge::change_game(uint8_t *cart)
 		break;
 	}
 
-	uint8_t size_rom = cart[0x148];
-	switch(size_rom)
+	uint8_t size_type = cart[0x148];
+	size_t rom_size = 0;
+
+	switch(size_type)
 	{
 	case 0x00 :
 		rom_size = 32768;
@@ -159,6 +161,7 @@ void Cartridge::change_game(uint8_t *cart)
 
 	for (size_t i = 0; i < rom_size; i++)
 		rom[i] = cart[i];
+	DEBUG_STREAM << "Rom size is " << rom_size << std::endl;
 
 	if (has_ram_)
 	{
@@ -183,6 +186,8 @@ void Cartridge::change_game(uint8_t *cart)
 		default :
 			break;
     		}
+		
+		DEBUG_STREAM << "Ram size is " << ram_size << std::endl;
   	}
 }
 
@@ -191,9 +196,11 @@ uint8_t Cartridge::read(uint16_t address)
 {
 	if (addr_in_range(address, 0x00, 0x3FFF))
 	{
-		if (address == 0x100)
+		if (address == 0x100) {
 			has_boot_ = true;
-		if (addr_in_range(address, 0x00, 0xFF) && !has_boot_)
+			return rom[0x100];
+		}
+		else if (addr_in_range(address, 0x00, 0xFF) && !has_boot_)
 			return boot_rom[address];
 		else
 			return rom[address];

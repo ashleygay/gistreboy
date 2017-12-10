@@ -78,12 +78,18 @@ void Memory::simple_write(uint8_t byte, uint16_t address)
 
 void Memory::set_interrupt_flag(unsigned int interrupt)
 {
+	DEBUG_STREAM << "Setting int number : "<< interrupt << std::endl;
+	DEBUG_STREAM << "IF: before " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 	memory[0xFF0F] |= (1 << interrupt);
+	DEBUG_STREAM << "IF: after " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 }
 
 void Memory::reset_interrupt_flag(unsigned int interrupt)
 {
+	DEBUG_STREAM << "Resetting int number : "<< interrupt << std::endl;
+	DEBUG_STREAM << "IF: before " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 	memory[0xFF0F] &= (~(1 << interrupt));
+	DEBUG_STREAM << "IF: after " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 }
 
 uint8_t Memory::get_interrupt_enable()

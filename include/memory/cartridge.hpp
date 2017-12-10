@@ -4,7 +4,9 @@
 #include <array>
 #include <string>
 #include <fstream>
+
 #include <memoryobject.hpp>
+#include <debug.hpp>
 
 
 
