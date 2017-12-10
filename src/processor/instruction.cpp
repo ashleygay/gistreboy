@@ -647,7 +647,7 @@ void SUB_AX::exec(Processor *p)
 #define SBC_XY_def(reg1, reg2)                  \
   void SBC_##reg1##reg2::exec(Processor *p)\
   {\
-    uint val = p->reg1.value - p->reg2.value - p->flag.getFlag(FlagRegister::CARRY); \
+    int val = p->reg1.value - p->reg2.value - p->flag.getFlag(FlagRegister::CARRY); \
     uint8_t result = static_cast<uint8_t>(val);\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
@@ -656,7 +656,7 @@ void SUB_AX::exec(Processor *p)
     p->flag.setFlag(FlagRegister::SUBTRACT);\
     if (((p->reg1.value & 0xF) - (p->reg2.value & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0) \
       p->flag.setFlag(FlagRegister::HALFCARRY);\
-    if (p->reg1.value < p->reg2.value)                 \
+    if (val < 0)                 \
       p->flag.setFlag(FlagRegister::CARRY);\
     else \
       p->flag.unsetFlag(FlagRegister::CARRY);\
@@ -674,7 +674,7 @@ SBC_XY_def(A, L)
 void SBC_AHL::exec(Processor *p)
 {
   auto tmp = HLReadDereference(p);
-  uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
+  int val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
@@ -683,7 +683,7 @@ void SBC_AHL::exec(Processor *p)
   p->flag.setFlag(FlagRegister::SUBTRACT);
   if (((p->A.value & 0xF) - (tmp & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0) 
     p->flag.setFlag(FlagRegister::HALFCARRY);
-  if (p->A.value < tmp)                 
+  if (val < 0)                 
     p->flag.setFlag(FlagRegister::CARRY);
   else
     p->flag.unsetFlag(FlagRegister::CARRY);
@@ -693,7 +693,7 @@ void SBC_AHL::exec(Processor *p)
 void SBC_AX::exec(Processor *p)
 {
   auto tmp = _arg.byte;
-  uint val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
+  int val = p->A.value - tmp - p->flag.getFlag(FlagRegister::CARRY);
   uint8_t result = static_cast<uint8_t>(val);
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
@@ -702,7 +702,7 @@ void SBC_AX::exec(Processor *p)
   p->flag.setFlag(FlagRegister::SUBTRACT);
   if (((p->A.value & 0xF) - (tmp & 0xF) - p->flag.getFlag(FlagRegister::CARRY)) < 0)
     p->flag.setFlag(FlagRegister::HALFCARRY);
-  if (p->A.value < tmp)
+  if (val < 0)
     p->flag.setFlag(FlagRegister::CARRY);
   else
     p->flag.unsetFlag(FlagRegister::CARRY);
