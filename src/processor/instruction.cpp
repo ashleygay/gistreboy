@@ -85,13 +85,13 @@ LD_RegX_def(L)
 
 #define LD_XHL_def(reg)\
 	void LD_##reg##HL::exec(Processor *p)\
-	{ p->A.value = HLReadDereference(p); }
+	{ p->reg.value = HLReadDereference(p); }
 
 #define LD_HLX_def(reg)\
 	void LD_HL##reg::exec(Processor *p)\
 	{\
 		uint16_t address = make_word(p->L.value, p->H.value);\
-		uint8_t value = p->A.value;\
+		uint8_t value = p->reg.value;\
 		p->_write(value, address);\
 	}
 
