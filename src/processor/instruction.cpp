@@ -308,7 +308,6 @@ void LD_SPHL::exec(Processor *p)
 	p->SP.value = make_word(p->L.value, p->H.value);
 }
 
-/*TODO louche check*/
 void LD_HLSPn::exec(Processor *p)
 {
 	int8_t n = static_cast<int8_t>(_arg.byte);
@@ -1077,7 +1076,7 @@ void SWAP_HL::exec(Processor *p)
 #define DAA_def()                  \
   void DAA::exec(Processor *p)\
   {\
-    p->flag.unsetFlag(FlagRegister::CARRY);\
+    /*p->flag.unsetFlag(FlagRegister::CARRY);\*/\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     auto a = p->A.value;\
     auto tmp = p->flag.getFlag(FlagRegister::CARRY) ? 0x60 : 0x00;	\
@@ -1086,13 +1085,15 @@ void SWAP_HL::exec(Processor *p)
       tmp |= 0x06;\
     if (p->flag.getFlag(FlagRegister::CARRY) ||\
 	(!p->flag.getFlag(FlagRegister::SUBTRACT) && (a & 0x99)))	\
-      tmp |= 0x06;\
+      tmp |= 0x60;\
     if (p->flag.getFlag(FlagRegister::SUBTRACT))\
       a = static_cast<uint8_t>(a - tmp);\
     else\
       a = static_cast<uint8_t>(a + tmp);\
-    if (((tmp << 2) & 0x100) != 0)\
+    if (!((tmp << 2) & 0x100))\
       p->flag.setFlag(FlagRegister::CARRY);\
+    /*else \
+      p->flag.unsetFlag(FlagRegister::CARRY);*/\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     if (a == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
@@ -1698,8 +1699,8 @@ void SLA_HL::exec(Processor *p)
     p->flag.unsetFlag(FlagRegister::ZERO);\
     auto bit_carry = check_bit(p->reg.value, 0);\
     auto top_bit = check_bit(p->reg.value, 7);\
-    auto temp = static_cast<uint8_t>(p->reg.value >> 1);        \
-    temp = set_bit_to(temp, 7, top_bit);				\
+    auto temp = static_cast<uint8_t>(p->reg.value >> 1);\
+    temp = set_bit_to(temp, 7, top_bit);\
     if (temp == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
     if (bit_carry)\
@@ -1866,7 +1867,7 @@ void JRNC::exec(Processor *p)
 void JRC::exec(Processor *p)
 {
 	if ( p->flag.getFlag(FlagRegister::CARRY))
-		p->PC.value = (int8_t) _arg.byte;
+		p->PC.value += (int8_t) _arg.byte;
 }
 
 /////////////////////////////////////
