@@ -7,7 +7,8 @@
 
 #include <callback.hpp>
 
-static GdkPixbuf* global_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 160, 144);
+static GdkPixbuf* global = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 160, 144);
+static GdkPixbuf* scaled = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 1600, 1440);
 
 static std::unordered_map<std::string, Key> bindings =
 	{{"k", Key::UP},
@@ -22,7 +23,7 @@ static std::unordered_map<std::string, Key> bindings =
 
 GdkPixbuf* get_global_pixbuf()
 {
-	return global_pixbuf;
+	return global;
 }
 
 void NYI(GtkWidget * b, gpointer user_data)
@@ -118,7 +119,7 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 //	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
 
 //	gdk_cairo_set_source_rgba(cr, &black);
-	gdk_cairo_set_source_pixbuf(cr, global_pixbuf, 0, 0);
+	gdk_cairo_set_source_pixbuf(cr, global, 0, 0);
  	cairo_paint (cr);
 //	cairo_fill(cr);
 

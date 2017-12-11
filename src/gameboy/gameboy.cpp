@@ -38,6 +38,7 @@ void GameBoy::step()
 	_cpu_cycles = p.step();
 	_lcd.step(_cpu_cycles);
 	_timers.step(_cpu_cycles);
+	_mem.write(0x0F, 0xFF00);
 
 #ifdef BENCH_STREAM
 	auto end_time = std::chrono::high_resolution_clock::now();

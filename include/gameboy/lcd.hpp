@@ -11,7 +11,6 @@
 
 #include <memory.hpp>
 #include <video.hpp>
-#include <video_module.hpp>
 #include <iostream>
 
 class LCD
