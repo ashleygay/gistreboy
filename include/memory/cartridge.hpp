@@ -39,8 +39,8 @@ public :
 
 private :
 
-	uint8_t get_current_rom_bank();
-	uint8_t get_current_ram_bank();
+	//uint8_t get_current_rom_bank();
+	//uint8_t get_current_ram_bank();
 
 	/*the actual assembly of the cartridge separated in banks of 32kB */
 	std::array<uint8_t, 2097152> rom;
@@ -86,8 +86,8 @@ std::array<uint8_t,  256> boot_rom= { {
   size_t rom_size = 0;
   size_t ram_size = 0;
 
-  uint8_t rom_bank_number = 0;
-  uint8_t ram_bank_number = 0; /* can be upper 2 bit of rom_bank_number */
+  uint8_t current_rom_bank = 0;
+  uint8_t current_ram_bank = 0; /* can be upper 2 bit of rom_bank_number */
 
   bool ram_enable_ = false;
   bool rom_ram_mode_ = false; /* false if rom mode, true if ram mode */
