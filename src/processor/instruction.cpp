@@ -1144,6 +1144,7 @@ SCF_def()
     p->flag.unsetFlag(FlagRegister::ZERO);\
     if (!(p->reg.value & (1 << bit)))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
+    p->flag.unsetFlag(FlagRegister::Flag::SUBTRACT);\
     p->flag.setFlag(FlagRegister::Flag::HALFCARRY);\
   }
 

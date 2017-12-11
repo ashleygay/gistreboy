@@ -270,7 +270,7 @@ decl_instruction(INC_E, 0x1C, 4, 0, 0, 0)
 decl_instruction(INC_H, 0x24, 4, 0, 0, 0)
 decl_instruction(INC_L, 0x2C, 4, 0, 0, 0)
 
-decl_instruction(INC_HLdereference, 0x34, 12, 1, 1, 0)
+decl_instruction(INC_HLdereference, 0x34, 12, 0, 0, 0)
 
 
 // INC on double registers
