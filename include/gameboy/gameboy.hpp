@@ -53,7 +53,7 @@ class GameBoy
 		void _resetComponents();
 		void _wireComponents();
 		void _clockCycle();
-		void _checkKeys();
+		void _checkKeys(uint8_t atomic);
 		void _interruptJOYPAD();
 	private:
 		Processor p;
@@ -61,6 +61,7 @@ class GameBoy
 		LCD _lcd;
 		TimerHandler _timers;
 
+		uint8_t _old_keys = 0;
 		std::atomic<bool> _running{false};
                 std::atomic<uint8_t> _keys;
 };

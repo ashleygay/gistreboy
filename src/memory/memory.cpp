@@ -12,7 +12,7 @@ Memory::Memory(Processor& proc) : processor(proc),
 			    std::make_pair(0xFE00, 0xFE9F)})
 {
 	memory.fill(0);
-	memory[0xFF00] = 0x0F;
+	memory[0xFF00] = 0b00111111;
 }
 
 
@@ -56,8 +56,6 @@ void Memory::write(uint8_t byte, uint16_t address)
 		memory[0xFF00] = (memory[0xFF00] & 0x0F) | byte;
 	else
 		memory[address] = byte;
-
-
 }
 
 uint8_t Memory::simple_read(uint16_t address)
