@@ -11,10 +11,10 @@ static GdkPixbuf* global = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 160, 144
 static GdkPixbuf* scaled = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 1600, 1440);
 
 static std::unordered_map<std::string, Key> bindings =
-	{{"k", Key::UP},
-	 {"j", Key::DOWN},
-	 {"h", Key::LEFT},
-	 {"l", Key::RIGHT},
+	{{"Up", Key::UP},
+	 {"Down", Key::DOWN},
+	 {"Left", Key::LEFT},
+	 {"Right", Key::RIGHT},
 	 {"a", Key::A},
 	 {"s", Key::B},
 	 {"d", Key::SELECT},

@@ -35,7 +35,7 @@ public :
 
 	void reset();
 
-	enum Interrupt {VBLANK, STAT, SERIAL, JOYPAD, TIMER};
+	enum Interrupt {VBLANK, STAT, TIMER, SERIAL, JOYPAD};
 
 	// Zeroes the desired interrupt to enable it
 	void set_interrupt_flag(unsigned int interrupt);
@@ -48,6 +48,7 @@ public :
 	uint8_t get_interrupt_flags();
 	uint8_t get_interrupt_enable();
 	uint8_t get_joypad();
+	void set_joypad(uint8_t byte);
 
 private :
 

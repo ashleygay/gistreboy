@@ -8,6 +8,6 @@
 
 #include <debug.hpp>
 
-enum Key {START, SELECT, A, B, LEFT, DOWN, UP, RIGHT};
+enum Key {LEFT, DOWN, UP, RIGHT, START, SELECT, A, B};
 
 void display_key(Key k);

@@ -45,27 +45,33 @@ void GameBoy::_wireComponents()
 void GameBoy::_checkKeys()
 {
 	uint8_t reg = _mem.get_joypad();
+//	std::cout << "FF00: " << std::bitset<8>(reg) << std::endl;
 	uint8_t keys = getAtomic();
-	uint8_t buttons = keys >> 4; // The highest bits are the buttons.
-	uint8_t pad = keys & 0x0F;
+	uint8_t buttons = keys & 0x0F; // The highest bits are the buttons.
+	uint8_t pad = keys >> 4;
 
 	// We keep only the select bits.
-	keys &= 0b00110000;
+	reg &= 0b00110000;
 
+//	std::cout << "SELECT BITS: " << std::bitset<8>(reg) << std::endl;
 	// If button is pressed but line is not selected
 	// we dont interrupt
-	if ((keys & (1 << 5))) { // Bit 5 is set we 'or' the button bits
-		keys |= buttons;
+	uint8_t tmp = 0;
+	if ((reg & (1 << 5))) { // Bit 5 is set we 'or' the button bits
+		tmp |= buttons;
 		_interruptJOYPAD();
 	}
 
-	if ((keys & (1 << 4))) { // Bit 4 is set we 'or' the pad bits
-		keys |= pad;
+	if ((reg & (1 << 4))) { // Bit 4 is set we 'or' the pad bits
+		tmp |= pad;
 		_interruptJOYPAD();
 	}
-
+	tmp = (~tmp & 0x0F);
+	reg |= tmp;
+//	std::cout << "ATOMIC BITS: " << std::bitset<8>(keys) << std::endl;
+//	std::cout << "JOYPAD BITS: " << std::bitset<8>(reg) << std::endl;
 	// Write modified register to 0xFF00
-	setAtomic(keys);
+	_mem.set_joypad(reg);
 }
 
 void GameBoy::_interruptJOYPAD()

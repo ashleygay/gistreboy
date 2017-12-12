@@ -12,6 +12,7 @@ Memory::Memory(Processor& proc) : processor(proc),
 			    std::make_pair(0xFE00, 0xFE9F)})
 {
 	memory.fill(0);
+	memory[0xFF00] = 0x0F;
 }
 
 
@@ -33,8 +34,6 @@ void Memory::reset()
 
 uint8_t Memory::read(uint16_t address)
 {
-	/*TODO fix joypad*/
-	memory[0xFF00] = memory[0xFF00] | 0x0F;
 	if (cartridge.isInRange(address))
 		return cartridge.read(address);
 	else if (video.isInRange(address))
@@ -49,18 +48,20 @@ void Memory::write(uint8_t byte, uint16_t address)
 		cartridge.write(byte, address);
 	else if (video.isInRange(address))
 		video.write(byte, address);
+
+	else if (address == 0xFF04) // We are writing to DIV register, we reset it
+		memory[0xFF04] = 0;
+
+	else if (address == 0xFF00)
+		memory[0xFF00] = (memory[0xFF00] & 0x0F) | byte;
 	else
 		memory[address] = byte;
 
-	if (address == 0xFF04) // We are writing to DIV register, we reset it
-		memory[0xFF04] = 0;
 
-	memory[0xFF00] = memory[0xFF00] | 0x0F;
 }
 
 uint8_t Memory::simple_read(uint16_t address)
 {
-	memory[0xFF00] = memory[0xFF00] | 0x0F;
 	if (cartridge.isInRange(address))
 		return cartridge.read(address);
 	else if (video.isInRange(address))
@@ -75,13 +76,14 @@ void Memory::simple_write(uint8_t byte, uint16_t address)
 		cartridge.write(byte, address);
 	else if (video.isInRange(address))
 		video.simple_write(byte, address);
-	else
-		memory[address] = byte;
 
-	if (address == 0xFF04) // We are writing to DIV register, we reset it
+	else if (address == 0xFF04) // We are writing to DIV register, we reset it
 		memory[0xFF04] = 0;
 
-	memory[0xFF00] = memory[0xFF00] | 0x0F;
+	else if (address == 0xFF00)
+		memory[0xFF00] = (memory[0xFF00] & 0x0F) | byte;
+	else
+		memory[address] = byte;
 }
 
 void Memory::set_interrupt_flag(unsigned int interrupt)
@@ -114,6 +116,12 @@ uint8_t Memory::get_joypad()
 {
 	return memory[0xFF00];
 }
+
+void Memory::set_joypad(uint8_t byte)
+{
+	memory[0xFF00] = byte;
+}
+
 
 Video& Memory::get_video()
 {
