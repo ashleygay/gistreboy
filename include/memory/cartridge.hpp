@@ -86,7 +86,7 @@ std::array<uint8_t,  256> boot_rom= { {
   size_t rom_size = 0;
   size_t ram_size = 0;
 
-  uint8_t current_rom_bank = 0;
+  uint8_t current_rom_bank = 1;
   uint8_t current_ram_bank = 0; /* can be upper 2 bit of rom_bank_number */
 
   bool ram_enable_ = false;

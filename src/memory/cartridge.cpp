@@ -226,13 +226,13 @@ void Cartridge::write(uint8_t byte, uint16_t address)
 		ram[address + current_ram_bank*0x2000 - 0xA000] = byte;
 
 	else if (addr_in_range(address, 0x00, 0X1FFF))
-		ram_enable_ = ((byte & 0x0A) == 0x0A);
+		ram_enable_ = ((byte & 0x0F) == 0x0A);
 
 	else if (addr_in_range(address, 0x2000, 0x3FFF))
 	{
 		byte &= 0x1f;
 		if (!byte)
-			byte = 0x01;
+			byte = 1;
 		current_rom_bank = (current_rom_bank & 0x60) | byte;
 	}
 
