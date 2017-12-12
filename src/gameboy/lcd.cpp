@@ -115,6 +115,9 @@ void LCD::draw_scanline()
 	//std::cout << "lcdc : " << _CONTROL << std::endl;
 	if (_CONTROL[7] && _CONTROL[0])
 		render_tiles(line);
+	if (_CONTROL[7] && _CONTROL[1])
+		render_sprites(line);
+		
 }
 
 void LCD::check_interrupt_stat(int num_bit)
@@ -143,9 +146,6 @@ void LCD::update_variables(int elapsed_time)
 
 void LCD::render_tiles(int current_line)
 {
-
-	/*maybe make all these variables attritbutes of the class*/
-
 	uint16_t tiles_address = 0;
 	uint16_t tile_map_address = 0;
 	bool is_signed = false;
@@ -202,7 +202,7 @@ void LCD::render_tiles(int current_line)
 							 tile_num,
 							 is_signed);
 
-		uint8_t color_id = get_color_id(tile_address, x, y);
+		uint8_t color_id = get_color_id(tile_address, 7-(x%8), y%8);
 
 		pixels[i][current_line] = get_color(color_id,
 						    _video.get_bgp());
@@ -212,35 +212,56 @@ void LCD::render_tiles(int current_line)
 
 void LCD::render_sprites(int current_line)
 {
-	std::bitset<8> lcdc(_video.get_lcd_control());
-	bool sprite_enable = lcdc[1];
-	bool is_8x16 = lcdc[2];
+	bool is_double = _CONTROL[2];
 
 	uint8_t width = 8;
-	uint8_t height = (is_8x16) ? 16 : 8;
+	uint8_t height = (is_double) ? 16 : 8;
 
 	std::vector<Sprite> sprites = _video.get_sprites();
-	std::vector<Sprite> visible_sprites;
+	std::vector<Sprite> on_line;
 
 	for (size_t i = 0; i < sprites.size(); i++)
 	{
 		if (sprites[i].get_x() == 0
 		    || sprites[i].get_x() >= 168
 		    || sprites[i].get_y() == 0
-		    || sprites[i].get_y() >= 160)
-			continue;
-
-		if (sprites[i].get_y_pos() > current_line
+		    || sprites[i].get_y() >= 160
+		    || sprites[i].get_y_pos() > current_line
 		    || sprites[i].get_y_pos() + height <= current_line)
 			continue;
 
-		visible_sprites.push_back(sprites[i]);
+		on_line.push_back(sprites[i]);
 	}
 
-	for (auto it = visible_sprites.begin();
-	     it != visible_sprites.end();)
+	for (auto& it : on_line)
 	{
-		
+		uint16_t tile_num = it.get_tile();
+		if (is_double)
+			tile_num &= 0xfe;
+		uint16_t tile_addr = get_tile_address(0x8000, tile_num,
+						      false);
+		uint16_t y = current_line - it.get_y_pos();
+		if (it.is_y_flipped())
+			y = height - y - 1;
+
+		uint8_t palette = _video.get_obp0();
+		if (it.is_obp1())
+			palette = _video.get_obp1();
+
+		for (int i = 0; i < 8; i++)
+		{
+			if (it.get_x() + i < 8 || it.get_x_pos()+i >= 160)
+				continue;
+
+			uint8_t x = 7 - i;
+			if (it.is_x_flipped())
+				x = i;
+
+			uint8_t color_id = get_color_id(tile_addr, x, y);
+			uint8_t color = get_color(color_id, palette);
+			if (color)
+				pixels[it.get_x_pos()+i][current_line]=color;
+		}
 	}
 
 	
@@ -268,14 +289,14 @@ uint16_t LCD::get_tile_address(uint16_t tile_addr, int16_t tilenum,
 
 uint8_t LCD::get_color_id(uint16_t tile_addr, uint8_t x, uint8_t y)
 {
-	uint8_t byte1 = _video.simple_read(tile_addr + (y % 8) * 2);
-	uint8_t byte2 = _video.simple_read(tile_addr + (y % 8) * 2 + 1);
+	uint8_t byte1 = _video.simple_read(tile_addr + y * 2);
+	uint8_t byte2 = _video.simple_read(tile_addr + y * 2 + 1);
 
 	uint8_t result = 0;
 
-	uint8_t bit1 = (byte1 >> (7 - (x % 8))) & 1;
+	uint8_t bit1 = (byte1 >> x) & 1;
 	result+= (bit1) ? 2 : 0;
-	uint8_t bit2 = (byte2 >> (7 - (x % 8))) & 1;
+	uint8_t bit2 = (byte2 >> x) & 1;
 	result+= (bit2) ? 1 : 0;
 
 	return result;
