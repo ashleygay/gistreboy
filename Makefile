@@ -21,7 +21,7 @@ PROCESSOR_SRC = $(patsubst %,$(subst include,src,$(PROCESSOR))/%,\
 GAMEBOY=include/gameboy
 _GAMEBOY_SRC += gameboy.cpp
 _GAMEBOY_SRC += lcd.cpp
-_GAMEBOY_SRC += interrupthandler.cpp
+_GAMEBOY_SRC += timer_handler.cpp
 GAMEBOY_SRC = $(patsubst %,$(subst include,src,$(GAMEBOY))/%,\
 		$(_GAMEBOY_SRC))
 
@@ -59,9 +59,8 @@ INCLUDE_PATH= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY) -I$(HELPERS) -I$(MEMORY) -I$(
 
 # For benchmarks, add -D BENCH_STREAM_ACTIVATED
 
-CC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 \
-	-D DEBUG_STREAM_ACTIVATED
-
+CC_OPTIONS= -O3 -g -Wall -Wextra -pedantic -std=c++14 \
+#		-D DEBUG_STREAM_ACTIVATED
 CXXFLAGS = $(CC_OPTIONS) $(INCLUDES) $(LIB)
 
 emulator: $(OBJS)

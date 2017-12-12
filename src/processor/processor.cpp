@@ -8,6 +8,7 @@
 #include <processor.hpp>
 #include <instruction.hpp>
 #include <memory.hpp>
+#include <iostream>
 
 /* PUBLIC METHODS */
 
@@ -33,6 +34,11 @@ int Processor::step()
 	throw std::runtime_error("Memory or handler pointer not set.");
 
 	int interrupts = _handleInterrupts();
+
+#if 0
+	if (stopped || halted)
+		return 0;
+#endif
 
 	if (!interrupts) {
 
@@ -84,13 +90,14 @@ int Processor::_handleInterrupts()
 				++index;
 			}
 
+			// Clear interrupt flag
+			// Disable IME so we do not interrupt whil interrupting
 			DEBUG_STREAM << "INTERRUPTING: " << index << std::endl;
 			_mem->reset_interrupt_flag(index);
-
+			IME = false;
 			halted = false;
 			_setupInterrupt(index);
-			//TODO: figure out which value to return
-			return 4;
+			return 5;
 		}
 	}
 	// No interrupts, we return 0
@@ -99,24 +106,30 @@ int Processor::_handleInterrupts()
 
 void Processor::push_word(uint16_t word)
 {
-	_mem->write(get_low(word), SP.value--);
-	_mem->write(get_high(word), SP.value--);
+	DEBUG_STREAM << "	PUSHING 0x" <<  std::hex
+	<< (int)word << std::dec << std::endl;
+	_mem->write(get_low(word), --SP.value);
+	_mem->write(get_high(word), --SP.value);
 }
 
 uint16_t Processor::pop_word()
 {
-	uint8_t high = _read(++SP.value);
-	uint8_t low = _read(++SP.value);
-	return make_word(low, high);
+	uint8_t high = _read(SP.value++);
+	uint8_t low = _read(SP.value++);
+	uint16_t tmp = make_word(low, high);
+	DEBUG_STREAM << "	POPING 0x" <<  std::hex
+	<< (int)tmp << std::dec<< std::endl;
+	return tmp;
 }
 
 void Processor::_setupInterrupt(unsigned int interrupt)
 {
 	// We push PC onto the stack
 	push_word(PC.value);
-
 	// We set PC to the correct interrupt
 	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
+	DEBUG_STREAM << "ISR: 0x" << std::hex << (int)PC.value
+			<< std::dec << std::endl;
 }
 
 void Processor::HALT()
@@ -139,7 +152,7 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
-	DEBUG_STREAM << "PC is 0x"<< std::hex << (int)PC.value << std::dec << std::endl;
+	DEBUG_STREAM << "PC: 0x"<< std::hex << (int)PC.value << std::dec;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
 	if (!iset.isValidOpCode(opcode)) {
@@ -154,26 +167,30 @@ void Processor::_fetchNextInstruction()
 		else //OpCode is on 16bits, we increment PC for args
 			++PC.value;
 	}
-	DEBUG_STREAM << "OPCODE: 0x"<< std::hex << (int)opcode << std::dec << std::endl;
 	// Opcode is valid
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArg arg;
 
+	//DEBUG_STREAM << "CODE: 0x"<< std::hex << (int)opcode << std::dec;
+	DEBUG_STREAM << " : "<< currentInstruction->toStr();
 	// This instruction takes an argument
 	if(currentInstruction->hasArg()) {
 
 		int size = currentInstruction->argSize();
 		if (size == 1) { // We add a byte to the argument vector
 			arg.byte = _mem->read(PC.value);
+			DEBUG_STREAM << " 0x" << std::hex << (int)arg.byte << std::dec;
 		}
 		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t word = _mem->read(PC.value);
 			++PC.value;
 			word = word | (_mem->read(PC.value) << 8);
 			arg.word = word;
+			DEBUG_STREAM << " 0x" << std::hex << (int)arg.word << std::dec;
 		}
 		++PC.value;
 	}
+	DEBUG_STREAM << std::endl;
 	currentInstruction->setArg(arg);
 }
 
@@ -185,6 +202,16 @@ uint8_t Processor::_read(uint16_t address)
 void Processor::_write(uint8_t value, uint16_t address)
 {
 	_mem->write(value, address);
+}
+
+uint8_t Processor::_simple_read(uint16_t address)
+{
+	return _mem->simple_read(address);
+}
+
+void Processor::_simple_write(uint8_t value, uint16_t address)
+{
+	_mem->simple_write(value, address);
 }
 
 void Processor::_BUG(std::string str, int value) const

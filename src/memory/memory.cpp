@@ -1,6 +1,7 @@
 #include <memory.hpp>
 #include <vector>
 #include <utility>
+#include <iostream>
 
 Memory::Memory(Processor& proc) : processor(proc),
 	       cartridge({std::make_pair(0x00, 0x7FFF),
@@ -32,6 +33,8 @@ void Memory::reset()
 
 uint8_t Memory::read(uint16_t address)
 {
+	/*TODO fix joypad*/
+	memory[0xFF00] = memory[0xFF00] | 0x0F;
 	if (cartridge.isInRange(address))
 		return cartridge.read(address);
 	else if (video.isInRange(address))
@@ -48,16 +51,53 @@ void Memory::write(uint8_t byte, uint16_t address)
 		video.write(byte, address);
 	else
 		memory[address] = byte;
+
+	if (address == 0xFF04) // We are writing to DIV register, we reset it
+		memory[0xFF04] = 0;
+
+	memory[0xFF00] = memory[0xFF00] | 0x0F;
+}
+
+uint8_t Memory::simple_read(uint16_t address)
+{
+	memory[0xFF00] = memory[0xFF00] | 0x0F;
+	if (cartridge.isInRange(address))
+		return cartridge.read(address);
+	else if (video.isInRange(address))
+		return video.simple_read(address);
+	else
+		return memory[address];
+}
+
+void Memory::simple_write(uint8_t byte, uint16_t address)
+{
+	if (cartridge.isInRange(address))
+		cartridge.write(byte, address);
+	else if (video.isInRange(address))
+		video.simple_write(byte, address);
+	else
+		memory[address] = byte;
+
+	if (address == 0xFF04) // We are writing to DIV register, we reset it
+		memory[0xFF04] = 0;
+
+	memory[0xFF00] = memory[0xFF00] | 0x0F;
 }
 
 void Memory::set_interrupt_flag(unsigned int interrupt)
 {
+	DEBUG_STREAM << "Setting int number : "<< interrupt << std::endl;
+	DEBUG_STREAM << "IF: before " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 	memory[0xFF0F] |= (1 << interrupt);
+	DEBUG_STREAM << "IF: after " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 }
 
 void Memory::reset_interrupt_flag(unsigned int interrupt)
 {
+	DEBUG_STREAM << "Resetting int number : "<< interrupt << std::endl;
+	DEBUG_STREAM << "IF: before " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 	memory[0xFF0F] &= (~(1 << interrupt));
+	DEBUG_STREAM << "IF: after " << std::bitset<8>(memory[0xFF0F]) << std::endl;
 }
 
 uint8_t Memory::get_interrupt_enable()

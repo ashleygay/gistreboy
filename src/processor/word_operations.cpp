@@ -19,6 +19,6 @@ uint8_t get_high(uint16_t word)
 
 uint8_t get_low(uint16_t word)
 {
-	return (word & 0xFF);
+	return (word & 0x00FF);
 }
 

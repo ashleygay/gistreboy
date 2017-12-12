@@ -8,7 +8,7 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy(): _mem(p), _lcd(_mem)
+GameBoy::GameBoy(): _mem(p), _lcd(_mem), _timers(_mem)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();
@@ -31,9 +31,9 @@ bool GameBoy::readyToLaunch()
 
 void GameBoy::step()
 {
-	_cpu_cycles = p.step();
+	int _cpu_cycles = p.step();
 	_lcd.step(_cpu_cycles);
-
+	_timers.step(_cpu_cycles);
 	_checkKeys();
 }
 
@@ -46,7 +46,7 @@ void GameBoy::_checkKeys()
 {
 	uint8_t reg = _mem.get_joypad();
 	uint8_t keys = getAtomic();
-	uint8_t buttons = keys >> 4;//The highest bits are the buttons.
+	uint8_t buttons = keys >> 4; // The highest bits are the buttons.
 	uint8_t pad = keys & 0x0F;
 
 	// We keep only the select bits.
@@ -75,6 +75,7 @@ void GameBoy::_interruptJOYPAD()
 
 void GameBoy::_resetComponents()
 {
+	//TODO: reset the CPU :)
 	_mem.reset();
 }
 

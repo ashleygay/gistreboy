@@ -19,6 +19,9 @@ public :
   	uint8_t read(uint16_t address);
   	void write(uint8_t byte, uint16_t address);
 
+	uint8_t simple_read(uint16_t address);
+	void simple_write(uint8_t byte, uint16_t address);
+
 	// Rebuild a cartridge with a new rom
 	void change_game(uint8_t *cart);
 

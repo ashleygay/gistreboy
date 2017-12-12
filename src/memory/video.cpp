@@ -19,20 +19,35 @@ uint8_t Video::read(uint16_t address)
 		return 0;
 }
 
+uint8_t Video::simple_read(uint16_t address)
+{
+	return video_memory[address];
+}
+
+void Video::simple_write(uint8_t byte, uint16_t address)
+{
+	video_memory[address] = byte;
+}
+
 void Video::write(uint8_t byte, uint16_t address)
 {
-	if (address == 0xFF40)
+	if (address == 0xFF46) // DMA transfer
 	{
 		uint16_t beg_src = (byte << 8);
 		uint16_t end_src = (byte << 8) | 0x9F;
 
 		dma_transfer(beg_src, end_src);
-		
+		return;
 	}
 
-	else if (address == 0xFF44)
+	else if (address == 0xFF44) // LYC we reset when writing
 	{
 		video_memory[address] = 0;
+		return;
+	}
+	else if (address == 0xFF41) //LCD status we keep the 3 first bits
+	{
+		video_memory[address] = (video_memory[address] & 0x07) | byte;
 		return;
 	}
 
@@ -50,8 +65,8 @@ void Video::dma_transfer(uint16_t beg_src, uint16_t end_src)
 
 	while (inc_src <= end_src)
 	{
-		byte = _proc._read(inc_src);
-		_proc._write(byte, inc_dest);
+		byte = _proc._simple_read(inc_src);
+		_proc._simple_write(byte, inc_dest);
 		++inc_src;
 		++inc_dest;
 	}
@@ -170,7 +185,7 @@ std::vector<Sprite> Video::get_sprites()
 void Video::set_lcd_status_mode(uint8_t mode)
 {
 	video_memory[0xFF41] = (video_memory[0xFF41] & 0xFC) |
-			       (mode & 0x03);	
+			       (mode & 0x03);
 }
 
 void Video::set_lcd_status(uint8_t status)

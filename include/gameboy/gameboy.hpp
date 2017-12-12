@@ -13,6 +13,7 @@
 #include <processor.hpp>
 #include <memory.hpp>
 #include <lcd.hpp>
+#include <timer_handler.hpp>
 
 #include <gtk/gtk.h>
 #include <iostream>
@@ -58,9 +59,7 @@ class GameBoy
 		Processor p;
 		Memory _mem;
 		LCD _lcd;
-
-		int _handler_cycles = 0;
-		int _cpu_cycles = 0;
+		TimerHandler _timers;
 
 		std::atomic<bool> _running{false};
                 std::atomic<uint8_t> _keys;

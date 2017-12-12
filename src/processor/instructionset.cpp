@@ -3,17 +3,6 @@
 
 InstructionSet::InstructionSet()
 {
-	//TODO: we add all instructions to the map here
-	//Use xmacros to generate all the instructions here
-	/*
-	map = {
-		#define X(instruction) \
-			auto instr_##instruction = new instruction();\
-			{instr_##instruction->getOpCode(), &instr_##instruction},
-		#undef X
-	};
-	*/
-
 	#define add_instr(instruct) \
 		auto instr_##instruct = new instruct();\
 		map[instr_##instruct->opCode()] = instr_##instruct;
@@ -42,6 +31,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_BC)
 	add_instr(LD_BD)
 	add_instr(LD_BE)
+	add_instr(LD_BH)
 	add_instr(LD_BL)
 	add_instr(LD_BHL)
 
@@ -50,6 +40,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_CC)
 	add_instr(LD_CD)
 	add_instr(LD_CE)
+	add_instr(LD_CH)
 	add_instr(LD_CL)
 	add_instr(LD_CHL)
 
@@ -58,6 +49,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_DC)
 	add_instr(LD_DD)
 	add_instr(LD_DE)
+	add_instr(LD_DH)
 	add_instr(LD_DL)
 	add_instr(LD_DHL)
 
@@ -66,6 +58,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_EC)
 	add_instr(LD_ED)
 	add_instr(LD_EE)
+	add_instr(LD_EH)
 	add_instr(LD_EL)
 	add_instr(LD_EHL)
 
@@ -74,6 +67,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_HC)
 	add_instr(LD_HD)
 	add_instr(LD_HE)
+	add_instr(LD_HH)
 	add_instr(LD_HL)
 	add_instr(LD_HHL)
 
@@ -82,6 +76,7 @@ InstructionSet::InstructionSet()
 	add_instr(LD_LC)
 	add_instr(LD_LD)
 	add_instr(LD_LE)
+	add_instr(LD_LH)
 	add_instr(LD_LL)
 	add_instr(LD_LHL)
 
@@ -245,13 +240,13 @@ InstructionSet::InstructionSet()
 	add_instr(DEC_HL)
 	add_instr(DEC_SP)
 
-	add_instr(SWAP_AX)
-	add_instr(SWAP_BX)
-	add_instr(SWAP_CX)
-	add_instr(SWAP_DX)
-	add_instr(SWAP_EX)
-	add_instr(SWAP_HX)
-	add_instr(SWAP_LX)
+	add_instr(SWAP_A)
+	add_instr(SWAP_B)
+	add_instr(SWAP_C)
+	add_instr(SWAP_D)
+	add_instr(SWAP_E)
+	add_instr(SWAP_H)
+	add_instr(SWAP_L)
 	add_instr(SWAP_HL)
 
 	add_instr(DAA)  
