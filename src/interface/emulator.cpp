@@ -41,8 +41,6 @@ void Emulator::mainLoop(GameBoy& gb)
 
 	while(gb.isRunning()) {
 		gb.step();
-		gb.update_memory(gb.getatomic(), 0xFF00);
-		gb.set_interrupt_joypad();
 	}
 }
 
@@ -74,35 +72,20 @@ void Emulator::key_press(Key k)
 {
 	DEBUG_STREAM << "PRESS ";
 	display_key(k);
-	switch(k)
-	  {
-	  case Key::A :
-	    gb.setatomic(0x21);
-	  case Key::B :
-	    gb.setatomic(0x22);
-	  case Key::START :
-	    gb.setatomic(0x28);
-	  case Key::SELECT :
-	    gb.setatomic(0x24);
-	  case Key::LEFT :
-	    gb.setatomic(0x12);
-	  case Key::RIGHT :
-	    gb.setatomic(0x11);
-	  case Key::UP :
-	    gb.setatomic(0x14);
-	  case Key::DOWN :
-	    gb.setatomic(0x18);
-	  default:
-	    gb.setatomic(0x00);
-	  } 
-	//TODO: notify the gameboy memory
+
+	auto keys = gb.getAtomic();
+	keys |= (1 << k);
+	gb.setAtomic(keys);
 }
 
 void Emulator::key_release(Key k)
 {
 	DEBUG_STREAM << "RELEASE ";
 	display_key(k);
-	//TODO: notify the gameboy memory
+
+	auto keys = gb.getAtomic();
+	keys &= ~(1 << k);
+	gb.setAtomic(keys);
 }
 
 void Emulator::changeCartridge(uint8_t *data)

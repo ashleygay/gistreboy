@@ -15,8 +15,8 @@ static std::unordered_map<std::string, Key> bindings =
 	 {"l", Key::RIGHT},
 	 {"a", Key::A},
 	 {"s", Key::B},
-	 {"d", Key::START},
-	 {"f", Key::SELECT},
+	 {"d", Key::SELECT},
+	 {"f", Key::START},
 	};
 
 

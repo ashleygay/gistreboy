@@ -31,24 +31,10 @@ bool GameBoy::readyToLaunch()
 
 void GameBoy::step()
 {
-#ifdef BENCH_STREAM
-	auto start_time = std::chrono::high_resolution_clock::now();
-#endif
+	_cpu_cycles = p.step();
+	_lcd.step(_cpu_cycles);
 
-	if (!_cpu_cycles) {
-		_cpu_cycles = p.step();
-		_lcd.step(_cpu_cycles);
-	}
-
-#ifdef BENCH_STREAM
-	auto end_time = std::chrono::high_resolution_clock::now();
-	BENCH_STREAM << "Period lasted "
-	<< std::chrono::duration_cast<std::chrono::nanoseconds>(end_time
-					- start_time).count()
-	<< " nanoseconds" << std::endl;
-	BENCH_STREAM << "Current CPU cycle " << _cpu_cycles << std::endl;
-#endif
-	_clockCycle();
+	_checkKeys();
 }
 
 void GameBoy::_wireComponents()
@@ -56,12 +42,36 @@ void GameBoy::_wireComponents()
 	p.setMemory(&_mem);
 }
 
-void GameBoy::_clockCycle()
+void GameBoy::_checkKeys()
 {
-	// Decrease all pending timers
-	if (_cpu_cycles) --_cpu_cycles;
+	uint8_t reg = _mem.get_joypad();
+	uint8_t keys = getAtomic();
+	uint8_t buttons = keys >> 4;//The highest bits are the buttons.
+	uint8_t pad = keys & 0x0F;
+
+	// We keep only the select bits.
+	keys &= 0b00110000;
+
+	// If button is pressed but line is not selected
+	// we dont interrupt
+	if ((keys & (1 << 5))) { // Bit 5 is set we 'or' the button bits
+		keys |= buttons;
+		_interruptJOYPAD();
+	}
+
+	if ((keys & (1 << 4))) { // Bit 4 is set we 'or' the pad bits
+		keys |= pad;
+		_interruptJOYPAD();
+	}
+
+	// Write modified register to 0xFF00
+	setAtomic(keys);
 }
 
+void GameBoy::_interruptJOYPAD()
+{
+	_mem.set_interrupt_flag(Memory::Interrupt::JOYPAD);
+}
 
 void GameBoy::_resetComponents()
 {
@@ -74,22 +84,17 @@ void GameBoy::changeGame(uint8_t *mem)
 	_mem.change_game(mem);
 }
 
-void GameBoy::setatomic(uint8_t value)
+void GameBoy::setAtomic(uint8_t value)
 {
-  	_atomic.store(value);
+  	_keys.store(value);
 }
 
-uint8_t GameBoy::getatomic()
+uint8_t GameBoy::getAtomic()
 {
-  	return _atomic.load();
-}  
-
-void GameBoy::update_memory(uint8_t byte, uint16_t address)
-{
-  	_mem.write(byte, address);
+  	return _keys.load();
 }
 
-void GameBoy::set_interrupt_joypad()
+void GameBoy::setJoypadInterrupt()
 {
   	_mem.set_interrupt_flag(Interrupt::JOYPAD);
 }

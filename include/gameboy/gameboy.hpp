@@ -42,26 +42,26 @@ class GameBoy
 		// returns false.
 		bool readyToLaunch();
 
-  		void setatomic(uint8_t value);
-  		uint8_t getatomic();
-  		void update_memory(uint8_t byte, uint16_t address);
-  		void set_interrupt_joypad();
-                
+		// Functions called by emulator for interacting
+		// with the memory to correctly set the joypad lines (FF00)
+  		void setAtomic(uint8_t value);
+  		uint8_t getAtomic();
 
+		void setJoypadInterrupt();
 	private:
 		void _resetComponents();
 		void _wireComponents();
 		void _clockCycle();
-
+		void _checkKeys();
+		void _interruptJOYPAD();
 	private:
 		Processor p;
 		Memory _mem;
-                
-
 		LCD _lcd;
+
 		int _handler_cycles = 0;
 		int _cpu_cycles = 0;
 
 		std::atomic<bool> _running{false};
-                std::atomic<uint> _atomic;
+                std::atomic<uint8_t> _keys;
 };

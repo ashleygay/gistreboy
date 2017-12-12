@@ -102,7 +102,10 @@ GFile* OpenButtonHelper::open_file_with_dialog(void)
 			DEBUG_STREAM << "Opening : " << filename << std::endl;
 			g = g_file_new_for_path(filename);
 			file_ok = verify_attributes(g);
-			if (!file_ok) message_dialog_display("Could not open file %s", filename);
+
+			if (!file_ok)
+				message_dialog_display("Could not open file %s", filename);
+
 			g_free(filename);
 		}
 		else
