@@ -1033,13 +1033,13 @@ void DEC_HLdereference::exec(Processor *p)
 
 // SWAP instructions
 
-#define SWAP_RegX_def(reg)                  \
-  void SWAP_##reg##X::exec(Processor *p)\
+#define SWAP_Reg_def(reg)                  \
+  void SWAP_##reg::exec(Processor *p)\
   {\
     p->flag.unsetFlag(FlagRegister::ZERO);\
-    auto a = p->reg.value >> 4;			\
-    auto b = p->reg.value << 4;\
-    auto temp = a | b;\
+    auto high = p->reg.value >> 4;\
+    auto low = p->reg.value << 4;\
+    auto temp = high | low;\
     p->reg.value = temp;\
     if (p->reg.value == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
@@ -1048,21 +1048,21 @@ void DEC_HLdereference::exec(Processor *p)
     p->flag.unsetFlag(FlagRegister::CARRY);\
     }
 
-SWAP_RegX_def(A)
-SWAP_RegX_def(B)
-SWAP_RegX_def(C)
-SWAP_RegX_def(D)
-SWAP_RegX_def(E)
-SWAP_RegX_def(H)
-SWAP_RegX_def(L)
+SWAP_Reg_def(A)
+SWAP_Reg_def(B)
+SWAP_Reg_def(C)
+SWAP_Reg_def(D)
+SWAP_Reg_def(E)
+SWAP_Reg_def(H)
+SWAP_Reg_def(L)
 
 void SWAP_HL::exec(Processor *p)
 {
   p->flag.unsetFlag(FlagRegister::ZERO);
-  auto tmp = HLReadDereference(p);
-  auto a = tmp >> 4;                 \
-  auto b = tmp << 4;
-  auto temp = a | b;
+  auto value = HLReadDereference(p);
+  auto high = value >> 4;
+  auto low = value << 4;
+  auto temp = high | low;
   if (temp == 0)
     p->flag.setFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::SUBTRACT);

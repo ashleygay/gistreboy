@@ -3,17 +3,6 @@
 
 InstructionSet::InstructionSet()
 {
-	//TODO: we add all instructions to the map here
-	//Use xmacros to generate all the instructions here
-	/*
-	map = {
-		#define X(instruction) \
-			auto instr_##instruction = new instruction();\
-			{instr_##instruction->getOpCode(), &instr_##instruction},
-		#undef X
-	};
-	*/
-
 	#define add_instr(instruct) \
 		auto instr_##instruct = new instruct();\
 		map[instr_##instruct->opCode()] = instr_##instruct;
@@ -251,13 +240,13 @@ InstructionSet::InstructionSet()
 	add_instr(DEC_HL)
 	add_instr(DEC_SP)
 
-	add_instr(SWAP_AX)
-	add_instr(SWAP_BX)
-	add_instr(SWAP_CX)
-	add_instr(SWAP_DX)
-	add_instr(SWAP_EX)
-	add_instr(SWAP_HX)
-	add_instr(SWAP_LX)
+	add_instr(SWAP_A)
+	add_instr(SWAP_B)
+	add_instr(SWAP_C)
+	add_instr(SWAP_D)
+	add_instr(SWAP_E)
+	add_instr(SWAP_H)
+	add_instr(SWAP_L)
 	add_instr(SWAP_HL)
 
 	add_instr(DAA)  

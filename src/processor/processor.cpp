@@ -152,7 +152,6 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
-	DEBUG_STREAM << "SP: 0x"<< std::hex << (int)SP.value << std::dec << std::endl;
 	DEBUG_STREAM << "PC: 0x"<< std::hex << (int)PC.value << std::dec;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
