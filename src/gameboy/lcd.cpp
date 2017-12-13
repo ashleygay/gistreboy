@@ -110,8 +110,9 @@ void LCD::draw()
 void LCD::draw_scanline()
 {
 	line = _video.get_ly();
-	for (int i = 0; i < 160; i++)
-		pixels[i][line] = 0;
+	//for (int i = 0; i < 160; i++)
+	//	pixels[i][line] = 0;
+	//std::cout << "lcdc : " << _CONTROL << std::endl;
 	if (_CONTROL[7] && _CONTROL[0])
 		render_tiles(line);
 	if (_CONTROL[7] && _CONTROL[1])
@@ -212,7 +213,6 @@ void LCD::render_sprites(int current_line)
 {
 	bool is_double = _CONTROL[2];
 
-	uint8_t width = 8;
 	uint8_t height = (is_double) ? 16 : 8;
 
 	std::vector<Sprite> sprites = _video.get_sprites();
@@ -248,7 +248,7 @@ void LCD::render_sprites(int current_line)
 
 		for (int i = 0; i < 8; ++i)
 		{
-			if (it.get_x() + i < 8 || it.get_x_pos()+i >= 160)
+			if (it.get_x_pos() + i < 0 || it.get_x_pos()+i >= 160)
 				continue;
 
 			uint8_t x = 7 - i;
@@ -257,7 +257,7 @@ void LCD::render_sprites(int current_line)
 
 			uint8_t color_id = get_color_id(tile_addr, x, y);
 			uint8_t color = get_color(color_id, palette);
-			if (color)
+			if (it.is_above_bg() || color)
 				pixels[it.get_x_pos()+i][current_line]=color;
 		}
 	}

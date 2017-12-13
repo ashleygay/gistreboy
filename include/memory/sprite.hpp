@@ -15,8 +15,8 @@ public :
 
 	uint8_t get_x() { return x_pos_; }
 	uint8_t get_y() { return y_pos_; }
-	uint8_t get_x_pos() { return x_pos_ - 8; }
-	uint8_t get_y_pos() { return y_pos_ - 16; }
+	int get_x_pos() { return static_cast<int>(x_pos_) - 8; }
+	int get_y_pos() { return static_cast<int>(y_pos_) - 16; }
 	uint8_t get_tile() { return tile_; }
 	bool is_x_flipped() { return x_flipped; }
 	bool is_y_flipped() { return y_flipped; }
