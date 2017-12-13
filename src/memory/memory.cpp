@@ -75,9 +75,6 @@ void Memory::simple_write(uint8_t byte, uint16_t address)
 	else if (video.isInRange(address))
 		video.simple_write(byte, address);
 
-	else if (address == 0xFF04) // We are writing to DIV register, we reset it
-		memory[0xFF04] = 0;
-
 	else if (address == 0xFF00)
 		memory[0xFF00] = (memory[0xFF00] & 0x0F) | byte;
 	else

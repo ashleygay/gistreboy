@@ -9,8 +9,10 @@ void TimerHandler::step(int cpu_step)
 	_updateVariables();
 
 	_div_counter += cpu_step;
-	if (_div_counter >= 512)
+	if (_div_counter >= 512) {
 		++_DIV;
+		_div_counter -= 512;
+	}
 
 	if (_timer_enable) {
 		_elapsed_time += cpu_step;
