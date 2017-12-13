@@ -311,6 +311,7 @@ void LD_SPHL::exec(Processor *p)
 void LD_HLSPn::exec(Processor *p)
 {
 	int8_t n = static_cast<int8_t>(_arg.byte);
+	DEBUG_STREAM<< "LD_HLSPn: DIFF" << std::dec << (int)n << std::endl;
 	int result = p->SP.value + n;
 	uint16_t HL = static_cast<uint16_t>(result);
 	p->L.value = get_low(HL);
@@ -896,8 +897,9 @@ void CP_AHL::exec(Processor *p)
 void CP_AX::exec(Processor *p)
 {
   auto tmp = _arg.byte;
-  uint val = p->A.value - tmp;
-  uint8_t result = static_cast<uint8_t>(val);
+	DEBUG_STREAM << "CP_AX: 0x" << std::hex << (int)p->A.value << " : 0x"
+	<< (int)tmp << std::endl;
+  uint8_t result = p->A.value - tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
   p->flag.unsetFlag(FlagRegister::CARRY);

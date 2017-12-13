@@ -26,10 +26,13 @@ void TimerHandler::step(int cpu_step)
 					DEBUG_STREAM << "INTERRUPT TIMER"<< std::endl;
 					_TIMA = _TMA;
 				}
-				++_TIMA;
+				else
+					++_TIMA;
 			}
 		}
 	}
+	else
+		_TIMA = 0;
 
 	_updateMemory();
 }

@@ -108,14 +108,14 @@ void Processor::push_word(uint16_t word)
 {
 	DEBUG_STREAM << "	PUSHING 0x" <<  std::hex
 	<< (int)word << std::dec << std::endl;
-	_mem->write(get_low(word), --SP.value);
 	_mem->write(get_high(word), --SP.value);
+	_mem->write(get_low(word), --SP.value);
 }
 
 uint16_t Processor::pop_word()
 {
-	uint8_t high = _read(SP.value++);
 	uint8_t low = _read(SP.value++);
+	uint8_t high = _read(SP.value++);
 	uint16_t tmp = make_word(low, high);
 	DEBUG_STREAM << "	POPING 0x" <<  std::hex
 	<< (int)tmp << std::dec<< std::endl;
@@ -128,7 +128,7 @@ void Processor::_setupInterrupt(unsigned int interrupt)
 	push_word(PC.value);
 	// We set PC to the correct interrupt
 	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
-	DEBUG_STREAM << "ISR: 0x" << std::hex << (int)PC.value
+	std::cout << "ISR: 0x" << std::hex << (int)PC.value
 			<< std::dec << std::endl;
 }
 
@@ -152,6 +152,9 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
+	DEBUG_STREAM << "SP: 0x"<< std::hex << (int)SP.value<< std::endl;
+	DEBUG_STREAM << "*(SP): 0x"<< std::hex << (int)_mem->simple_read(SP.value)<< std::endl;
+	DEBUG_STREAM << "*(SP - 1): 0x"<< std::hex << (int)_mem->simple_read(SP.value - 1)<< std::endl;
 	DEBUG_STREAM << "PC: 0x"<< std::hex << (int)PC.value << std::dec;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;

@@ -13,6 +13,7 @@ Memory::Memory(Processor& proc) : processor(proc),
 {
 	memory.fill(0);
 	memory[0xFF00] = 0b00111111;
+	memory[0xFF07] = 0x00;
 }
 
 
