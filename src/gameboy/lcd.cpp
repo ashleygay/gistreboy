@@ -112,12 +112,10 @@ void LCD::draw_scanline()
 	line = _video.get_ly();
 	for (int i = 0; i < 160; i++)
 		pixels[i][line] = 0;
-	//std::cout << "lcdc : " << _CONTROL << std::endl;
 	if (_CONTROL[7] && _CONTROL[0])
 		render_tiles(line);
 	if (_CONTROL[7] && _CONTROL[1])
 		render_sprites(line);
-		
 }
 
 void LCD::check_interrupt_stat(int num_bit)
@@ -220,7 +218,7 @@ void LCD::render_sprites(int current_line)
 	std::vector<Sprite> sprites = _video.get_sprites();
 	std::vector<Sprite> on_line;
 
-	for (size_t i = 0; i < sprites.size(); i++)
+	for (size_t i = 0; i < sprites.size(); ++i)
 	{
 		if (sprites[i].get_x() == 0
 		    || sprites[i].get_x() >= 168
@@ -248,7 +246,7 @@ void LCD::render_sprites(int current_line)
 		if (it.is_obp1())
 			palette = _video.get_obp1();
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; ++i)
 		{
 			if (it.get_x() + i < 8 || it.get_x_pos()+i >= 160)
 				continue;
@@ -263,9 +261,6 @@ void LCD::render_sprites(int current_line)
 				pixels[it.get_x_pos()+i][current_line]=color;
 		}
 	}
-
-	
-	
 }
 
 int16_t LCD::get_tile_num(uint16_t tilemap_addr, uint8_t x,
