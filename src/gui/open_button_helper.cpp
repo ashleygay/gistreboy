@@ -21,15 +21,11 @@ uint8_t* OpenButtonHelper::load_content(GFile* gf)
     	size = file.tellg();
 	file.seekg(0, std::ios::beg);
 
-	DEBUG_STREAM << "Copying file into buffer size : " << size << std::endl;
-	DEBUG_STREAM << "Buffer is :" << std::endl;
 	// We copy the content of the file
 	uint8_t * mem = (uint8_t *)malloc(size);
 	if (mem) {
 		for (uint i = 0; i < size; ++i) {
 			mem[i] = file.get();
-			DEBUG_STREAM << "0x" << std::hex << (int)mem[i]
-				     << std::dec << ", ";
 		}
 	}
 
@@ -38,8 +34,6 @@ uint8_t* OpenButtonHelper::load_content(GFile* gf)
 
 bool OpenButtonHelper::verify_attributes(GFile * f)
 {
-	DEBUG_STREAM << "Checking attributes of "
-		     << g_file_get_path(f) << std::endl; 
 
 	// We check that all attributes for the given files are respected
 	for (auto pair : _attributes) {
@@ -53,20 +47,13 @@ bool OpenButtonHelper::verify_attributes(GFile * f)
 						NULL,
 						NULL);
 
-		DEBUG_STREAM << "Checking attribute "
-			     << attribute
-			     << "\n\twanted value is "
-			     << value << std::endl; 
-
 		const char * actual_val;
 		actual_val = g_file_info_get_attribute_as_string(info,
 								 attribute);
-		DEBUG_STREAM << "\tactual value is " << actual_val << std::endl; 
 
 		if (strcmp(actual_val, value))
 			return false;
 	}
-	DEBUG_STREAM << "Succesfully checked all attributes." << std::endl;
 	return true;
 }
 
@@ -79,8 +66,6 @@ GFile* OpenButtonHelper::open_file_with_dialog(void)
 
 	GtkWidget * w = _window;
 	if (!w) {
-		DEBUG_STREAM << "Trying to call open_correct_file without a parent window."
-				<< " Call set_window before calling that function" << std::endl;
 		return NULL;
 
 	}
@@ -99,7 +84,6 @@ GFile* OpenButtonHelper::open_file_with_dialog(void)
 		if (res == GTK_RESPONSE_ACCEPT) {
 			GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
 			char * filename = gtk_file_chooser_get_filename (chooser);
-			DEBUG_STREAM << "Opening : " << filename << std::endl;
 			g = g_file_new_for_path(filename);
 			file_ok = verify_attributes(g);
 

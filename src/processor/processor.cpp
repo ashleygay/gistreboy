@@ -59,7 +59,6 @@ int Processor::_handleInterrupts()
 {
 	//TODO maybe factorize IF and IE
 	if (stopped) {
-		DEBUG_STREAM << "STOPPED" << std::endl;
 		// Check if any selected button is pressed
 		uint8_t joypad_status = _mem->get_joypad();
 
@@ -92,7 +91,6 @@ int Processor::_handleInterrupts()
 
 			// Clear interrupt flag
 			// Disable IME so we do not interrupt whil interrupting
-			DEBUG_STREAM << "INTERRUPTING: " << index << std::endl;
 			_mem->reset_interrupt_flag(index);
 			IME = false;
 			halted = false;
@@ -106,8 +104,6 @@ int Processor::_handleInterrupts()
 
 void Processor::push_word(uint16_t word)
 {
-	DEBUG_STREAM << "	PUSHING 0x" <<  std::hex
-	<< (int)word << std::dec << std::endl;
 	_mem->write(get_high(word), --SP.value);
 	_mem->write(get_low(word), --SP.value);
 }
@@ -117,8 +113,6 @@ uint16_t Processor::pop_word()
 	uint8_t low = _read(SP.value++);
 	uint8_t high = _read(SP.value++);
 	uint16_t tmp = make_word(low, high);
-	DEBUG_STREAM << "	POPING 0x" <<  std::hex
-	<< (int)tmp << std::dec<< std::endl;
 	return tmp;
 }
 
@@ -150,10 +144,6 @@ int Processor::_execCurrentInstruction()
 
 void Processor::_fetchNextInstruction()
 {
-	DEBUG_STREAM << "SP: 0x"<< std::hex << (int)SP.value<< std::endl;
-	DEBUG_STREAM << "*(SP): 0x"<< std::hex << (int)_mem->simple_read(SP.value)<< std::endl;
-	DEBUG_STREAM << "*(SP - 1): 0x"<< std::hex << (int)_mem->simple_read(SP.value - 1)<< std::endl;
-	DEBUG_STREAM << "PC: 0x"<< std::hex << (int)PC.value << std::dec;
 	uint16_t opcode = _mem->read(PC.value);
 	++PC.value;
 	if (!iset.isValidOpCode(opcode)) {
@@ -172,26 +162,21 @@ void Processor::_fetchNextInstruction()
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArg arg;
 
-	//DEBUG_STREAM << "CODE: 0x"<< std::hex << (int)opcode << std::dec;
-	DEBUG_STREAM << " : "<< currentInstruction->toStr();
 	// This instruction takes an argument
 	if(currentInstruction->hasArg()) {
 
 		int size = currentInstruction->argSize();
 		if (size == 1) { // We add a byte to the argument vector
 			arg.byte = _mem->read(PC.value);
-			DEBUG_STREAM << " 0x" << std::hex << (int)arg.byte << std::dec;
 		}
 		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t word = _mem->read(PC.value);
 			++PC.value;
 			word = word | (_mem->read(PC.value) << 8);
 			arg.word = word;
-			DEBUG_STREAM << " 0x" << std::hex << (int)arg.word << std::dec;
 		}
 		++PC.value;
 	}
-	DEBUG_STREAM << std::endl;
 	currentInstruction->setArg(arg);
 }
 

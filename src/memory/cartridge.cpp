@@ -161,7 +161,6 @@ void Cartridge::change_game(uint8_t *cart)
 
 	for (size_t i = 0; i < rom_size; i++)
 		rom[i] = cart[i];
-	DEBUG_STREAM << "Rom size is " << rom_size << std::endl;
 
 	if (has_ram_)
 	{
@@ -187,7 +186,6 @@ void Cartridge::change_game(uint8_t *cart)
 			break;
     		}
 		
-		DEBUG_STREAM << "Ram size is " << ram_size << std::endl;
   	}
 }
 

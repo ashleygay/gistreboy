@@ -13,29 +13,11 @@ Emulator::Emulator()
 {
 }
 
-const uint8_t * Emulator::getRenderedPixels()
-{
-	//TODO: if VRAM has been updated, we render again
-	// if(_p.vramToUpdate())
-		//_renderPixels();
-	DEBUG_STREAM << "Getting pixels" << std::endl;
-	return _pixels;
-}
-
-void Emulator::_renderPixels()
-{
-	//TODO: update _pixels here
-
-	DEBUG_STREAM << "Rendering..." << std::endl;
-
-	//_p.setNoUpdate();
-}
-
 void Emulator::mainLoop(GameBoy& gb)
 {
 	//TODO: Display an error message if not ready
 	if (!gb.readyToLaunch()) {
-		DEBUG_STREAM << "Load a game first." << std::endl;
+		std::cout << "Load a game first." << std::endl;
 		return;
 	}
 
@@ -58,19 +40,15 @@ void Emulator::start()
 void Emulator::stop()
 {
 	try {
-		DEBUG_STREAM << "Stopping gameboy" << std::endl;
 		gb.stop();
 		_future.get();
-		DEBUG_STREAM << "Emulator stopped" << std::endl;
 	}
 	catch (const std::exception&) {
-		DEBUG_STREAM << "Emulator is not started" << std::endl;
 	}
 }
 
 void Emulator::key_press(Key k)
 {
-	DEBUG_STREAM << "PRESS ";
 	display_key(k);
 
 	auto keys = gb.getAtomic();
@@ -80,7 +58,6 @@ void Emulator::key_press(Key k)
 
 void Emulator::key_release(Key k)
 {
-	DEBUG_STREAM << "RELEASE ";
 	display_key(k);
 
 	auto keys = gb.getAtomic();

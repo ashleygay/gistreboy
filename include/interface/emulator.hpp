@@ -34,9 +34,6 @@ class Emulator
 		// 	s is the size of the file
 		void changeCartridge(uint8_t *data);
 
-		// Returns a buffer ready to be displayed directly on screen
-		const uint8_t * getRenderedPixels();
-
 		// Starts the emulator with the current memory address
 		void start();
 
@@ -48,8 +45,6 @@ class Emulator
 		void key_release(Key k);
 
 	private:
-		// Renders the VRAM onto the pixel buffer
-		void _renderPixels();
 
 		Emulator();
 
@@ -64,6 +59,4 @@ class Emulator
 	private:
 		GameBoy gb;
 		std::future<void> _future;
-
-		uint8_t _pixels[600 * 400];
 };

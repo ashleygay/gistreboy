@@ -29,7 +29,7 @@ GdkPixbuf* get_global_pixbuf()
 void NYI(GtkWidget * b, gpointer user_data)
 {
 	(void)user_data;
-	DEBUG_STREAM << "Button \"" << gtk_menu_item_get_label(GTK_MENU_ITEM(b))
+	std::cout << "Button \"" << gtk_menu_item_get_label(GTK_MENU_ITEM(b))
 		    << "\" not yet implemented." << std::endl;
 }
 
@@ -57,7 +57,6 @@ void stop_callback(GtkWidget * w, gpointer user_data)
 {
 	(void)w;
 	(void)user_data;
-	DEBUG_STREAM << "Stopping the emulation." << std::endl;
 	Emulator::getInstance().stop();
 }
 
@@ -75,8 +74,6 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 	// Emulator takes ownership of the data pointer
 	Emulator::getInstance().changeCartridge(data);
 
-	DEBUG_STREAM << "We give the pointer to the memory here."
-		     << std::endl;
 	free(data);
 }
 
@@ -90,14 +87,6 @@ void run_button_callback(GtkWidget * b, gpointer user_data)
 
 gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 {
-//	using namespace std::chrono_literals;
-	(void)user_data;
-
-//	DEBUG_STREAM << "Draw area callback" << std::endl;
-//	DEBUG_STREAM << "Cairo object pointer is : " << (void*)cr<< std::endl;
-
-	//TODO: get an instance of emu_interface and get the buffer to render
-
 	int width = 0, height = 0;
 	GtkStyleContext *context;
 
@@ -105,23 +94,10 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 	width = gtk_widget_get_allocated_width(w);
 	height = gtk_widget_get_allocated_height(w);
 
-//	std::this_thread::sleep_for(2s);
-//	sleep(0.5);
-	//std::cout << "Dimensions : " << width  << " x " << height << std::endl;
-
 	gtk_render_background(context, cr, 150, 150, width, height);
-/*
-  	cairo_arc (cr,
-             width / 2.0, height / 2.0,
-             MIN (width, height) / 2.0,
-             0, 2 * G_PI);
-*/
-//	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
 
-//	gdk_cairo_set_source_rgba(cr, &black);
 	gdk_cairo_set_source_pixbuf(cr, global, 0, 0);
  	cairo_paint (cr);
-//	cairo_fill(cr);
 
 	return FALSE;
 }
@@ -130,7 +106,6 @@ int trigger_draw(GtkWidget * area, GdkFrameClock * c, gpointer user_data)
 {
 	(void)c;
 	(void)user_data;
-//	DEBUG_STREAM << "Triggering draw event on the area. clock " << (void*)c << std::endl;
 	gtk_widget_queue_draw_area(area, 0, 0,
 			gtk_widget_get_allocated_width(area),
 			gtk_widget_get_allocated_height(area));
