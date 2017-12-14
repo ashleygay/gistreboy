@@ -128,8 +128,6 @@ void Processor::_setupInterrupt(unsigned int interrupt)
 	push_word(PC.value);
 	// We set PC to the correct interrupt
 	PC.value = INTERRUPT_VECTOR + (8 * interrupt);
-	std::cout << "ISR: 0x" << std::hex << (int)PC.value
-			<< std::dec << std::endl;
 }
 
 void Processor::HALT()
