@@ -1,6 +1,6 @@
 *.swp
-*.o
 emulator
 *.aux
 *.log
 cr.pdf
+Makefile

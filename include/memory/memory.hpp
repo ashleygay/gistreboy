@@ -14,13 +14,16 @@
 class Memory {
 
 public :
-	Memory(uint8_t* rom, Processor& proc);
+	Memory(Processor& proc);
 
   	uint8_t read(uint16_t address);
-  	void write(uint16_t address, uint8_t byte);
+  	void write(uint8_t byte, uint16_t address);
+
+	uint8_t simple_read(uint16_t address);
+	void simple_write(uint8_t byte, uint16_t address);
 
 	// Rebuild a cartridge with a new rom
-	void set_rom(uint8_t *rom);
+	void change_game(uint8_t *cart);
 
 	//Resets memory values to their default state
 	void resetMemory();
@@ -28,9 +31,30 @@ public :
 	Video& get_video();
 	Cartridge& get_cartridge();
 
+	bool is_ready();
+
+	void reset();
+
+	enum Interrupt {VBLANK, STAT, TIMER, SERIAL, JOYPAD};
+
+	// Zeroes the desired interrupt to enable it
+	void set_interrupt_flag(unsigned int interrupt);
+
+	// Set the desired interrupt to 1
+	// Called from interrupt handler to "consume" the interrupt
+	void reset_interrupt_flag(unsigned int interrupt);
+
+	// Get specific values in memory
+	uint8_t get_interrupt_flags();
+	uint8_t get_interrupt_enable();
+	uint8_t get_joypad();
+	void set_joypad(uint8_t byte);
+
 private :
 
 	std::array<uint8_t, 0x10000> memory;
+
+	bool _ready = false;
 
 	Processor& processor;
 	Cartridge cartridge;

@@ -13,13 +13,14 @@
 
 #include <gameboy.hpp>
 #include <debug.hpp>
-#include <file_content.hpp>
+#include <key.hpp>
 
 #include <iostream>
 #include <array>
 #include <string>
 #include <chrono>
 #include <thread>
+#include <unistd.h>
 
 class Emulator
 {
@@ -31,7 +32,7 @@ class Emulator
 		// Called when the user changes the game
 		// 	mem is the content of the file
 		// 	s is the size of the file
-		void changeCartridge(FileContent& f);
+		void changeCartridge(uint8_t *data);
 
 		// Returns a buffer ready to be displayed directly on screen
 		const uint8_t * getRenderedPixels();
@@ -41,6 +42,10 @@ class Emulator
 
 		// Stops the currently running emulator
 		void stop();
+
+		// Receive a key press from the GUI thread
+		void key_press(Key k);
+		void key_release(Key k);
 
 	private:
 		// Renders the VRAM onto the pixel buffer
@@ -61,6 +66,4 @@ class Emulator
 		std::future<void> _future;
 
 		uint8_t _pixels[600 * 400];
-		uint8_t * _mem = NULL;
-		size_t _s;
 };

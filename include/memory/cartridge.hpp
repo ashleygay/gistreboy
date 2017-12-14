@@ -4,7 +4,9 @@
 #include <array>
 #include <string>
 #include <fstream>
+
 #include <memoryobject.hpp>
+#include <debug.hpp>
 
 
 
@@ -12,15 +14,19 @@ class Cartridge : public MemoryObject {
 
 public :
 
-	Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
-		  uint8_t *cart);
+	Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range);
   
+	// We use this method to change the currently running game.
+	// The gameboy should not be running while calling it.
+	// It initializes the rom and the ram to zero.
+	void change_game(uint8_t *cart);
+
 	uint8_t read(uint16_t address);
-	void write(uint16_t address, uint8_t byte);  
+	void write(uint8_t byte, uint16_t address);  
 
 	// FIXME: actually implement permissions
 	bool can_read(uint16_t address);
-	bool can_write(uint16_t address, uint8_t byte);
+	bool can_write(uint16_t address);
 
 	bool ram_enable();
 	bool has_boot();
@@ -33,8 +39,8 @@ public :
 
 private :
 
-	uint8_t get_current_rom_bank();
-	uint8_t get_current_ram_bank();
+	//uint8_t get_current_rom_bank();
+	//uint8_t get_current_ram_bank();
 
 	/*the actual assembly of the cartridge separated in banks of 32kB */
 	std::array<uint8_t, 2097152> rom;
@@ -80,8 +86,8 @@ std::array<uint8_t,  256> boot_rom= { {
   size_t rom_size = 0;
   size_t ram_size = 0;
 
-  uint8_t rom_bank_number = 0;
-  uint8_t ram_bank_number = 0; /* can be upper 2 bit of rom_bank_number */
+  uint8_t current_rom_bank = 1;
+  uint8_t current_ram_bank = 0; /* can be upper 2 bit of rom_bank_number */
 
   bool ram_enable_ = false;
   bool rom_ram_mode_ = false; /* false if rom mode, true if ram mode */
@@ -94,5 +100,7 @@ std::array<uint8_t,  256> boot_rom= { {
   bool has_boot_ = false; /* true when boot rom is finished */
 
   std::string name;
+
+  bool initialized = false;
 
 };

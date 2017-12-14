@@ -3,80 +3,68 @@ LISTE DES INSTRUCTIONS
 
 LD(nn, n)	 -> done 
 LD(r1, r2)  	 -> done (HL not done)
-LD(A, n)	 -> ?
-LD(n, A		 -> ?
-LD(A, (C))  	 -> ?
-LD((C), A)  	 -> ?
-LD(A, (HLD))	 -> ?
-LD(A, (HL-))	 -> ?
-LDD(A, (HL))	 -> ?
-LD((HLD), A)     -> ?
-LD((HL-), A)     -> ?
-LDD((HL), A)     -> ?
-LD(A, (HLI))     -> ?
-LD(A, (HL+))     -> ?
-LDI(A, (HL))     -> ?
-LD((HLI), A)     -> ?
-LD((HLI), A)     -> ?
-LDI((HL), A)     -> ?
-LDH(n, A) 	 -> ?
-LDH(A, n)	 -> ?
-LD(n, nn)	 -> ?
-LD(SP, HL)	 -> ?
-LD(HL, SP+n)	 -> ?
-LDHL(SP, n)	 -> ?
-LD(nn, SP)	 -> ?
+LD(A, n)	 -> done
+LD(n, A)	 -> done
+LD(A, (C))  	 -> done
+LD((C), A)  	 -> done
+LDD(A, (HL))	 -> done
+LDD((HL), A)     -> done
+LDI(A, (HL))     -> done
+LDI((HL), A)     -> done
+LDH(n, A) 	 -> done
+LDH(A, n)	 -> done
+LD(n, nn)	 -> done
+LD(SP, HL)	 -> done
+LD(HL, SP+n)	 -> done
+LDHL(SP, n)	 -> done
+LD(nn, SP)	 -> done
 
-PUSH(nn)	 -> not done
-POP(nn)		 -> not done
+PUSH(nn)	 -> done
+POP(nn)		 -> done
 
-ADD(A, n)	 -> done (HL and # not done)
-ADC(A, n)        -> done (HL and # not done)
-SUB(n)        	 -> done (HL and # not done)
-SBC(A, n)      	 -> done (HL and # not done)
+ADD(A, n)	 -> done 
+ADC(A, n)        -> done 
+SUB(n)        	 -> done 
+SBC(A, n)      	 -> done 
 
 ADD(HL, n)	 -> not done
 ADD(SP, n)	 -> not done
 
 
-AND(n)        	 -> done (HL and # not done)
-OR(n)		 -> done (HL and # not done)
-XOR(n)           -> done (HL and # not done)
-CP(n)            -> done (HL and # not done)
-INC(n)           -> done (HL not done)
-DEC(n)           -> done (HL not done)
+AND(n)        	 -> done 
+OR(n)		 -> done 
+XOR(n)           -> done 
+CP(n)            -> done 
+INC(n)           -> done 
+DEC(n)           -> done 
 
 INC(nn)		 -> not done
 DEC(nn)		 -> not done
 
-SWAP(n)		 -> done (HL not done)
+SWAP(n)		 -> done
 
-DAA		 -> not done
-CPL		 -> not done
-CCF		 -> not done
-SCF		 -> not done
+DAA		 -> done
+CPL		 -> done
+CCF		 -> done
+SCF		 -> done
 NOP 		 -> done
-HALT 		 -> not done
-STOP		 -> not done
-DI		 -> not done
-EI		 -> not done
+HALT 		 -> done
+STOP		 -> done
+DI		 -> done
+EI		 -> done
 
-RLCA		 -> not done
-RLA		 -> not done
-RRCA		 -> not done
-RRA		 -> not done
-RLC(n)		 -> not done
-RL(n)		 -> not done
-RRC(n)		 -> not done
-RR(n)		 -> not done
+RLC(n)		 -> done  
+RL(n)		 -> done  
+RRC(n)		 -> done 
+RR(n)		 -> done  
 
-SLA(n)		 -> not done
-SRA(n)		 -> not done
-SRL(n)		 -> not done
+SLA(n)		 -> done  
+SRA(n)		 -> done 
+SRL(n)		 -> done 
 
-BIT(b, r)	 -> not done
-SET(b, r)	 -> not done
-RES(b, r)	 -> not done
+BIT(b, r)	 -> done
+SET(b, r)	 -> done
+RES(b, r)	 -> done
 
 JP(nn) 		 -> not done
 JP(cc, nn)	 -> not done

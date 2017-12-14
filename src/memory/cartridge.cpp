@@ -1,9 +1,15 @@
 #include <cartridge.hpp>
 
-Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
-			uint8_t *cart) :
+Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range) :
 			MemoryObject(range)
 {
+}
+
+
+void Cartridge::change_game(uint8_t *cart)
+{
+	initialized = true;
+
 	rom.fill(0);
   	ram.fill(0);
 
@@ -111,8 +117,10 @@ Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
 		break;
 	}
 
-	uint8_t size_rom = cart[0x148];
-	switch(size_rom)
+	uint8_t size_type = cart[0x148];
+	size_t rom_size = 0;
+
+	switch(size_type)
 	{
 	case 0x00 :
 		rom_size = 32768;
@@ -153,6 +161,7 @@ Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
 
 	for (size_t i = 0; i < rom_size; i++)
 		rom[i] = cart[i];
+	DEBUG_STREAM << "Rom size is " << rom_size << std::endl;
 
 	if (has_ram_)
 	{
@@ -177,16 +186,21 @@ Cartridge::Cartridge(std::vector<std::pair<uint16_t, uint16_t>> range,
 		default :
 			break;
     		}
+		
+		DEBUG_STREAM << "Ram size is " << ram_size << std::endl;
   	}
 }
+
 
 uint8_t Cartridge::read(uint16_t address)
 {
 	if (addr_in_range(address, 0x00, 0x3FFF))
 	{
-		if (address == 0x100)
+		if (address == 0x100) {
 			has_boot_ = true;
-		if (addr_in_range(address, 0x00, 0xFF) && !has_boot_)
+			return rom[0x100];
+		}
+		else if (addr_in_range(address, 0x00, 0xFF) && !has_boot_)
 			return boot_rom[address];
 		else
 			return rom[address];
@@ -197,62 +211,62 @@ uint8_t Cartridge::read(uint16_t address)
 		if (mbc == 0)
 			return rom[address];
 		else
-			return rom[address + get_current_rom_bank()*16384];
+			return rom[address + current_rom_bank*0x4000 - 0x4000];
 	}
 
 	else if (addr_in_range(address, 0xA000, 0xBFFF))
-		return ram[address + get_current_ram_bank()*8192 - 0xA000];
+		return ram[address + current_ram_bank*0x2000 - 0xA000];
 
 	return 0;
 }
 
-void Cartridge::write(uint16_t address, uint8_t byte)
+void Cartridge::write(uint8_t byte, uint16_t address)
 {
 	if (addr_in_range(address, 0xA000, 0xBFFF))
-		ram[address + get_current_ram_bank()*8192 - 0xA000] = byte;
+		ram[address + current_ram_bank*0x2000 - 0xA000] = byte;
 
 	else if (addr_in_range(address, 0x00, 0X1FFF))
 		ram_enable_ = ((byte & 0x0F) == 0x0A);
 
 	else if (addr_in_range(address, 0x2000, 0x3FFF))
 	{
-		if (byte > 0x1F)
-			rom_bank_number = 0x01;
-		else if (byte == 0x00 || byte == 0x20 || byte == 0x40
-			 || byte == 0x60)
-			rom_bank_number = byte + 1;
-		else
-			rom_bank_number = byte;
+		byte &= 0x1f;
+		if (!byte)
+			byte = 1;
+		current_rom_bank = (current_rom_bank & 0x60) | byte;
 	}
 
 	else if (addr_in_range(address, 0x4000, 0x5FFF))
-		ram_bank_number = byte;
-	else if (addr_in_range(address, 0x6000, 0x7FFF))
 	{
-		if (byte == 0x00)
-			rom_ram_mode_ = false;
-		else if (byte == 0x01)
-			rom_ram_mode_ = true;
+		byte &= 0x03;
+		if (rom_ram_mode_)
+			current_ram_bank = byte;
+		else
+			current_rom_bank = (byte << 5) | (current_rom_bank & 0x1f);
 	}
+	else if (addr_in_range(address, 0x6000, 0x7FFF))
+		rom_ram_mode_ = byte;
 
 }
 
 bool Cartridge::can_read(uint16_t address)
 {
+	//FIXME
 	return true;
 }
 
-bool Cartridge::can_write(uint16_t address, uint8_t byte)
+bool Cartridge::can_write(uint16_t address)
 {
+	//FIXME
 	return true;
 }
 
-uint8_t Cartridge::get_current_rom_bank()
+/*uint8_t Cartridge::get_current_rom_bank()
 {
 	if (rom_ram_mode_)
 		return rom_bank_number;
 	else
-		return (ram_bank_number << 5)+rom_bank_number;
+		return (ram_bank_number << 5) | rom_bank_number;
 }
 
 uint8_t Cartridge::get_current_ram_bank()
@@ -261,7 +275,7 @@ uint8_t Cartridge::get_current_ram_bank()
 		return ram_bank_number;
 	else
 		return 0;
-}
+}*/
 
 bool Cartridge::ram_enable()
 {

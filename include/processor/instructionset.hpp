@@ -5,7 +5,6 @@
 class Instruction;
 
 #include <opcode.hpp>
-#include <boost/variant/recursive_variant.hpp>
 
 using OpCodeToInstruction = std::unordered_map<OpCode, Instruction *>;
 

@@ -33,6 +33,12 @@ void Emulator::_renderPixels()
 
 void Emulator::mainLoop(GameBoy& gb)
 {
+	//TODO: Display an error message if not ready
+	if (!gb.readyToLaunch()) {
+		DEBUG_STREAM << "Load a game first." << std::endl;
+		return;
+	}
+
 	while(gb.isRunning()) {
 		gb.step();
 	}
@@ -43,7 +49,6 @@ void Emulator::start()
 	if (!gb.isRunning()) {
 		_future = std::async(std::launch::async,
 			Emulator::mainLoop, std::ref(gb));
-		gb.start();
 	}
 	else
 		std::cout << "Emulator already running" << std::endl;
@@ -53,9 +58,9 @@ void Emulator::start()
 void Emulator::stop()
 {
 	try {
+		DEBUG_STREAM << "Stopping gameboy" << std::endl;
 		gb.stop();
-		_future.wait();
-		_future.get(); // Future calls to wait() will be invalid.
+		_future.get();
 		DEBUG_STREAM << "Emulator stopped" << std::endl;
 	}
 	catch (const std::exception&) {
@@ -63,10 +68,28 @@ void Emulator::stop()
 	}
 }
 
-void Emulator::changeCartridge(FileContent& f)
+void Emulator::key_press(Key k)
+{
+	DEBUG_STREAM << "PRESS ";
+	display_key(k);
+
+	auto keys = gb.getAtomic();
+	keys |= (1 << k);
+	gb.setAtomic(keys);
+}
+
+void Emulator::key_release(Key k)
+{
+	DEBUG_STREAM << "RELEASE ";
+	display_key(k);
+
+	auto keys = gb.getAtomic();
+	keys &= ~(1 << k);
+	gb.setAtomic(keys);
+}
+
+void Emulator::changeCartridge(uint8_t *data)
 {
 	stop();
-	//TODO
-	//gb.setCartridge(f.memory);
-	start();
+	gb.changeGame(data);
 }

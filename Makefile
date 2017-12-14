@@ -10,22 +10,24 @@ GUI_SRC = $(patsubst %,$(subst include,src,$(GUI))/%,$(_GUI_SRC))
 
 PROCESSOR=include/processor
 _PROCESSOR_SRC += instruction.cpp
-_PROCESSOR_SRC += instructionargs.cpp
 _PROCESSOR_SRC += instructionset.cpp
 _PROCESSOR_SRC += processor.cpp
 _PROCESSOR_SRC += registers.cpp
+_PROCESSOR_SRC += word_operations.cpp
 PROCESSOR_SRC = $(patsubst %,$(subst include,src,$(PROCESSOR))/%,\
 		$(_PROCESSOR_SRC))
 
 
 GAMEBOY=include/gameboy
 _GAMEBOY_SRC += gameboy.cpp
-_GAMEBOY_SRC += interrupthandler.cpp
+_GAMEBOY_SRC += lcd.cpp
+_GAMEBOY_SRC += timer_handler.cpp
 GAMEBOY_SRC = $(patsubst %,$(subst include,src,$(GAMEBOY))/%,\
 		$(_GAMEBOY_SRC))
 
 INTERFACE=include/interface
 _INTERFACE_SRC += emulator.cpp
+_INTERFACE_SRC += key.cpp
 INTERFACE_SRC = $(patsubst %,$(subst include,src,$(INTERFACE))/%,\
 		$(_INTERFACE_SRC))
 
@@ -52,13 +54,13 @@ SRC= $(MAIN) $(GUI_SRC) $(INTERFACE_SRC) $(GAMEBOY_SRC)\
 OBJS = $(SRC:.cpp=.o)
 
 # SETUP ALL NECESSARY FLAGS
-LIB=`pkg-config --cflags --libs gtk+-3.0` -lboost_system
+LIB=`pkg-config --cflags --libs gtk+-3.0`
 INCLUDE_PATH= -I$(GUI) -I$(INTERFACE) -I$(GAMEBOY) -I$(HELPERS) -I$(MEMORY) -I$(PROCESSOR)
 
-CC_OPTIONS= -O0 -g -Wall -Wextra -pedantic -std=c++14 \
-	-D DEBUG_STREAM_ACTIVATED\
-	-D BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+# For benchmarks, add -D BENCH_STREAM_ACTIVATED
 
+CC_OPTIONS= -O3 -g -Wall -Wextra -pedantic -std=c++14 \
+#		-D DEBUG_STREAM_ACTIVATED
 CXXFLAGS = $(CC_OPTIONS) $(INCLUDES) $(LIB)
 
 emulator: $(OBJS)

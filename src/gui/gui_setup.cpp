@@ -64,6 +64,13 @@ void setup_gui (GtkApplication *app)
 
 
 	gtk_container_add(GTK_CONTAINER (window), box);
+
+	g_signal_connect(window, "key-release-event",
+			G_CALLBACK(key_released_callback), NULL);
+
+	g_signal_connect(window, "key-press-event",
+			G_CALLBACK(key_pressed_callback), NULL);
+
 	gtk_widget_show_all (window);
 }
 
