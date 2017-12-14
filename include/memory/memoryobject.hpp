@@ -31,11 +31,10 @@ class MemoryObject
 
 		virtual uint8_t read(uint16_t address) = 0;
 
-		virtual void write(uint16_t address, uint8_t byte) = 0;
+		virtual void write(uint8_t byte, uint16_t address) = 0;
 
-		// FIXME: actually implement permissions
 		virtual bool can_read(uint16_t address) = 0;
-		virtual bool can_write(uint16_t address, uint8_t byte) = 0;
+		virtual bool can_write(uint16_t address) = 0;
 
 	protected:
 	

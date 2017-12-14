@@ -8,62 +8,106 @@
 #include <gameboy.hpp>
 
 
-GameBoy::GameBoy()
+GameBoy::GameBoy(): _mem(p), _lcd(_mem), _timers(_mem)
 {
 	//TODO: create memory from processor and rom
-	// m(rom, &p);
 	_wireComponents();
+
+#ifdef BENCH_STREAM
+	BENCH_STREAM << "Clock Period "
+	<< std::chrono::high_resolution_clock::period::den
+	<< std::endl;
+#endif
+}
+
+bool GameBoy::readyToLaunch()
+{
+	if (_mem.is_ready()) {
+		_running = true;
+		return true;
+	}
+	return false;
 }
 
 void GameBoy::step()
 {
-	// Priority order:
-	// 	Interrupts
-	// 	Next Instruction
 
-	// Start chrono here for a cycle
-	boost::asio::deadline_timer t(io,
-			boost::posix_time::nanoseconds(GB_CYCLE));
-
-	if (!_handler_cycles)
-		_handler_cycles = _handler.doInterrupt();
-/*
-	if (!_checkInterrupts())
-		_checkCPU();
-
-	_checkLCD();
-*/
-	// wait for chrono here
-	t.wait();
-	_clockCycle();
+	int atomic = getAtomic();
+	if (_old_keys != atomic) {
+		_checkKeys(atomic);
+		_old_keys = atomic;
+	}
+	int _cpu_cycles = p.step();
+	_lcd.step(_cpu_cycles);
+	_timers.step(_cpu_cycles);
 }
 
 void GameBoy::_wireComponents()
 {
-	// TODO: Init all here
-	//p.setMemory(&m);
-	p.setInterruptHandler(&_handler);
-	// lcd.setMemory(&m);
-	//_handler.setMemory(&m);
+	p.setMemory(&_mem);
 }
 
-void GameBoy::_clockCycle()
+void GameBoy::_checkKeys(uint8_t atomic)
 {
-	// Decrease all pending timers
-	if (_handler_cycles) --_handler_cycles;
-	if (_cpu_cycles) --_cpu_cycles;
-	if (_lcd_cycles) --_lcd_cycles;
+	uint8_t reg = _mem.get_joypad();
+	uint8_t keys = atomic;
+
+	uint8_t buttons = keys & 0x0F; // The lowest bits are the buttons.
+	uint8_t pad = keys >> 4;
+
+	// We keep only the select bits.
+	reg &= 0b00110000;
+
+	//std::cout << "SELECT BITS: " << std::bitset<8>(reg) << std::endl;
+	// If button is pressed but line is not selected
+	// we dont interrupt
+	uint8_t tmp = 0;
+	if ((reg & (1 << 5))) { // Bit 5 is set we 'or' the button bits
+		tmp |= buttons;
+		_interruptJOYPAD();
+	}
+
+	if ((reg & (1 << 4))) { // Bit 4 is set we 'or' the pad bits
+		tmp |= pad;
+		_interruptJOYPAD();
+	}
+	tmp = (~tmp & 0x0F);
+	reg |= tmp;
+	//std::cout << "ATOMIC BITS: " << std::bitset<8>(keys) << std::endl;
+	//std::cout << "JOYPAD BITS: " << std::bitset<8>(reg) << std::endl;
+
+	// Write modified register to 0xFF00
+	_mem.set_joypad(reg);
 }
 
+void GameBoy::_interruptJOYPAD()
+{
+	_mem.set_interrupt_flag(Memory::Interrupt::JOYPAD);
+}
 
 void GameBoy::_resetComponents()
 {
-	// TODO Reset components here
+	//TODO: reset the CPU :)
+	_mem.reset();
 }
 
-void GameBoy::changeGame(uint8_t * mem, size_t s)
+void GameBoy::changeGame(uint8_t *mem)
 {
-	//TODO: memory copies the content of the pointer.
-	//_resetComponents();
-	//m.setCartridge(mem, s);
+	_resetComponents();
+	_mem.change_game(mem);
+}
+
+void GameBoy::setAtomic(uint8_t value)
+{
+  	_keys.store(value);
+}
+
+uint8_t GameBoy::getAtomic()
+{
+  	return _keys.load();
+}
+
+void GameBoy::setJoypadInterrupt()
+{
+  	_mem.set_interrupt_flag(Interrupt::JOYPAD);
 }

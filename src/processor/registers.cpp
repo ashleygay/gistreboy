@@ -53,13 +53,12 @@ bool FlagRegister::getFlag(FlagRegister::Flag flag)
 	return false;
 }
 
-
-void InterruptRegister::setInterrupt(InterruptRegister::Interrupt interrupt)
+unsigned char FlagRegister::get_value()
 {
-	value |= (1 << interrupt);
+	return value;
 }
-		
-void InterruptRegister::resetInterrupt(InterruptRegister::Interrupt interrupt)
+
+void FlagRegister::set_value(unsigned char val)
 {
-	value ^= (1 << interrupt);
+	value = val;
 }

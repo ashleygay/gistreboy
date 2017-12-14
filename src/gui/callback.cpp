@@ -7,6 +7,25 @@
 
 #include <callback.hpp>
 
+static GdkPixbuf* global = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 160, 144);
+static GdkPixbuf* scaled = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 1600, 1440);
+
+static std::unordered_map<std::string, Key> bindings =
+	{{"Up", Key::UP},
+	 {"Down", Key::DOWN},
+	 {"Left", Key::LEFT},
+	 {"Right", Key::RIGHT},
+	 {"a", Key::A},
+	 {"s", Key::B},
+	 {"d", Key::SELECT},
+	 {"f", Key::START},
+	};
+
+GdkPixbuf* get_global_pixbuf()
+{
+	return global;
+}
+
 void NYI(GtkWidget * b, gpointer user_data)
 {
 	(void)user_data;
@@ -14,12 +33,32 @@ void NYI(GtkWidget * b, gpointer user_data)
 		    << "\" not yet implemented." << std::endl;
 }
 
+gboolean key_pressed_callback(GtkWidget *widget, GdkEventKey *event)
+{
+	if (!event) return false;
+	std::string str(gdk_keyval_name(event->keyval));
+	if (bindings.find(str) != bindings.end())
+		Emulator::getInstance().key_press(bindings[str]);
+
+	return true;
+}
+
+gboolean key_released_callback(GtkWidget *widget, GdkEventKey *event)
+{
+	if (!event) return false;
+	std::string str(gdk_keyval_name(event->keyval));
+	if (bindings.find(str) != bindings.end())
+		Emulator::getInstance().key_release(bindings[str]);
+
+	return true;
+}
+
 void stop_callback(GtkWidget * w, gpointer user_data)
 {
 	(void)w;
 	(void)user_data;
 	DEBUG_STREAM << "Stopping the emulation." << std::endl;
-	EmuInterface::getInstance().stopEmulator();
+	Emulator::getInstance().stop();
 }
 
 
@@ -28,17 +67,17 @@ void open_button_callback(GtkWidget * b, gpointer user_data)
 	(void)b;
 	OpenButtonHelper *helper = (OpenButtonHelper *)user_data;
 	GFile* g = helper->open_file_with_dialog();
-	FileContent data = helper->load_content(g);
+	uint8_t *data = helper->load_content(g);
 
-	if (!data.memory)
+	if (!data)
 		return;
 
-	EmuInterface & i = EmuInterface::getInstance();
+	// Emulator takes ownership of the data pointer
+	Emulator::getInstance().changeCartridge(data);
 
-	// EmuInterface takes ownership of the data pointer
-	i.changeCartridge(data);
-
-	DEBUG_STREAM << "We give the pointer to the memory here." << std::endl;
+	DEBUG_STREAM << "We give the pointer to the memory here."
+		     << std::endl;
+	free(data);
 }
 
 void run_button_callback(GtkWidget * b, gpointer user_data)
@@ -46,9 +85,7 @@ void run_button_callback(GtkWidget * b, gpointer user_data)
 	(void)b;
 	(void)user_data;
 
-	EmuInterface& i = EmuInterface::getInstance();
-
-	i.startEmulator();
+	Emulator::getInstance().start();
 }
 
 gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
@@ -69,19 +106,22 @@ gboolean draw_callback(GtkWidget * w, cairo_t *cr, gpointer user_data)
 	height = gtk_widget_get_allocated_height(w);
 
 //	std::this_thread::sleep_for(2s);
-//	DEBUG_STREAM << "Dimensions : " << width  << " x " << height << std::endl;
+//	sleep(0.5);
+	//std::cout << "Dimensions : " << width  << " x " << height << std::endl;
 
-	gtk_render_background(context, cr, 0, 0, width, height);
-
+	gtk_render_background(context, cr, 150, 150, width, height);
+/*
   	cairo_arc (cr,
              width / 2.0, height / 2.0,
              MIN (width, height) / 2.0,
              0, 2 * G_PI);
+*/
+//	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
 
-	GdkRGBA black = {0.0, 0.0, 0.0, 1.0};
-
-	gdk_cairo_set_source_rgba(cr, &black);
-	cairo_fill(cr);
+//	gdk_cairo_set_source_rgba(cr, &black);
+	gdk_cairo_set_source_pixbuf(cr, global, 0, 0);
+ 	cairo_paint (cr);
+//	cairo_fill(cr);
 
 	return FALSE;
 }

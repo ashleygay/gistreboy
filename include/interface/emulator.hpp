@@ -2,6 +2,7 @@
  * File : emu_interface.hpp
  *
  * This class is used by the GUI to communicate with the emulator itself
+ # This class now handles both the interfacing and the threading.
  *
  * File created by : Corentin Gay
  * File was created the : 16/09/2017
@@ -9,51 +10,60 @@
 
 #pragma once
 
+
+#include <gameboy.hpp>
 #include <debug.hpp>
-#include <emu_controller.hpp>
-#include <file_content.hpp>
+#include <key.hpp>
 
 #include <iostream>
 #include <array>
 #include <string>
 #include <chrono>
 #include <thread>
+#include <unistd.h>
 
-class EmuInterface
+class Emulator
 {
 	public:
-		static EmuInterface& getInstance()
-			{static EmuInterface emu; return emu;}
+		static Emulator& getInstance()
+			{static Emulator emu; return emu;}
 
 	public:
 		// Called when the user changes the game
 		// 	mem is the content of the file
 		// 	s is the size of the file
-		void changeCartridge(FileContent& f);
+		void changeCartridge(uint8_t *data);
 
 		// Returns a buffer ready to be displayed directly on screen
 		const uint8_t * getRenderedPixels();
 
 		// Starts the emulator with the current memory address
-		void startEmulator();
+		void start();
 
 		// Stops the currently running emulator
-		void stopEmulator();
+		void stop();
+
+		// Receive a key press from the GUI thread
+		void key_press(Key k);
+		void key_release(Key k);
 
 	private:
 		// Renders the VRAM onto the pixel buffer
 		void _renderPixels();
 
-		EmuInterface();
-	public:
-		// Deleted operators here
-		EmuInterface(EmuInterface const &) = delete;
-		void operator=(EmuInterface const &) = delete;
+		Emulator();
 
 	private:
-		//GtkWidget * window; // Used to display errors
-		EmuController _controller;
+		static void mainLoop(GameBoy& gb);
+
+	public:
+		// Deleted operators here
+		Emulator(Emulator const &) = delete;
+		void operator=(Emulator const &) = delete;
+
+	private:
+		GameBoy gb;
+		std::future<void> _future;
+
 		uint8_t _pixels[600 * 400];
-		uint8_t * _mem = NULL;
-		size_t _s;
 };
