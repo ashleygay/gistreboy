@@ -32,6 +32,7 @@ bool GameBoy::readyToLaunch()
 void GameBoy::step()
 {
 
+	using namespace std::chrono_literals;
 	int atomic = getAtomic();
 	if (_old_keys != atomic) {
 		_checkKeys(atomic);
@@ -40,6 +41,9 @@ void GameBoy::step()
 	int _cpu_cycles = p.step();
 	_lcd.step(_cpu_cycles);
 	_timers.step(_cpu_cycles);
+
+	// Wait after each instruction, this works for - O0
+	for (int i = 0 ; i < 25; ++i);
 }
 
 void GameBoy::_wireComponents()
