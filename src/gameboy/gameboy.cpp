@@ -42,8 +42,10 @@ void GameBoy::step()
 	_lcd.step(_cpu_cycles);
 	_timers.step(_cpu_cycles);
 
-	// Wait after each instruction, this works for - O0
-	for (int i = 0 ; i < 25; ++i);
+	// FIXME: doesnt work, for now
+	//std::this_thread::sleep_for(10ns);
+	// Wait after each instruction, this works for -O0
+	for (int i = 0 ; i < 15; ++i);
 }
 
 void GameBoy::_wireComponents()
