@@ -33,13 +33,13 @@ void setup_gui (GtkApplication *app)
 
 	window = gtk_application_window_new(app);
 	gtk_window_set_title(GTK_WINDOW (window), "Super Gistre Boy");
-	gtk_window_set_default_size(GTK_WINDOW (window), 600, 400);
+	gtk_window_set_default_size(GTK_WINDOW (window), 1180, 864);
 
 	menuItem = gtk_menu_item_new_with_label("Menu");
 	g_signal_connect(G_OBJECT (window), "destroy", G_CALLBACK (stop_callback), NULL);
 
 	area = gtk_drawing_area_new();
-	gtk_widget_set_size_request (area, 600, 400);
+	gtk_widget_set_size_request (area, 1180, 864);
 	subMenu = gtk_menu_new();
 	menuBar = gtk_menu_bar_new();
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
