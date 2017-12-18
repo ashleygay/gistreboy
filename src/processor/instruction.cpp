@@ -405,7 +405,7 @@ void NOP::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
 	if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF)) > 0xF)\
 	  p->flag.setFlag(FlagRegister::HALFCARRY);\
-	if (result & 0x100)\
+	if (val & 0x100)\
 	  p->flag.setFlag(FlagRegister::CARRY);	\
 	p->reg1.value = result;\
 }
@@ -1094,8 +1094,8 @@ void SWAP_HL::exec(Processor *p)
       a = static_cast<uint8_t>(a + tmp);\
     if (!((tmp << 2) & 0x100))\
       p->flag.setFlag(FlagRegister::CARRY);\
-    /*else \
-      p->flag.unsetFlag(FlagRegister::CARRY);*/\
+    else \
+      p->flag.unsetFlag(FlagRegister::CARRY);\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     if (a == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
