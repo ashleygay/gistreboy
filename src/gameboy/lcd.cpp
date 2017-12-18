@@ -110,8 +110,6 @@ void LCD::draw()
 void LCD::draw_scanline()
 {
 	line = _video.get_ly();
-	//for (int i = 0; i < 160; i++)
-	//	pixels[i][line] = 0;
 	//std::cout << "lcdc : " << _CONTROL << std::endl;
 	if (_CONTROL[7] && _CONTROL[0])
 		render_tiles(line);
@@ -231,8 +229,12 @@ void LCD::render_sprites(int current_line)
 		on_line.push_back(sprites[i]);
 	}
 
+	int count = 0;
+
 	for (auto& it : on_line)
 	{
+		if (count >= 10)
+			break;
 		uint16_t tile_num = it.get_tile();
 		if (is_double)
 			tile_num &= 0xfe;
@@ -260,6 +262,7 @@ void LCD::render_sprites(int current_line)
 			if (it.is_above_bg() || color)
 				pixels[it.get_x_pos()+i][current_line]=color;
 		}
+		count++;
 	}
 }
 
