@@ -26,9 +26,3 @@ namespace std
 #else
 	#define DEBUG_STREAM std::nullstream()
 #endif
-
-#ifdef BENCH_STREAM_ACTIVATED
-	#define BENCH_STREAM std::cout
-#else
-	#define BENCH_STREAM std::nullstream()
-#endif
