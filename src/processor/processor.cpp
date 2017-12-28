@@ -161,22 +161,26 @@ void Processor::_fetchNextInstruction()
 	// Opcode is valid
 	currentInstruction = iset.getInstruction(opcode);
 	InstructionArg arg;
-
+//	std::cout << "INSTR: " << currentInstruction->toStr();
 	// This instruction takes an argument
 	if(currentInstruction->hasArg()) {
+//	std::cout << " ";
 
 		int size = currentInstruction->argSize();
 		if (size == 1) { // We add a byte to the argument vector
 			arg.byte = _mem->read(PC.value);
+//			std::cout << std::hex << (int)arg.byte;
 		}
 		else { // Argument of size 2, we add a short to the argument vector
 			uint16_t word = _mem->read(PC.value);
 			++PC.value;
 			word = word | (_mem->read(PC.value) << 8);
 			arg.word = word;
+//			std::cout << std::hex << (int)arg.word;
 		}
 		++PC.value;
 	}
+//	std::cout << std::endl;
 	currentInstruction->setArg(arg);
 }
 
