@@ -25,10 +25,19 @@ bool GameBoy::readyToLaunch()
 
 void GameBoy::step()
 {
+	//begin_time = get time of the day (us)
+	auto start = std::chrono::high_resolution_clock::now();
 	_checkKeys(getAtomic());
 	int _cpu_cycles = p.step();
 	_lcd.step(_cpu_cycles);
 	_timers.step(_cpu_cycles);
+	//end_time = get time of the day (us)
+	auto elapsed = std::chrono::high_resolution_clock::now() - start;
+	long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() - _cpu_cycles * 0.2384;
+	if (microseconds > 0)
+		usleep(microseconds);
+	//wait_time = end_time - begin_time - _cpu_cycles * 0.2384
+	//usleep(wait_time)
 }
 
 void GameBoy::_wireComponents()
