@@ -12,12 +12,6 @@ GameBoy::GameBoy(): _mem(p), _lcd(_mem), _timers(_mem)
 {
 	//TODO: create memory from processor and rom
 	_wireComponents();
-
-#ifdef BENCH_STREAM
-	BENCH_STREAM << "Clock Period "
-	<< std::chrono::high_resolution_clock::period::den
-	<< std::endl;
-#endif
 }
 
 bool GameBoy::readyToLaunch()
