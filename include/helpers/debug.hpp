@@ -20,9 +20,3 @@ namespace std
 		nullstream(): std::ios(0), std::ostream(0) {}
 	};
 }
-
-#ifdef DEBUG_STREAM_ACTIVATED
-	#define DEBUG_STREAM std::cout
-#else
-	#define DEBUG_STREAM std::nullstream()
-#endif
