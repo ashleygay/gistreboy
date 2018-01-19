@@ -4,35 +4,35 @@ void display_key(Key k)
 {
 	switch (k) {
 		case Key::DOWN :
-			DEBUG_STREAM << "Key : " << "DOWN"
+			std::cout << "Key : " << "DOWN"
 				     << std::endl;
 			break;
 		case Key::UP :
-			DEBUG_STREAM << "Key : " << "UP"
+			std::cout << "Key : " << "UP"
 				     << std::endl;
 			break;
 		case Key::RIGHT :
-			DEBUG_STREAM << "Key : " << "RIGHT"
+			std::cout << "Key : " << "RIGHT"
 				     << std::endl;
 			break;
 		case Key::LEFT :
-			DEBUG_STREAM << "Key : " << "LEFT"
+			std::cout << "Key : " << "LEFT"
 				     << std::endl;
 			break;
 		case Key::A :
-			DEBUG_STREAM << "Key : " << "A"
+			std::cout << "Key : " << "A"
 				     << std::endl;
 			break;
 		case Key::B :
-			DEBUG_STREAM << "Key : " << "B"
+			std::cout << "Key : " << "B"
 				     << std::endl;
 			break;
 		case Key::START :
-			DEBUG_STREAM << "Key : " << "START"
+			std::cout << "Key : " << "START"
 				     << std::endl;
 			break;
 		case Key::SELECT :
-			DEBUG_STREAM << "Key : " << "SELECT"
+			std::cout << "Key : " << "SELECT"
 				     << std::endl;
 			break;
 	}

@@ -49,7 +49,7 @@ void Emulator::stop()
 
 void Emulator::key_press(Key k)
 {
-	display_key(k);
+	//display_key(k);
 
 	auto keys = gb.getAtomic();
 	keys |= (1 << k);
@@ -58,7 +58,7 @@ void Emulator::key_press(Key k)
 
 void Emulator::key_release(Key k)
 {
-	display_key(k);
+	//display_key(k);
 
 	auto keys = gb.getAtomic();
 	keys &= ~(1 << k);

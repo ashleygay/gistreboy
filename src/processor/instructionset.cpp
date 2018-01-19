@@ -4,8 +4,8 @@
 InstructionSet::InstructionSet()
 {
 	#define add_instr(instruct) \
-		auto instr_##instruct = new instruct();\
-		map[instr_##instruct->opCode()] = instr_##instruct;
+		static auto instr_##instruct = instruct();\
+		map[instr_##instruct.opCode()] = &instr_##instruct;
 
 	add_instr(NOP)
 

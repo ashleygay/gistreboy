@@ -60,5 +60,5 @@ unsigned char FlagRegister::get_value()
 
 void FlagRegister::set_value(unsigned char val)
 {
-	value = val;
+	value = val & 0xF0;
 }

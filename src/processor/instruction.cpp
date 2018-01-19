@@ -311,7 +311,6 @@ void LD_SPHL::exec(Processor *p)
 void LD_HLSPn::exec(Processor *p)
 {
 	int8_t n = static_cast<int8_t>(_arg.byte);
-	DEBUG_STREAM<< "LD_HLSPn: DIFF" << std::dec << (int)n << std::endl;
 	int result = p->SP.value + n;
 	uint16_t HL = static_cast<uint16_t>(result);
 	p->L.value = get_low(HL);
@@ -405,7 +404,7 @@ void NOP::exec(Processor *p)
 	p->flag.unsetFlag(FlagRegister::SUBTRACT);\
 	if (((p->reg1.value & 0xF) + (p->reg2.value & 0xF)) > 0xF)\
 	  p->flag.setFlag(FlagRegister::HALFCARRY);\
-	if (result & 0x100)\
+	if (val & 0x100)\
 	  p->flag.setFlag(FlagRegister::CARRY);	\
 	p->reg1.value = result;\
 }
@@ -897,8 +896,6 @@ void CP_AHL::exec(Processor *p)
 void CP_AX::exec(Processor *p)
 {
   auto tmp = _arg.byte;
-	DEBUG_STREAM << "CP_AX: 0x" << std::hex << (int)p->A.value << " : 0x"
-	<< (int)tmp << std::endl;
   uint8_t result = p->A.value - tmp;
   p->flag.unsetFlag(FlagRegister::ZERO);
   p->flag.unsetFlag(FlagRegister::HALFCARRY);
@@ -1073,29 +1070,24 @@ void SWAP_HL::exec(Processor *p)
   HLWriteDereference(p, temp);
 }
 
-/*TODO Check DAA */
-
 #define DAA_def()                  \
   void DAA::exec(Processor *p)\
   {\
-    /*p->flag.unsetFlag(FlagRegister::CARRY);\*/\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     auto a = p->A.value;\
-    auto tmp = p->flag.getFlag(FlagRegister::CARRY) ? 0x60 : 0x00;	\
-    if (p->flag.getFlag(FlagRegister::CARRY) ||\
+    uint16_t tmp = p->flag.getFlag(FlagRegister::CARRY) ? 0x60 : 0x00;	\
+    if (p->flag.getFlag(FlagRegister::HALFCARRY) ||\
 	(!p->flag.getFlag(FlagRegister::SUBTRACT) && ((a & 0x0F) > 9)))\
       tmp |= 0x06;\
     if (p->flag.getFlag(FlagRegister::CARRY) ||\
-	(!p->flag.getFlag(FlagRegister::SUBTRACT) && (a & 0x99)))	\
+	(!p->flag.getFlag(FlagRegister::SUBTRACT) && (a > 0x99)))	\
       tmp |= 0x60;\
     if (p->flag.getFlag(FlagRegister::SUBTRACT))\
       a = static_cast<uint8_t>(a - tmp);\
     else\
       a = static_cast<uint8_t>(a + tmp);\
-    if (!((tmp << 2) & 0x100))\
+    if ((tmp << 2) & 0x100)\
       p->flag.setFlag(FlagRegister::CARRY);\
-    /*else \
-      p->flag.unsetFlag(FlagRegister::CARRY);*/\
     p->flag.unsetFlag(FlagRegister::HALFCARRY);\
     if (a == 0)\
       p->flag.setFlag(FlagRegister::ZERO);\
@@ -1212,7 +1204,7 @@ BIT_BITX_def(7, L)
   {\
     p->flag.unsetFlag(FlagRegister::ZERO);\
     auto tmp = HLReadDereference(p);\
-    if (tmp & (1 << bit))\
+    if (!(tmp & (1 << bit)))\
       p->flag.setFlag(FlagRegister::Flag::ZERO);\
     p->flag.unsetFlag(FlagRegister::Flag::SUBTRACT);\
     p->flag.setFlag(FlagRegister::Flag::HALFCARRY);\
