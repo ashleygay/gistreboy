@@ -31,7 +31,7 @@ void GameBoy::step()
 	_lcd.step(_cpu_cycles);
 	_timers.step(_cpu_cycles);
 	auto elapsed = std::chrono::high_resolution_clock::now() - start;
-	long long nanoseconds = -std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count() + _cpu_cycles * 14.7;
+	long long nanoseconds = -std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count() + _cpu_cycles * 23.8;
 	//std::cout << nanoseconds << std::endl;
 	if (nanoseconds > 0)
 	{
